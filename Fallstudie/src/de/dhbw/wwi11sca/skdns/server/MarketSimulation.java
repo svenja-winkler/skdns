@@ -156,7 +156,7 @@ public class MarketSimulation {
 		amount = (int) Math.ceil(ownCompany.getTopLine()
 				- ownCompany.getFixedCosts() - ownCompany.getSalaryStaff()
 				* ownCompany.getNumberOfStaff() - version.getMarketing()
-				- ownCompany.getVariableCosts() - amortization);
+				- ownCompany.getVariableCosts()*ownCompany.getProduct().getSalesVolume() - amortization);
 
 		ownCompany.setAmount(amount);
 
