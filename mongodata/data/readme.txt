@@ -1,0 +1,1 @@
+Der Ordner mongodata ist vorhanden, damit das Projekt SKDNS-Fallstudie beim ersten Starten eine Datenbank erzeugen kann.
