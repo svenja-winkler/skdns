@@ -341,7 +341,7 @@ public class AdminSimulation implements EntryPoint {
 
 		@Override
 		public void onSuccess(Void result) {
-			Window.alert("Änderung erfolgreich. Informieren Sie den Kunden.");
+			Window.alert("\u00c4nderung erfolgreich. Informieren Sie den Kunden.");
 
 
 		} // Ende method onSuccess
@@ -394,7 +394,7 @@ public class AdminSimulation implements EntryPoint {
 
 		@Override
 		public void onSuccess(Void result) {
-			Window.alert("User wurde hinzugefügt.");
+			Window.alert("User wurde hinzugef\u00fcgt.");
 			service.getUser(new GetUserCallback());
 		
 			service.getStats(new GetStatsCallback() );
