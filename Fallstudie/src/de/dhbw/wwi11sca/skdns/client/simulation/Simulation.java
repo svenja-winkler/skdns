@@ -271,7 +271,13 @@ public class Simulation implements EntryPoint {
 		TextColumn<Company> gewinnColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				return new Integer(company.getAmount()).toString();
+				if(company.getAmount() != 0){
+					return new Integer(company.getAmount()).toString();
+				}
+				else{
+					return new String("k.A.");
+				}
+				
 			}
 		};
 		TextColumn<Company> marktAnteilColumn = new TextColumn<Company>() {

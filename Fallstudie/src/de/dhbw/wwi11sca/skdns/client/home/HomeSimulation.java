@@ -132,7 +132,12 @@ public class HomeSimulation implements EntryPoint {
 		TextColumn<Company> amountColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				return new Integer(company.getAmount()).toString();
+				if(company.getAmount() != 0){
+					return new Integer(company.getAmount()).toString();
+				}
+				else{
+					return new String("k.A.");
+				}
 			}
 		}; // Ende amountColumn
 			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Marktanteil

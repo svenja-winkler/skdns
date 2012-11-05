@@ -294,7 +294,7 @@ public class MarketSimulation {
 
 		// neuer Preis des Unternehmens ermitteln
 		company.getProduct().setPrice(
-				company.getProduct().getPrice() / priceFactor);
+				Math.ceil(company.getProduct().getPrice() / priceFactor));
 
 		// Umsatz berechnen
 		topLine = (int) Math.ceil(topLine * marketing * priceFactor);
