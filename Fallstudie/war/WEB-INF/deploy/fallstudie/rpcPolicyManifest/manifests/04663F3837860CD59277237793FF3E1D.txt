@@ -1,0 +1,2 @@
+serviceClass: de.dhbw.wwi11sca.skdns.client.simulation.SimulationService
+path: CDA2993BB80EB29C8B50A03DFC6002DC.gwt.rpc

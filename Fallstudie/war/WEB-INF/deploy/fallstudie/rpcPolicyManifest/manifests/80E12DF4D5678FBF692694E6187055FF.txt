@@ -1,0 +1,2 @@
+serviceClass: de.dhbw.wwi11sca.skdns.client.company.CompanyService
+path: 12BFF009E8796680D994A371B59370F2.gwt.rpc

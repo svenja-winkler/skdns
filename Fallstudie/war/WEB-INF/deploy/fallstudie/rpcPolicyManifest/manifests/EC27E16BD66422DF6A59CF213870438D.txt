@@ -1,0 +1,2 @@
+serviceClass: de.dhbw.wwi11sca.skdns.client.admin.AdminService
+path: 4C2A15F36858A2C3B94CC6AE1289C1E5.gwt.rpc

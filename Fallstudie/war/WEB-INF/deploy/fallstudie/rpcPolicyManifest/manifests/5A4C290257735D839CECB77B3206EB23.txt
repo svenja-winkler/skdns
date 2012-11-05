@@ -1,0 +1,2 @@
+serviceClass: de.dhbw.wwi11sca.skdns.client.logout.LogoutService
+path: 669FF721F9314BD9658633B3B42B94C2.gwt.rpc

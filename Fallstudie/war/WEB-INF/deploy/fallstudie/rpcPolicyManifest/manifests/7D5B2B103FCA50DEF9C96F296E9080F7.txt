@@ -1,0 +1,2 @@
+serviceClass: de.dhbw.wwi11sca.skdns.client.login.LoginService
+path: 4B2F9BF6398629DBB5161D268BCDE4C9.gwt.rpc

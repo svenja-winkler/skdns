@@ -1,0 +1,2 @@
+serviceClass: de.dhbw.wwi11sca.skdns.client.home.HomeService
+path: 273C26FD2EE2D659D54FA3B4BD460063.gwt.rpc
