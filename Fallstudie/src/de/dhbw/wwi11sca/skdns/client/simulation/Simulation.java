@@ -115,7 +115,7 @@ public class Simulation implements EntryPoint {
 		absolutePanelSimulation.add(lbHome, 30, 30);
 		lbHome.setStyleName("gwt-Home-Label");
 		// Label Simulation : lbSimulation
-		absolutePanelSimulation.add(lbSimulation, 84, 34);
+		absolutePanelSimulation.add(lbSimulation, 71, 30);
 
 		// ScrollPanel, auf dem der TabPanel angebracht wird
 		absolutePanelSimulation.add(scrollPanelYears, 60, 401);

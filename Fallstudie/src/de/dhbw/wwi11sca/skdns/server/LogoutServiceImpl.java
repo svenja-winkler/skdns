@@ -12,7 +12,6 @@ import com.mongodb.MongoException;
 import de.dhbw.wwi11sca.skdns.client.logout.LogoutService;
 import de.dhbw.wwi11sca.skdns.shared.SimulationVersion;
 
-
 public class LogoutServiceImpl extends RemoteServiceServlet implements
 		LogoutService {
 
@@ -20,24 +19,22 @@ public class LogoutServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void deleteVersions() {
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		List<SimulationVersion> versions = ds
-				.createQuery(SimulationVersion.class)
-				.filter("userID =", LoginServiceImpl.getUserID()).asList();
+		if (LoginServiceImpl.getUserID() != null) {
+			Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
+			List<SimulationVersion> versions = ds
+					.createQuery(SimulationVersion.class)
+					.filter("userID =", LoginServiceImpl.getUserID()).asList();
 
-
-		if(versions.size() > 3)
-			{
-			ds.delete(ds.createQuery(SimulationVersion.class).filter("userID = ",
-					LoginServiceImpl.getUserID()));
-			versions.get(versions.size()-1);
-			for (int i = versions.size(); i > versions.size() - 3; i--) {
-				ds.save(versions.get(i));
+			if (versions.size() > 3) {
+				ds.delete(ds.createQuery(SimulationVersion.class).filter(
+						"userID = ", LoginServiceImpl.getUserID()));
+				versions.get(versions.size() - 1);
+				for (int i = versions.size(); i > versions.size() - 3; i--) {
+					ds.save(versions.get(i));
+				}
 			}
-			}
+		}
 
-
-		
 	}
 
 	private static Mongo getMongo() {

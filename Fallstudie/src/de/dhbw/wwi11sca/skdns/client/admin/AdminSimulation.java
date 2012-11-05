@@ -28,7 +28,6 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 
-import de.dhbw.wwi11sca.skdns.client.login.LoginSimulation;
 import de.dhbw.wwi11sca.skdns.client.logout.LogoutSimulation;
 import de.dhbw.wwi11sca.skdns.shared.Admin;
 import de.dhbw.wwi11sca.skdns.shared.User;
@@ -44,10 +43,9 @@ public class AdminSimulation implements EntryPoint {
 	// Widgets
 	CellTable<User> cellTableUser = new CellTable<User>();
 	List<User> userList;
-	Button btRefresh = new Button("Refresh Usertabelle");
 
 	Button btLogout = new Button("Logout");
-	
+
 	AbsolutePanel absolutePanelUserStats = new AbsolutePanel();
 	Label lbExistingUsers = new Label("aktuell angelegte User:");
 	Label lbLoginCounter = new Label("0");
@@ -72,8 +70,9 @@ public class AdminSimulation implements EntryPoint {
 	Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
 	private RegExp expName = RegExp
 			.compile("[a-zA-Z0-9\u00E4\u00FC\u00F6\u00C4\u00DC\u00DF\u00D6]+");
-	private RegExp expMail = RegExp.compile("^([a-zA-Z0-9]+)(\u0040)([a-zA-Z0-9]+)(\\.)([a-z]+)$");
-	
+	private RegExp expMail = RegExp
+			.compile("^([a-zA-Z0-9]+)(\u0040)([a-zA-Z0-9]+)(\\.)([a-z]+)$");
+
 	String changeInfo;
 	private AdminServiceAsync service = GWT.create(AdminService.class);
 
@@ -93,8 +92,6 @@ public class AdminSimulation implements EntryPoint {
 
 		// Buttons
 		panelAdmin.add(btLogout, 933, 10);
-		panelAdmin.add(btRefresh, 547, 559);
-		btRefresh.setSize("167px", "30px");
 		absolutePanelDeleteUser.add(btDelete, 245, 46);
 		absolutePanelCreateUser.add(btCreateUser, 243, 135);
 
@@ -148,14 +145,7 @@ public class AdminSimulation implements EntryPoint {
 
 		// Eventhandler
 
-		btRefresh.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-
-				service.getUser(new GetUserCallback());
-
-			}
-		}); // btSave
-
+		
 		btDelete.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				// User löschen, dessen Name angezeigt wurde
@@ -173,33 +163,31 @@ public class AdminSimulation implements EntryPoint {
 			public void onClick(ClickEvent event) {
 
 				// Daten aus Textboxen übernehmen und neuen User erzeugen
-				if( expName.test(textBoxUsername.getText())
+				if (expName.test(textBoxUsername.getText())
 						&& expName.test(textBoxPassword.getText())
-						&& expMail.test(textBoxMail.getText())
-							){
+						&& expMail.test(textBoxMail.getText())) {
 					// Überprüfung, ob User schon existiert
-					for (User user: userList){
-						if (textBoxUsername.getText().equals(user.getUsername())){
+					for (User user : userList) {
+						if (textBoxUsername.getText()
+								.equals(user.getUsername())) {
 							alreadyExistingUser = true;
 						}
 					}
-					if (alreadyExistingUser == true){
+					if (alreadyExistingUser == true) {
 						Window.alert("Dieser User existiert bereits.");
 						alreadyExistingUser = false;
-					}
-					else{
+					} else {
 						newUser = new User();
 						newUser.setUsername(textBoxUsername.getText());
 						newUser.setPassword(textBoxPassword.getText());
 						newUser.setMail(textBoxMail.getText());
 						service.saveUser(newUser, new SaveUserCallback());
 					}
-						
+
 				} else {
-					Window.alert("Bitte geben sie alle Daten an!");					
+					Window.alert("Bitte geben sie alle Daten an!");
 				}
 
-				
 			}
 		}); // Ende btCreateUser
 
@@ -216,7 +204,10 @@ public class AdminSimulation implements EntryPoint {
 		// Admin Daten eingeben kann
 		textBoxUsername.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				textBoxUsername.setText("");
+				if (textBoxUsername.getValue().equals("Username")) {
+					textBoxUsername.setText("");
+				}
+
 			}
 		}); // Ende textBoxUsername
 
@@ -224,7 +215,10 @@ public class AdminSimulation implements EntryPoint {
 		// Admin Daten eingeben kann
 		textBoxMail.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				textBoxMail.setText("");
+				if (textBoxMail.getValue().equals("E-Mail")) {
+					textBoxMail.setText("");
+				}
+
 			}
 		}); // Ende textBoxUsername
 
@@ -232,7 +226,10 @@ public class AdminSimulation implements EntryPoint {
 		// Admin Daten eingeben kann
 		textBoxPassword.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				textBoxPassword.setText("");
+				if (textBoxPassword.getValue().equals("Kennwort")) {
+					textBoxPassword.setText("");
+				}
+
 			}
 		}); // Ende textBoxUsername
 
@@ -241,7 +238,10 @@ public class AdminSimulation implements EntryPoint {
 		// Admin Daten eingeben kann
 		textBoxUsernameDelete.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				textBoxUsernameDelete.setText("");
+				if (textBoxUsernameDelete.getValue().equals("Username")) {
+					textBoxUsernameDelete.setText("");
+				}
+
 			}
 		}); // Ende textBoxUsername
 
@@ -317,10 +317,10 @@ public class AdminSimulation implements EntryPoint {
 					@Override
 					public void update(int index, User object, String value) {
 						((User) object)
-						.setForgottenPassword(new Boolean(value));
-				service.updateTable((User) object,
-						new UpdateTableCallback());
-				cellTableUser.redraw();
+								.setForgottenPassword(new Boolean(value));
+						service.updateTable((User) object,
+								new UpdateTableCallback());
+						cellTableUser.redraw();
 					}
 				});
 
@@ -342,7 +342,6 @@ public class AdminSimulation implements EntryPoint {
 		@Override
 		public void onSuccess(Void result) {
 			Window.alert("\u00c4nderung erfolgreich. Informieren Sie den Kunden.");
-
 
 		} // Ende method onSuccess
 	} // Ende class SaveUserCallback
@@ -396,8 +395,8 @@ public class AdminSimulation implements EntryPoint {
 		public void onSuccess(Void result) {
 			Window.alert("User wurde hinzugef\u00fcgt.");
 			service.getUser(new GetUserCallback());
-		
-			service.getStats(new GetStatsCallback() );
+
+			service.getStats(new GetStatsCallback());
 
 		} // Ende method onSuccess
 	} // Ende class SaveUserCallback
