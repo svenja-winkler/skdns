@@ -22,5 +22,5 @@ public interface SimulationService extends RemoteService {
 
 	List<Company> getCompany();
 
-
+	List<Company> getCompany(List<Company> companies);
 }

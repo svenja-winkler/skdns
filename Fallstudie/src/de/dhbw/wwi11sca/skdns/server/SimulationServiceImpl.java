@@ -80,5 +80,32 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements
 		}
 		return m;
 	} // Ende method getMongo
+
+	@Override
+	public List<Company> getCompany(List<Company> companies) {
+		
+		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
+		
+		ds.delete(ds.createQuery(Company.class).filter("userID = ", LoginServiceImpl.getUserID()));
+		ds.delete(ds.createQuery(OwnCompany.class).filter("userID = ", LoginServiceImpl.getUserID()));
+		
+		for (Company company : companies) {
+			ds.save(company);
+		}
+		
+		List<Company> dbCompany = ds.createQuery(Company.class)
+				.filter("userID =", LoginServiceImpl.getUserID()).asList();
+
+		List<OwnCompany> dbOwnCompany = ds.createQuery(OwnCompany.class)
+				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
+
+		// Eigenes Unternehmen aus der Datenbank laden und am Anfang der Liste
+		// in die Liste aufnehmen
+		OwnCompany single = dbOwnCompany.get(0);
+
+		dbCompany.add(0, single);
+
+		return dbCompany;
+	}
 	
 } // Ende class SimulationServiceImpl

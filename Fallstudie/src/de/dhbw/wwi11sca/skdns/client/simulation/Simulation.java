@@ -90,6 +90,7 @@ public class Simulation implements EntryPoint {
 	Label lbInvestMachinePersonal;
 	Label necessaryPersonalInfo;
 	Label unusedMachineCapacityInfo;
+	Label lbAmount;
 
 	int stackYear = 0;
 	int simulationYear = 1;
@@ -150,31 +151,8 @@ public class Simulation implements EntryPoint {
 		// Simulation starten
 		btSimulation.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				// eine neue Simulationsversion des laufenden Jahres wird
-				// angebracht
-				absolutePanelYear[stackYear] = new AbsolutePanel();
-				absolutePanelYear[stackYear].setSize("892px", "280px");
 
-				SimulationVersion version = new SimulationVersion(
-						simulationYear, simulationVersion);
-
-				if (integerBoxMarketing.getValue() != null)
-					version.setMarketing(integerBoxMarketing.getValue());
-				if (integerBoxMachineValue.getValue() != null)
-					version.setMachineValue(integerBoxMachineValue.getValue());
-				if (integerBoxCapacity.getValue() != null)
-					version.setMachineCapacity(integerBoxCapacity.getValue());
-				if (integerBoxMachineStaff.getValue() != null)
-					version.setMachineStaff(integerBoxMachineStaff.getValue());
-				if (integerBoxPersonal.getValue() != null)
-					version.setPersonal(integerBoxPersonal.getValue());
-				if (doubleBoxPrice.getValue() != null)
-					version.setPrice(doubleBoxPrice.getValue());
-
-				deleteValueInvestments();
-
-				service.createSimulationCallback(version,
-						new CreateSimulationCallback());
+				getInput();
 
 				stackYear++;
 				simulationVersion++;
@@ -185,6 +163,11 @@ public class Simulation implements EntryPoint {
 		// Simulation Folgejahr starten
 		btNextYear.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				// TODO Daten aktualisieren
+				service.getCompany(companyListSimulation, new GetCompanyCallback());
+				companyList.clear();
+				summaryCompanies();
+				
 				// Alle Versionen (außer der letzten) des letzten Jahres werden
 				// aus der Ansicht gelöscht:
 				for (int i = deleteCounter; i < stackYear - 1; i++) {
@@ -196,38 +179,10 @@ public class Simulation implements EntryPoint {
 				simulationYear++;
 				simulationVersion = 1;
 
-				// eine Simulationsversion des nächsten Jahres wird angebracht
-				absolutePanelYear[stackYear] = new AbsolutePanel();
-				absolutePanelYear[stackYear].setSize("100%", "250px");
-
-				SimulationVersion version = new SimulationVersion(
-						simulationYear, simulationVersion);
-
-				if (integerBoxMarketing.getValue() != null)
-					version.setMarketing(integerBoxMarketing.getValue());
-				if (integerBoxMachineValue.getValue() != null)
-					version.setMachineValue(integerBoxMachineValue.getValue());
-				if (integerBoxCapacity.getValue() != null)
-					version.setMachineCapacity(integerBoxCapacity.getValue());
-				if (integerBoxMachineStaff.getValue() != null)
-					version.setMachineStaff(integerBoxMachineStaff.getValue());
-				if (integerBoxPersonal.getValue() != null)
-					version.setPersonal(integerBoxPersonal.getValue());
-				if (doubleBoxPrice.getValue() != null)
-					version.setPrice(doubleBoxPrice.getValue());
-
-				// gefüllte Investitionsfelder werden geleert:
-				deleteValueInvestments();
-
-				tabPanelYears
-						.add(absolutePanelYear[stackYear], "Jahr "
-								+ simulationYear + " (" + simulationVersion
-								+ ")", true);
+				getInput();
 
 				stackYear++;
 				simulationVersion++;
-				service.createSimulationCallback(version,
-						new CreateSimulationCallback());
 
 			}
 		}); // Ende btNextYear
@@ -251,6 +206,38 @@ public class Simulation implements EntryPoint {
 		}); // btLogout
 
 	} // Ende onModuleLoad()
+
+	private void getInput() {
+		// eine neue Simulationsversion des laufenden Jahres wird
+		// angebracht
+		absolutePanelYear[stackYear] = new AbsolutePanel();
+		absolutePanelYear[stackYear].setSize("892px", "280px");
+		
+		SimulationVersion version = new SimulationVersion(simulationYear,
+				simulationVersion);
+
+		if (integerBoxMarketing.getValue() != null)
+			version.setMarketing(integerBoxMarketing.getValue());
+		if (integerBoxMachineValue.getValue() != null)
+			version.setMachineValue(integerBoxMachineValue.getValue());
+		if (integerBoxCapacity.getValue() != null)
+			version.setMachineCapacity(integerBoxCapacity.getValue());
+		if (integerBoxMachineStaff.getValue() != null)
+			version.setMachineStaff(integerBoxMachineStaff.getValue());
+		if (integerBoxPersonal.getValue() != null)
+			version.setPersonal(integerBoxPersonal.getValue());
+		if (doubleBoxPrice.getValue() != null) {
+			version.setPrice(doubleBoxPrice.getValue());
+		} else {
+			version.setPrice(0.0);
+		}
+
+		deleteValueInvestments();
+
+		service.createSimulationCallback(version,
+				new CreateSimulationCallback());
+
+	}
 
 	private void deleteValueInvestments() {
 		integerBoxMarketing.setValue(null);
@@ -374,7 +361,6 @@ public class Simulation implements EntryPoint {
 
 	public void showInput(SimulationVersion result) {
 		// Eingegebene Investitionen werden angezeigt
-
 		verticalPanelInput = new VerticalPanel();
 		lbResults = new Label("Ihre Eingabe: ");
 		lbResults.setStyleName("gwt-Panel-Invest-Inputlabel");
@@ -405,8 +391,8 @@ public class Simulation implements EntryPoint {
 	public void showPieChart(final List<Company> companyListSimulation) {
 		// Marktanteilstorte wird erstellt und angezeigt
 		absolutePanelPieChart = new AbsolutePanel();
-		absolutePanelYear[stackYear - 1].add(absolutePanelPieChart, 170, 10);
-		absolutePanelPieChart.setSize("325px", "260px");
+		absolutePanelYear[stackYear - 1].add(absolutePanelPieChart, 160, 10);
+		absolutePanelPieChart.setSize("335px", "260px");
 
 		Runnable onLoadCallback = new Runnable() {
 			public void run() {
@@ -510,13 +496,11 @@ public class Simulation implements EntryPoint {
 	}
 
 	private DataTable createColumnTable(List<Company> companies) {
-
-		// TODO: Gewinn einfügen
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Unternehmen");
 		data.addColumn(ColumnType.NUMBER, "Umsatz");
 		data.addRows(4);
-		data.addRows(companies.size() * 2);
+		data.addRows(companies.size());
 		int rowIndex = 0;
 		// Datentabelle mit Daten befüllen
 
@@ -524,8 +508,6 @@ public class Simulation implements EntryPoint {
 			data.setValue(rowIndex, 0, company.getTradeName());
 			data.setValue(rowIndex, 1, company.getTopLine());
 			rowIndex++;
-			data.setValue(rowIndex, 0, "");
-			data.setValue(rowIndex, 1, company.getAmount());
 			rowIndex++;
 		}
 
@@ -583,7 +565,6 @@ public class Simulation implements EntryPoint {
 			absolutePanelYear[stackYear - 1].setStyleName("gwt-Panel-results");
 			showInput(result);
 			// Angezeigte Daten ind er Tabelle neu laden
-			summaryCompanies();
 
 			companyListSimulation = new ArrayList<Company>();
 			companyListSimulation.add(result.getOwnCompany());
@@ -601,22 +582,26 @@ public class Simulation implements EntryPoint {
 			showColumnChart(companyListSimulation);
 
 			if (result.getNecessaryPersonal() > 0) {
-				necessaryPersonalInfo = new Label(
-						"F\u00fcr die neue Maschine ist nicht gen\u00fcgend Personal vorhanden. Es fehlen mindestens "
-								+ result.getNecessaryPersonal()
-								+ " Mitarbeiter.");
+				necessaryPersonalInfo = new Label("Es fehlen mindestens "
+						+ result.getNecessaryPersonal() + " Mitarbeiter.");
 				absolutePanelYear[stackYear - 1].add(necessaryPersonalInfo,
-						130, 0);
+						105, 6);
 				necessaryPersonalInfo.setStyleName("gwt-Infolabel");
 
 			}
 			if (result.isUnusedMachineCapacity() == true) {
+
 				unusedMachineCapacityInfo = new Label(
 						"M\u00f6chten Sie noch eine Maschine kaufen? Sie k\u00f6nnten dadurch Ihr Betriebergebnis steigern!");
 				absolutePanelYear[stackYear - 1].add(unusedMachineCapacityInfo,
-						130, 22);
+						105, 18);
 				unusedMachineCapacityInfo.setStyleName("gwt-Infolabel");
 			}
+
+			lbAmount = new Label("Gewinn des eigenen Unternehmen: "
+					+ result.getOwnCompany().getAmount());
+			absolutePanelYear[stackYear - 1].add(lbAmount, 516, 251);
+			lbAmount.setStyleName("gwt-Panel-Invest-Inputlabel");
 
 		} // Ende method onSuccess
 

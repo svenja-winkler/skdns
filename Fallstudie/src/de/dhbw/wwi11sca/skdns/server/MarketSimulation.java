@@ -45,9 +45,13 @@ public class MarketSimulation {
 		company2 = version.getCompany2();
 		company3 = version.getCompany3();
 
+		// Hinzufügen des neu eingestellten Personals
+		ownCompany.setNumberOfStaff(ownCompany.getNumberOfStaff() + version.getPersonal());
+		
 		// Sonderfall 1
 		// Überprüft, ob genügend Personal für den Einsatz aller Maschinen
 		// vorhanden ist
+		
 		specialCaseOne(version);
 
 		// Schritt 1
@@ -97,18 +101,18 @@ public class MarketSimulation {
 
 		// Schritt 5
 		// Ermittlung der Unternehmensabsatzmengen
-		calculateSalesVolume(topLineMarket, ownCompany.getMarketShare(),
+		ownCompany.getProduct().setSalesVolume(calculateSalesVolume(topLineMarket, ownCompany.getMarketShare(),
 				ownCompany.getProduct().getPrice(), ownCompany.getProduct()
-						.getSalesVolume());
-		calculateSalesVolume(topLineMarket, company1.getMarketShare(), company1
+						.getSalesVolume()));
+		company1.getProduct().setSalesVolume(calculateSalesVolume(topLineMarket, company1.getMarketShare(), company1
 				.getProduct().getPrice(), company1.getProduct()
-				.getSalesVolume());
-		calculateSalesVolume(topLineMarket, company2.getMarketShare(), company2
+				.getSalesVolume()));
+		company2.getProduct().setSalesVolume(calculateSalesVolume(topLineMarket, company1.getMarketShare(), company1
 				.getProduct().getPrice(), company2.getProduct()
-				.getSalesVolume());
-		calculateSalesVolume(topLineMarket, company3.getMarketShare(), company3
+				.getSalesVolume()));
+		company3.getProduct().setSalesVolume(calculateSalesVolume(topLineMarket, company1.getMarketShare(), company1
 				.getProduct().getPrice(), company3.getProduct()
-				.getSalesVolume());
+				.getSalesVolume()));
 
 		// Überprüfung, ob der Markt wächst oder sinkt
 		if (increaseRandom[random] > 1) {
@@ -290,7 +294,7 @@ public class MarketSimulation {
 
 		// neuer Preis des Unternehmens ermitteln
 		company.getProduct().setPrice(
-				priceFactor / company.getProduct().getPrice());
+				company.getProduct().getPrice() / priceFactor);
 
 		// Umsatz berechnen
 		topLine = (int) Math.ceil(topLine * marketing * priceFactor);
@@ -315,6 +319,7 @@ public class MarketSimulation {
 			priceNew = priceOld;
 		}
 		double priceFactor = priceOld / priceNew;
+		
 		topLine = (int) (Math.ceil(topLine * marketing * priceFactor));
 		return topLine;
 	} // Ende method calculateTopLineOwnCompany
@@ -324,7 +329,7 @@ public class MarketSimulation {
 		double topLineCompanyCalc = topLineCompany;
 		double topLineCalc = topLine;
 		// TODO warum sind topLineCompanyCalc und topLineCalc 0?
-		marketShare = (marketShare + (topLineCompanyCalc / topLineCalc) * 100) * 0.5;
+		marketShare = Math.round((marketShare + (topLineCompanyCalc / topLineCalc) * 100) * 0.5);
 		return marketShare;
 	} // Ende method calculateMarketShare
 
