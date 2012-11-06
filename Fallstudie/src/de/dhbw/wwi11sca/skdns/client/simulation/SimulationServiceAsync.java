@@ -16,7 +16,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface SimulationServiceAsync {
 
 	void getCompany(AsyncCallback<List<Company>> callback);
-	
+
 	void getCompany(List<Company> companies,
 			AsyncCallback<List<Company>> callback);
 

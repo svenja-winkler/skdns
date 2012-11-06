@@ -14,11 +14,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import de.dhbw.wwi11sca.skdns.shared.Company;
-import de.dhbw.wwi11sca.skdns.shared.OwnCompany;
 
 @RemoteServiceRelativePath("home")
 public interface HomeService extends RemoteService {
-
 
 	List<Company> getCompany();
 

@@ -19,11 +19,11 @@ public interface AdminServiceAsync {
 	void getUser(AsyncCallback<List<User>> callback);
 
 	void saveUser(User newUser, AsyncCallback<Void> callback);
+
 	void updateTable(User user, AsyncCallback<Void> callback);
 
 	void deleteUser(String deleteUser, AsyncCallback<Void> callback);
 
 	void getStats(AsyncCallback<Admin> callback);
 
-	
 }
