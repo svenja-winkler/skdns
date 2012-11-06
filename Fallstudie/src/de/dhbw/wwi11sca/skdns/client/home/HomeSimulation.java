@@ -117,7 +117,8 @@ public class HomeSimulation implements EntryPoint {
 		TextColumn<Company> tradeNameColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				return new String(company.getTradeName()).toString();
+				return new String(company.getTradeName());
+
 			}
 
 		}; // Ende tradeNameColumn
@@ -125,17 +126,20 @@ public class HomeSimulation implements EntryPoint {
 		TextColumn<Company> topLineColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				return new Integer(company.getTopLine()).toString();
+				if (company.getTopLine() != 0) {
+					return new Integer(company.getTopLine()).toString();
+				} else {
+					return new String("k.A.");
+				}
 			}
 		}; // Ende topLineColumn
 			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Gewinn
 		TextColumn<Company> amountColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				if(company.getAmount() != 0){
+				if (company.getAmount() != 0) {
 					return new Integer(company.getAmount()).toString();
-				}
-				else{
+				} else {
 					return new String("k.A.");
 				}
 			}
@@ -144,7 +148,11 @@ public class HomeSimulation implements EntryPoint {
 		TextColumn<Company> marketShareColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(final Company company) {
-				return new Double(company.getMarketShare()).toString();
+				if (company.getMarketShare() != 0.0) {
+					return new Double(company.getMarketShare()).toString();
+				} else {
+					return new String("k.A.");
+				}
 			}
 		}; // Ende marketShareColumn
 			// Unternehmensdaten der Konkurrenzunternehmen befüllen:
@@ -152,8 +160,12 @@ public class HomeSimulation implements EntryPoint {
 		TextColumn<Company> salesVolumeColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(final Company company) {
-				return new Integer(company.getProduct().getSalesVolume())
-						.toString();
+				if (company.getProduct().getSalesVolume() != 0) {
+					return new Integer(company.getProduct().getSalesVolume())
+							.toString();
+				} else {
+					return new String("k.A.");
+				}
 			}
 		}; // Ende salesVolumeColumn
 			// Unternehmensdaten der Konkurrenzunternehmen befüllen:
@@ -161,7 +173,12 @@ public class HomeSimulation implements EntryPoint {
 		TextColumn<Company> productPriceColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(final Company company) {
-				return new Double(company.getProduct().getPrice()).toString();
+				if (company.getProduct().getPrice() != 0.0) {
+					return new Double(company.getProduct().getPrice())
+							.toString();
+				} else {
+					return new String("k.A.");
+				}
 			}
 		}; // Ende productPriceColumn
 
@@ -201,11 +218,9 @@ public class HomeSimulation implements EntryPoint {
 			// to the widget.
 			companyList = dataProvider.getList();
 
-			
-			
 			for (Company company : result) {
 				companyList.add(company);
-				if (company.getTopLine() == 0){
+				if (company.getTopLine() == 0) {
 					emptyCompanyCounter++;
 				}
 			} // Ende for-Schleife
@@ -220,5 +235,4 @@ public class HomeSimulation implements EntryPoint {
 		} // Ende method onSuccess
 	} // Ende class GetCompanyCallback
 
-	
 } // Ende class HomeSimulation

@@ -10,38 +10,52 @@ public class Company implements Serializable {
 	private int topLine;
 	private int amount;
 	private double marketShare;
-	private String trendOfRequest;
 	private Product product;
 	private String tradeName;
 
 	public Company() {
 	}
 
-	public Company(int topLine, int amount, double marketShare,
-			String trendOfRequest, Product product) {
+	public Company(String userID, String companyID, String tradeName,
+			Product product) {
+		this.userID = userID;
+		this.companyID = companyID;
+		this.tradeName = tradeName;
+		this.product = product;
+	}
+
+	public Company(String userID, String companyID, String tradeName,
+			int topLine, double marketShare, Product product) {
+		this.userID = userID;
+		this.companyID = companyID;
+		this.tradeName = tradeName;
+		this.topLine = topLine;
+		this.marketShare = marketShare;
+		this.product = product;
+	}
+
+	public Company(int topLine, int amount, double marketShare, Product product) {
 		this.setTopLine(topLine);
 		this.setAmount(amount);
 		this.setMarketShare(marketShare);
-		this.setTrendOfRequest(trendOfRequest);
 		this.setProduct(product);
 	}
 
-	public Company(int topLine, int amount, double marketShare,
-			String trendOfRequest) {
+	public Company(int topLine, int amount, double marketShare) {
 		this.setTopLine(topLine);
 		this.setAmount(amount);
 		this.setMarketShare(marketShare);
-		this.setTrendOfRequest(trendOfRequest);
 
 	}
 
-	public String getCompanyID(){
+	public String getCompanyID() {
 		return companyID;
 	}
-	
-	public void setCompanyID(String companyID){
+
+	public void setCompanyID(String companyID) {
 		this.companyID = companyID;
 	}
+
 	public int getTopLine() {
 		return topLine;
 	}
@@ -64,14 +78,6 @@ public class Company implements Serializable {
 
 	public void setMarketShare(double marketShare) {
 		this.marketShare = marketShare;
-	}
-
-	public String getTrendOfRequest() {
-		return trendOfRequest;
-	}
-
-	public void setTrendOfRequest(String trendOfRequest) {
-		this.trendOfRequest = trendOfRequest;
 	}
 
 	public Product getProduct() {

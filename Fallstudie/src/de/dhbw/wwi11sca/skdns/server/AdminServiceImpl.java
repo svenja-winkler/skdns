@@ -50,71 +50,65 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 
 	@Override
 	public void saveUser(User newUser) {
-		newUser.setUserID(newUser.getUsername());		
-		
-		OwnCompany ownCompany = new OwnCompany();
+		newUser.setUserID(newUser.getUsername());
+		// String companyID, int topLine,
+		// double marketShare, Product product, String tradeName,
+		// double fixedCosts, double variableCosts, Machines machines,
+		// int salaryStaff, int numberOfStaff
 		Product ownProduct = new Product();
-		Machines ownMachines = new Machines();
-		ownMachines.setUserID(newUser.getUsername());
-		ownCompany.setMachines(ownMachines);
+		ownProduct.setPrice(12.34);
 		ownProduct.setUserID(newUser.getUsername());
-		ownCompany.setProduct(ownProduct);
-		ownCompany.setTradeName("Eigenes Unternehmen");
-		ownCompany.setUserID(newUser.getUsername());
-		ownCompany.setCompanyID("ownCom");
-		
-		Company company1 = new Company();
-		company1.setTradeName("Competitior");
-		company1.setUserID(newUser.getUsername());
-		company1.setCompanyID("1");
+		Machines ownMachine = new Machines(100046, 10, 10, 1234.56);
+		OwnCompany ownCompany = new OwnCompany(newUser.getUsername(), "ownCom",
+				1234567, 50.05, ownProduct, "Eigenes Unternehmen", 12345, 4.56,
+				ownMachine, 12345, 15);
+
 		Product productCom1 = new Product();
+		productCom1.setPrice(12.34);
 		productCom1.setUserID(newUser.getUsername());
-		company1.setProduct(productCom1);
-		
-		Company company2 = new Company();
-		company2.setTradeName("Competitior");
-		company2.setUserID(newUser.getUsername());
-		company2.setCompanyID("2");
+		Company company1 = new Company(newUser.getUsername(), "1",
+				"Konkurrent", 1234567, 49.95, productCom1);
+
 		Product productCom2 = new Product();
 		productCom2.setUserID(newUser.getUsername());
-		company2.setProduct(productCom2);
-		
-		Company company3 = new Company();
-		company3.setTradeName("Competitior");
-		company3.setUserID(newUser.getUsername());
-		company3.setCompanyID("3");
+		Company company2 = new Company(newUser.getUsername(), "2",
+				"Konkurrent", productCom2);
+
 		Product productCom3 = new Product();
 		productCom3.setUserID(newUser.getUsername());
-		company3.setProduct(productCom3);
-		
+		Company company3 = new Company(newUser.getUsername(), "3",
+				"Konkurrent", productCom3);
+
 		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
 		ds.save(newUser);
 		ds.save(ownCompany);
 		ds.save(company1);
 		ds.save(company2);
 		ds.save(company3);
-		
-		
-		
+
 	} // Ende method saveUser
 
 	@Override
-	public void deleteUser(String deleteUser) {		
+	public void deleteUser(String deleteUser) {
 		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
 		ds.delete(ds.createQuery(User.class).filter("userID = ", deleteUser));
-		ds.delete(ds.createQuery(OwnCompany.class).filter("userID = ", deleteUser));
+		ds.delete(ds.createQuery(OwnCompany.class).filter("userID = ",
+				deleteUser));
 		ds.delete(ds.createQuery(Company.class).filter("userID = ", deleteUser));
 		ds.delete(ds.createQuery(Product.class).filter("userID = ", deleteUser));
-		ds.delete(ds.createQuery(Machines.class).filter("userID = ", deleteUser));
-		ds.delete(ds.createQuery(SimulationVersion.class).filter("userID = ", deleteUser));
+		ds.delete(ds.createQuery(Machines.class)
+				.filter("userID = ", deleteUser));
+		ds.delete(ds.createQuery(SimulationVersion.class).filter("userID = ",
+				deleteUser));
 	} // Ende method deleteUser
 
 	@Override
 	public Admin getStats() {
 		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		List<User> allUser = ds.createQuery(User.class).filter("username <>", "admin").asList();
+		List<User> allUser = ds.createQuery(User.class)
+				.filter("username <>", "admin").asList();
 		admin.setExistingUserCount(allUser.size());
-		
+
 		return getAdmin();
 	} // Ende method getStats
 
@@ -129,14 +123,15 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 	@Override
 	public void updateTable(User user) {
 		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		Query<User> updateQuery = ds.createQuery(User.class).field("userID").equal(user.getUserID());
+		Query<User> updateQuery = ds.createQuery(User.class).field("userID")
+				.equal(user.getUserID());
 		// ds.createQuery(EigenesUnternehmen.class);
 		UpdateOperations<User> ops;
 		ops = ds.createUpdateOperations(User.class)
 				.set("password", user.getPassword())
 				.set("forgottenPassword", user.isForgottenPassword());
-								
-		ds.update(updateQuery,ops);
+
+		ds.update(updateQuery, ops);
 	}
 
 } // Ende class AdminServiceImpl

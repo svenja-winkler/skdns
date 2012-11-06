@@ -14,6 +14,24 @@ public class OwnCompany extends Company implements Serializable {
 	public OwnCompany() {
 	}
 
+	public OwnCompany(String userID, String companyID, int topLine,
+			double marketShare, Product product, String tradeName,
+			double fixedCosts, double variableCosts, Machines machines,
+			int salaryStaff, int numberOfStaff) {
+		setUserID(userID);
+		setCompanyID(companyID);
+		setTopLine(topLine);
+		setMarketShare(marketShare);
+		setProduct(product);
+		setTradeName(tradeName);
+		this.fixedCosts = fixedCosts;
+		this.variableCosts = variableCosts;
+		this.machines = machines;
+		this.salaryStaff = salaryStaff;
+		this.numberOfStaff = numberOfStaff;
+
+	}
+
 	public double getFixedCosts() {
 		return fixedCosts;
 	}
@@ -53,6 +71,5 @@ public class OwnCompany extends Company implements Serializable {
 	public void setNumberOfStaff(int numberOfStaff) {
 		this.numberOfStaff = numberOfStaff;
 	}
-
 
 }

@@ -122,7 +122,6 @@ public class AdminSimulation implements EntryPoint {
 		absolutePanelCreateUser.add(textBoxMail, 10, 135);
 
 		textBoxUsername.setSize("159px", "18px");
-
 		textBoxUsername.setText("Username");
 		textBoxPassword.setText("Kennwort");
 		textBoxMail.setText("E-Mail");

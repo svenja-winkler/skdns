@@ -164,10 +164,11 @@ public class Simulation implements EntryPoint {
 		btNextYear.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				// TODO Daten aktualisieren
-				service.getCompany(companyListSimulation, new GetCompanyCallback());
+				service.getCompany(companyListSimulation,
+						new GetCompanyCallback());
 				companyList.clear();
 				summaryCompanies();
-				
+
 				// Alle Versionen (außer der letzten) des letzten Jahres werden
 				// aus der Ansicht gelöscht:
 				for (int i = deleteCounter; i < stackYear - 1; i++) {
@@ -212,7 +213,7 @@ public class Simulation implements EntryPoint {
 		// angebracht
 		absolutePanelYear[stackYear] = new AbsolutePanel();
 		absolutePanelYear[stackYear].setSize("892px", "280px");
-		
+
 		SimulationVersion version = new SimulationVersion(simulationYear,
 				simulationVersion);
 
@@ -256,56 +257,81 @@ public class Simulation implements EntryPoint {
 		tableCompanies.setSize("894px", "156px");
 		tableCompanies.setStyleName("cellTableHeader");
 
+		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
 		TextColumn<Company> tradeNameColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				return new String(company.getTradeName()).toString();
+				return new String(company.getTradeName());
+
 			}
-		};
-		TextColumn<Company> umsatzColumn = new TextColumn<Company>() {
+
+		}; // Ende tradeNameColumn
+			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
+		TextColumn<Company> topLineColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				return new Integer(company.getTopLine()).toString();
-			}
-		};
-		TextColumn<Company> gewinnColumn = new TextColumn<Company>() {
-			@Override
-			public String getValue(Company company) {
-				if(company.getAmount() != 0){
-					return new Integer(company.getAmount()).toString();
-				}
-				else{
+				if (company.getTopLine() != 0) {
+					return new Integer(company.getTopLine()).toString();
+				} else {
 					return new String("k.A.");
 				}
-				
 			}
-		};
-		TextColumn<Company> marktAnteilColumn = new TextColumn<Company>() {
+		}; // Ende topLineColumn
+			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Gewinn
+		TextColumn<Company> amountColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
-				return new Double(company.getMarketShare()).toString();
+				if (company.getAmount() != 0) {
+					return new Integer(company.getAmount()).toString();
+				} else {
+					return new String("k.A.");
+				}
 			}
-		};
-		TextColumn<Company> produktMengeColumn = new TextColumn<Company>() {
+		}; // Ende amountColumn
+			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Marktanteil
+		TextColumn<Company> marketShareColumn = new TextColumn<Company>() {
 			@Override
-			public String getValue(Company company) {
-				return new Integer(company.getProduct().getSalesVolume())
-						.toString();
+			public String getValue(final Company company) {
+				if (company.getMarketShare() != 0.0) {
+					return new Double(company.getMarketShare()).toString();
+				} else {
+					return new String("k.A.");
+				}
 			}
-		};
-		TextColumn<Company> produktPreisColumn = new TextColumn<Company>() {
+		}; // Ende marketShareColumn
+			// Unternehmensdaten der Konkurrenzunternehmen befüllen:
+			// Produktmenge
+		TextColumn<Company> salesVolumeColumn = new TextColumn<Company>() {
 			@Override
-			public String getValue(Company company) {
-				return new Double(company.getProduct().getPrice()).toString();
+			public String getValue(final Company company) {
+				if (company.getProduct().getSalesVolume() != 0) {
+					return new Integer(company.getProduct().getSalesVolume())
+							.toString();
+				} else {
+					return new String("k.A.");
+				}
 			}
-		};
+		}; // Ende salesVolumeColumn
+			// Unternehmensdaten der Konkurrenzunternehmen befüllen:
+			// Produktpreis
+		TextColumn<Company> productPriceColumn = new TextColumn<Company>() {
+			@Override
+			public String getValue(final Company company) {
+				if (company.getProduct().getPrice() != 0.0) {
+					return new Double(company.getProduct().getPrice())
+							.toString();
+				} else {
+					return new String("k.A.");
+				}
+			}
+		}; // Ende productPriceColumn
 
 		tableCompanies.addColumn(tradeNameColumn, "Firma");
-		tableCompanies.addColumn(umsatzColumn, "Umsatz");
-		tableCompanies.addColumn(gewinnColumn, "Gewinn");
-		tableCompanies.addColumn(marktAnteilColumn, "Marktanteil");
-		tableCompanies.addColumn(produktPreisColumn, "Produktpreis");
-		tableCompanies.addColumn(produktMengeColumn, "Absatzmenge");
+		tableCompanies.addColumn(topLineColumn, "Umsatz");
+		tableCompanies.addColumn(amountColumn, "Gewinn");
+		tableCompanies.addColumn(marketShareColumn, "Marktanteil");
+		tableCompanies.addColumn(productPriceColumn, "Produktpreis");
+		tableCompanies.addColumn(salesVolumeColumn, "Absatzmenge");
 
 		// TODO: Wenn eine Simulation aufgerufen wurde, soll die Liste
 		// aktualisiert werden

@@ -162,35 +162,35 @@ public class CompanySimulation implements EntryPoint {
 				logout.onModuleLoad();
 			}
 		});
-		
+
 		// Maschinen
 		addCellTableMachines();
-		
+
 		Button btAddMachines = new Button("+");
 		absolutePanelOwnCompany.add(btAddMachines, 682, 277);
 		btAddMachines.setSize("30px", "30px");
-				
+
 		Button btDeleteMachines = new Button("-");
 		absolutePanelOwnCompany.add(btDeleteMachines, 714, 277);
 		btDeleteMachines.setSize("30px", "30px");
-				
+
 		btAddMachines.addClickHandler(new ClickHandler() {
-					
-				@Override
-				public void onClick(ClickEvent event) {
-					Machines newMachine = new Machines();
-					machinesOwnCompany.add(newMachine);					
-				}
-		});
-		btDeleteMachines.addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
-				
-				machinesOwnCompany.remove(machinesOwnCompany.size()-1)	;			
+				Machines newMachine = new Machines();
+				machinesOwnCompany.add(newMachine);
 			}
-	});
-	
+		});
+		btDeleteMachines.addClickHandler(new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+				machinesOwnCompany.remove(machinesOwnCompany.size() - 1);
+			}
+		});
+
 		// AbsolutePanels für die Unternehmen anbringen
 		// Tab für das eigene Unternehmen
 		addTabPanelOwnCompany();
@@ -253,23 +253,23 @@ public class CompanySimulation implements EntryPoint {
 		// Unternehmensdaten löschen
 		absolutePanelOwnCompany.add(btDeleteOwnCompany, 718, 541);
 		btDeleteOwnCompany.setSize("100px", "35px");
-		
-				// Eventhandler
-				// Unternehmen löschen
-				btDeleteOwnCompany.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						// TODO: Meldung: Sind sie sich sicher
-						textBoxTradeName.setText("0");
-						textBoxTopLineOwnCompany.setValue("0");
-						textBoxMarketShareOwnCompany.setValue("0");
-						textBoxProductPriceOwnCompany.setValue("0");
-						textBoxVariableCosts.setValue("0");
-						textBoxNumberOfStaff.setValue("0");
-						textBoxSalaryOfStaff.setValue("0");
-						// TODO Maschinen in Oberfläche löschen
-						// TODO EigenesUnternehmen aus DB löschen
-					}
-				}); // Ende btDeleteOwnCompany
+
+		// Eventhandler
+		// Unternehmen löschen
+		btDeleteOwnCompany.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				// TODO: Meldung: Sind sie sich sicher
+				textBoxTradeName.setText("0");
+				textBoxTopLineOwnCompany.setValue("0");
+				textBoxMarketShareOwnCompany.setValue("0");
+				textBoxProductPriceOwnCompany.setValue("0");
+				textBoxVariableCosts.setValue("0");
+				textBoxNumberOfStaff.setValue("0");
+				textBoxSalaryOfStaff.setValue("0");
+				// TODO Maschinen in Oberfläche löschen
+				// TODO EigenesUnternehmen aus DB löschen
+			}
+		}); // Ende btDeleteOwnCompany
 		// Unternehmen speichern
 		btSaveOwnCompany.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -316,117 +316,120 @@ public class CompanySimulation implements EntryPoint {
 			}
 		}); // Ende btSaveOwnCompany
 	} // Ende method addTabPanelOwnCompany
-	private void addCellTableMachines(){
+
+	private void addCellTableMachines() {
 		// Maschinen
 		cellTableMachines = new CellTable<Machines>();
 		absolutePanelOwnCompany.add(cellTableMachines, 88, 277);
 		cellTableMachines.setSize("656px", "100px");
 		cellTableMachines.setStyleName("cellTableHeader");
 
-
 		final EditTextCell serviceLifeCell = new EditTextCell();
 		Column<Machines, String> serviceLifeColumn = new Column<Machines, String>(
-				serviceLifeCell){
+				serviceLifeCell) {
 
-					@Override
-					public String getValue(Machines object) {
-						return new Integer(object.getServiceLife()).toString();
-					}
-			
+			@Override
+			public String getValue(Machines object) {
+				return new Integer(object.getServiceLife()).toString();
+			}
+
 		};
 		serviceLifeColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
 			@Override
 			public void update(int index, Machines object, String value) {
-			
-				if( expInteger.test(value)){
+
+				if (expInteger.test(value)) {
 					ownCom.getMachines().setServiceLife(new Integer(value));
 					cellTableMachines.redraw();
-				}else{
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");					
+				} else {
+					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
 				}
-				
+
 			}
-		});//Ende serviceLifeColumn
-		
+		});// Ende serviceLifeColumn
+
 		final EditTextCell capacityCell = new EditTextCell();
 		Column<Machines, String> capacityColumn = new Column<Machines, String>(
-				capacityCell){
+				capacityCell) {
 
-					@Override
-					public String getValue(Machines object) {
-						return new Integer(object.getCapacity()).toString();
-					}
-			
+			@Override
+			public String getValue(Machines object) {
+				return new Integer(object.getCapacity()).toString();
+			}
+
 		};
 		capacityColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
 			@Override
 			public void update(int index, Machines object, String value) {
-			
-				if( expInteger.test(value)){
+
+				if (expInteger.test(value)) {
 					ownCom.getMachines().setCapacity(new Integer(value));
 					cellTableMachines.redraw();
-				}else{
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");					
+				} else {
+					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
 				}
-				
+
 			}
-		});	//Ende capacityColumn
-		
+		}); // Ende capacityColumn
+
 		final EditTextCell accountingValueCell = new EditTextCell();
 		Column<Machines, String> accountingValueColumn = new Column<Machines, String>(
-				accountingValueCell){
+				accountingValueCell) {
 
-					@Override
-					public String getValue(Machines object) {
-						return new Double(object.getAccountingValue()).toString();
-					}
-			
-		};
-		accountingValueColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
 			@Override
-			public void update(int index, Machines object, String value) {
-			
-				if( expDouble.test(value)){
-					ownCom.getMachines().setAccountingValue(new Double(value));
-					cellTableMachines.redraw();
-				}else{
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");					
-				}
-				
+			public String getValue(Machines object) {
+				return new Double(object.getAccountingValue()).toString();
 			}
-		});	//Ende accountingValueColumn
-		
+
+		};
+		accountingValueColumn
+				.setFieldUpdater(new FieldUpdater<Machines, String>() {
+					@Override
+					public void update(int index, Machines object, String value) {
+
+						if (expDouble.test(value)) {
+							ownCom.getMachines().setAccountingValue(
+									new Double(value));
+							cellTableMachines.redraw();
+						} else {
+							Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
+						}
+
+					}
+				}); // Ende accountingValueColumn
+
 		final EditTextCell staffCell = new EditTextCell();
 		Column<Machines, String> staffColumn = new Column<Machines, String>(
-				staffCell){
+				staffCell) {
 
-					@Override
-					public String getValue(Machines object) {
-						return new Integer(object.getStaff()).toString();
-					}
-			
+			@Override
+			public String getValue(Machines object) {
+				return new Integer(object.getStaff()).toString();
+			}
+
 		};
 		staffColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
 			@Override
 			public void update(int index, Machines object, String value) {
-			
-				if( expInteger.test(value)){
+
+				if (expInteger.test(value)) {
 					ownCom.getMachines().setStaff(new Integer(value));
 					cellTableMachines.redraw();
-				}else{
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");					
+				} else {
+					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
 				}
-				
+
 			}
-		});	//Ende staffColumn
-		
-				cellTableMachines.addColumn(serviceLifeColumn,
-						"bisherige Nutzungsdauer");
-				cellTableMachines.addColumn(capacityColumn, "Kapazit\u00e4t");
-				cellTableMachines.addColumn(accountingValueColumn, "Preis");
-				cellTableMachines.addColumn(staffColumn, "Notwendige Mitarbeiter");
-		
+		}); // Ende staffColumn
+
+		cellTableMachines.addColumn(serviceLifeColumn,
+				"restliche Nutzungsdauer");
+		cellTableMachines.addColumn(capacityColumn, "Kapazit\u00e4t");
+		cellTableMachines.addColumn(accountingValueColumn, "Preis");
+		cellTableMachines.addColumn(staffColumn, "Notwendige Mitarbeiter");
+
 	}
+
 	private void addTabPanelCompanyOne() {
 		// Tab für Unternehmen 1 anbringen
 		absolutePanelCompany1.setSize("100%", "596");
@@ -447,51 +450,51 @@ public class CompanySimulation implements EntryPoint {
 		textBoxMarketShareCompany1.setSize("161", "24");
 		absolutePanelCompany1.add(textBoxProductPriceCompany1, 136, 94);
 		textBoxProductPriceCompany1.setSize("161px", "22px");
-		
-				absolutePanelCompany1.add(btSaveCompany1, 233, 173);
-				btSaveCompany1.setSize("100px", "35px");
-				// Buttons
-				absolutePanelCompany1.add(btDeleteCompany1, 416, 173);
-				btDeleteCompany1.setSize("100px", "35px");
-				
-						// Eventhandler
-						// Unternehmen löschen
-						btDeleteCompany1.addClickHandler(new ClickHandler() {
-							public void onClick(ClickEvent event) {
-								// TODO Daten Unternehmen 1 aus DB löschen
-								textBoxTopLineCompany1.setValue("0");
-								textBoxMarketShareCompany1.setValue("0");
-								textBoxProductPriceCompany1.setValue("0");
-							}
-						}); // Ende btDeleteCompany1
-				// Unternehmen speichern
-				btSaveCompany1.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
 
-						if (expInteger.test(textBoxTopLineCompany1.getText())
-								&& expDouble.test(textBoxMarketShareCompany1.getText())
-								&& expDouble.test(textBoxProductPriceCompany1.getText())
+		absolutePanelCompany1.add(btSaveCompany1, 233, 173);
+		btSaveCompany1.setSize("100px", "35px");
+		// Buttons
+		absolutePanelCompany1.add(btDeleteCompany1, 416, 173);
+		btDeleteCompany1.setSize("100px", "35px");
 
-						) {
-							companies.get(0).setTopLine(
-									new Integer(textBoxTopLineCompany1.getText()));
-							companies.get(0).setMarketShare(
-									new Double(textBoxMarketShareCompany1.getText()));
-							companies
-									.get(0)
-									.getProduct()
-									.setPrice(
-											new Double(textBoxProductPriceCompany1
-													.getText()));
+		// Eventhandler
+		// Unternehmen löschen
+		btDeleteCompany1.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				// TODO Daten Unternehmen 1 aus DB löschen
+				textBoxTopLineCompany1.setValue("0");
+				textBoxMarketShareCompany1.setValue("0");
+				textBoxProductPriceCompany1.setValue("0");
+			}
+		}); // Ende btDeleteCompany1
+		// Unternehmen speichern
+		btSaveCompany1.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
 
-							service.addCompany(companies.get(0),
-									new AddCompanyCallback());
-						} else {
-							Window.alert("Bitte Eingabe \u00FCberpr\u00FCfen");
-						} // Ende if-else
+				if (expInteger.test(textBoxTopLineCompany1.getText())
+						&& expDouble.test(textBoxMarketShareCompany1.getText())
+						&& expDouble.test(textBoxProductPriceCompany1.getText())
 
-					}
-				}); // Ende btSaveCompany1
+				) {
+					companies.get(0).setTopLine(
+							new Integer(textBoxTopLineCompany1.getText()));
+					companies.get(0).setMarketShare(
+							new Double(textBoxMarketShareCompany1.getText()));
+					companies
+							.get(0)
+							.getProduct()
+							.setPrice(
+									new Double(textBoxProductPriceCompany1
+											.getText()));
+
+					service.addCompany(companies.get(0),
+							new AddCompanyCallback());
+				} else {
+					Window.alert("Bitte Eingabe \u00FCberpr\u00FCfen");
+				} // Ende if-else
+
+			}
+		}); // Ende btSaveCompany1
 
 	} // Ende method addTabPanelCompanyOne
 
@@ -515,47 +518,47 @@ public class CompanySimulation implements EntryPoint {
 		textBoxMarketShareCompany2.setSize("161", "24");
 		absolutePanelCompany2.add(textBoxProductPriceCompany2, 136, 94);
 		textBoxProductPriceCompany2.setSize("161px", "22px");
-		
-				absolutePanelCompany2.add(btSaveCompany2, 233, 173);
-				btSaveCompany2.setSize("100px", "35px");
-				// Buttons
-				absolutePanelCompany2.add(btDeleteCompany2, 416, 173);
-				btDeleteCompany2.setSize("100px", "35px");
-				// Eventhandler
-				// Unternehmen löschen
-				btDeleteCompany2.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						// TODO Daten Unternehmen 2 aus DB löschen
-						textBoxTopLineCompany2.setValue("0");
-						textBoxMarketShareCompany2.setValue("0");
-						textBoxProductPriceCompany2.setValue("0");
-					}
-				}); // Ende btDeleteCompany2
-				// Unternehmen speichern
-				btSaveCompany2.addClickHandler(new ClickHandler() {
-					public void onClick(ClickEvent event) {
-						if (expInteger.test(textBoxTopLineCompany2.getText())
-								&& expDouble.test(textBoxMarketShareCompany2.getText())
-								&& expDouble.test(textBoxProductPriceCompany2.getText())
 
-						) {
-							companies.get(1).setTopLine(
-									new Integer(textBoxTopLineCompany2.getText()));
-							companies.get(1).setMarketShare(
-									new Double(textBoxMarketShareCompany2.getText()));
-							companies
-									.get(1)
-									.getProduct()
-									.setPrice(
-											new Double(textBoxProductPriceCompany2
-													.getText()));
-							service.addCompany(companies.get(1),
-									new AddCompanyCallback());
-						} else {
-							Window.alert("Bitte Eingabe \u00FCberpr\u00FCfen");
-						} // Ende if-else
-					}
-				}); // Ende btSaveCompany2
+		absolutePanelCompany2.add(btSaveCompany2, 233, 173);
+		btSaveCompany2.setSize("100px", "35px");
+		// Buttons
+		absolutePanelCompany2.add(btDeleteCompany2, 416, 173);
+		btDeleteCompany2.setSize("100px", "35px");
+		// Eventhandler
+		// Unternehmen löschen
+		btDeleteCompany2.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				// TODO Daten Unternehmen 2 aus DB löschen
+				textBoxTopLineCompany2.setValue("0");
+				textBoxMarketShareCompany2.setValue("0");
+				textBoxProductPriceCompany2.setValue("0");
+			}
+		}); // Ende btDeleteCompany2
+		// Unternehmen speichern
+		btSaveCompany2.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if (expInteger.test(textBoxTopLineCompany2.getText())
+						&& expDouble.test(textBoxMarketShareCompany2.getText())
+						&& expDouble.test(textBoxProductPriceCompany2.getText())
+
+				) {
+					companies.get(1).setTopLine(
+							new Integer(textBoxTopLineCompany2.getText()));
+					companies.get(1).setMarketShare(
+							new Double(textBoxMarketShareCompany2.getText()));
+					companies
+							.get(1)
+							.getProduct()
+							.setPrice(
+									new Double(textBoxProductPriceCompany2
+											.getText()));
+					service.addCompany(companies.get(1),
+							new AddCompanyCallback());
+				} else {
+					Window.alert("Bitte Eingabe \u00FCberpr\u00FCfen");
+				} // Ende if-else
+			}
+		}); // Ende btSaveCompany2
 	} // Ende method addTabPanelCompany2
 
 	private void addTabPanelCompanyThree() {
@@ -682,14 +685,14 @@ public class CompanySimulation implements EntryPoint {
 			dataOwnProvider.addDataDisplay(cellTableMachines);
 			// Add the data to the data provider, which automatically pushes it
 			// to the widget.
-			
+
 			machinesOwnCompany = dataOwnProvider.getList();
-			//Wenn es mehre Maschinen gibt:
-//			Machines machines = result.getMachines();
-//			for(OwnCompany ownCom: machines){
-//				machinesOwnCompany.add(ownCom.getMachines());	
-//			}
-			//sonst:
+			// Wenn es mehre Maschinen gibt:
+			// Machines machines = result.getMachines();
+			// for(OwnCompany ownCom: machines){
+			// machinesOwnCompany.add(ownCom.getMachines());
+			// }
+			// sonst:
 			machinesOwnCompany.add(ownCom.getMachines());
 
 			textBoxTradeName.setText(result.getTradeName());
