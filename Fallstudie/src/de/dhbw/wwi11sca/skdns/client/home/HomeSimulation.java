@@ -4,8 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.home;
  * 
  * @author SKDNS Marktsimulationen
  * 
- *         Die HomeSimulation enthält das Frontend des Homescreens des
- *         jeweiligen Users.
+ * Die HomeSimulation enthält das Frontend des Homescreens des
+ * jeweiligen Users.
  * 
  */
 import java.util.List;
@@ -18,10 +18,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 
-import de.dhbw.wwi11sca.skdns.client.login.LoginSimulation;
 import de.dhbw.wwi11sca.skdns.client.logout.LogoutSimulation;
 import de.dhbw.wwi11sca.skdns.client.simulation.Simulation;
 import de.dhbw.wwi11sca.skdns.client.company.CompanySimulation;
@@ -34,23 +32,22 @@ import com.google.gwt.view.client.ListDataProvider;
 
 public class HomeSimulation implements EntryPoint {
 
-	// Panels
 	private AbsolutePanel panelHome = new AbsolutePanel();
 
-	// Widgets
-	private CellTable<Company> tableCompanies = new CellTable<Company>();
 	private Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
+
+	private CellTable<Company> tableCompanies = new CellTable<Company>();
 
 	private Button btCompaniesChange = new Button("Unternehmen bearbeiten");
 	private Button btSimulation = new Button("Simulation starten");
 	private Button btLogout = new Button("Logout");
 
 	private List<Company> companyList;
+
 	int emptyCompanyCounter = 0;
 
 	private HomeServiceAsync service = GWT.create(HomeService.class);
 
-	@Override
 	public void onModuleLoad() {
 
 		// RootPanel: root
@@ -64,6 +61,11 @@ public class HomeSimulation implements EntryPoint {
 		// Firmenlogo: logo
 		panelHome.add(logo, 333, 96);
 		logo.setSize("359px", "93px");
+
+		// CellTable für Konkurrenzunternehmen
+		panelHome.add(tableCompanies, 110, 268);
+		tableCompanies.setSize("805px", "200px");
+		tableCompanies.setStyleName("cellTableHeader");
 
 		// Buttons
 
@@ -84,6 +86,7 @@ public class HomeSimulation implements EntryPoint {
 		// Eventhandler Unternehmen bearbeiten
 		btCompaniesChange.addClickHandler(new ClickHandler() {
 			public void onClick(final ClickEvent event) {
+				// Laden der Unternehmen bearbeiten Oberfläche
 				RootPanel.get().clear();
 				CompanySimulation company = new CompanySimulation();
 				company.onModuleLoad();
@@ -93,6 +96,7 @@ public class HomeSimulation implements EntryPoint {
 		// Eventhandler Simualation starten
 		btSimulation.addClickHandler(new ClickHandler() {
 			public void onClick(final ClickEvent event) {
+				// Laden der Simulationsoberfläche
 				RootPanel.get().clear();
 				Simulation simulation = new Simulation();
 				simulation.onModuleLoad();
@@ -102,18 +106,16 @@ public class HomeSimulation implements EntryPoint {
 		// Eventhandler ausloggen
 		btLogout.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
+				// Laden der Logoutoberfläche
 				RootPanel.get().clear();
 				LogoutSimulation logout = new LogoutSimulation();
 				logout.onModuleLoad();
 			}
 		}); // btLogout
 
-		// CellTable für Konkurrenzunternehmen
-		panelHome.add(tableCompanies, 110, 268);
-		tableCompanies.setSize("805px", "200px");
-		tableCompanies.setStyleName("cellTableHeader");
+		// Tabelle mit Unternehmensdaten befüllen
 
-		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
+		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Firma
 		TextColumn<Company> tradeNameColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
@@ -122,41 +124,48 @@ public class HomeSimulation implements EntryPoint {
 			}
 
 		}; // Ende tradeNameColumn
-			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
+
+		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
 		TextColumn<Company> topLineColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
 				if (company.getTopLine() != 0) {
 					return new Integer(company.getTopLine()).toString();
 				} else {
+					// Ist der Wert 0 wird k.A. gegeben
 					return new String("k.A.");
 				}
 			}
 		}; // Ende topLineColumn
-			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Gewinn
+
+		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Gewinn
 		TextColumn<Company> amountColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(Company company) {
 				if (company.getAmount() != 0) {
 					return new Integer(company.getAmount()).toString();
 				} else {
+					// Ist der Wert 0 wird k.A. gegeben
 					return new String("k.A.");
 				}
 			}
 		}; // Ende amountColumn
-			// Unternehmensdaten der Konkurrenzunternehmen befüllen: Marktanteil
+
+		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Marktanteil
 		TextColumn<Company> marketShareColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(final Company company) {
 				if (company.getMarketShare() != 0.0) {
 					return new Double(company.getMarketShare()).toString();
 				} else {
+					// Ist der Wert 0 wird k.A. gegeben
 					return new String("k.A.");
 				}
 			}
 		}; // Ende marketShareColumn
-			// Unternehmensdaten der Konkurrenzunternehmen befüllen:
-			// Produktmenge
+
+		// Unternehmensdaten der Konkurrenzunternehmen befüllen:
+		// Produktmenge
 		TextColumn<Company> salesVolumeColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(final Company company) {
@@ -164,12 +173,14 @@ public class HomeSimulation implements EntryPoint {
 					return new Integer(company.getProduct().getSalesVolume())
 							.toString();
 				} else {
+					// Ist der Wert 0 wird k.A. gegeben
 					return new String("k.A.");
 				}
 			}
 		}; // Ende salesVolumeColumn
-			// Unternehmensdaten der Konkurrenzunternehmen befüllen:
-			// Produktpreis
+
+		// Unternehmensdaten der Konkurrenzunternehmen befüllen:
+		// Produktpreis
 		TextColumn<Company> productPriceColumn = new TextColumn<Company>() {
 			@Override
 			public String getValue(final Company company) {
@@ -177,6 +188,7 @@ public class HomeSimulation implements EntryPoint {
 					return new Double(company.getProduct().getPrice())
 							.toString();
 				} else {
+					// Ist der Wert 0 wird k.A. gegeben
 					return new String("k.A.");
 				}
 			}
@@ -190,10 +202,8 @@ public class HomeSimulation implements EntryPoint {
 		tableCompanies.addColumn(productPriceColumn, "Produktpreis");
 		tableCompanies.addColumn(salesVolumeColumn, "Absatzmenge");
 
-		// Call
-		// Unternehmen
+		// Call: Unternehmen laden
 		service.getCompany(new GetCompanyCallback());
-
 	} // Ende method onModuleLoad
 
 	/**
@@ -203,26 +213,25 @@ public class HomeSimulation implements EntryPoint {
 	 * 
 	 */
 	public class GetCompanyCallback implements AsyncCallback<List<Company>> {
-		@Override
+
 		public void onFailure(final Throwable caught) {
 		} // Ende method onFailure
 
-		@Override
 		public final void onSuccess(List<Company> result) {
 
+			// Unternehmenstabelle mit dem DataProvider verbinden
 			ListDataProvider<Company> dataProvider = new ListDataProvider<Company>();
-			// Connect the table to the data provider.
 			dataProvider.addDataDisplay(tableCompanies);
 
-			// Add the data to the data provider, which automatically pushes it
-			// to the widget.
+			// Liste befüllen
 			companyList = dataProvider.getList();
 
+			// Ermitteln, wie viele gefüllte Unternehmen zurückgeliefert werden
 			for (Company company : result) {
 				companyList.add(company);
 				if (company.getTopLine() == 0) {
 					emptyCompanyCounter++;
-				}
+				} // Ende if-Statement
 			} // Ende for-Schleife
 
 			// Wenn weniger als zwei Unternehmen aus der DB zurückgeliefert
@@ -231,8 +240,6 @@ public class HomeSimulation implements EntryPoint {
 			if (emptyCompanyCounter > 2) {
 				btSimulation.setEnabled(false);
 			} // Ende if-Statement
-
 		} // Ende method onSuccess
 	} // Ende class GetCompanyCallback
-
 } // Ende class HomeSimulation

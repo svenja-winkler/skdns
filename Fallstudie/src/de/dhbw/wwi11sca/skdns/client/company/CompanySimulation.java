@@ -26,7 +26,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.user.client.ui.TextBox;
 import de.dhbw.wwi11sca.skdns.client.home.HomeSimulation;
-import de.dhbw.wwi11sca.skdns.client.login.LoginSimulation;
 import de.dhbw.wwi11sca.skdns.client.logout.LogoutSimulation;
 import de.dhbw.wwi11sca.skdns.shared.Company;
 import de.dhbw.wwi11sca.skdns.shared.Machines;
@@ -37,14 +36,13 @@ import com.google.gwt.view.client.ListDataProvider;
 
 public class CompanySimulation implements EntryPoint {
 
-	// Allgemeine Panel
 	private AbsolutePanel absolutePanelCreate = new AbsolutePanel();
 	private TabLayoutPanel tabPanelCreateCompanies = new TabLayoutPanel(1.5,
 			Unit.EM);
 
-	// Widgets
 	private Label lbHome = new Label("Home");
 	private Label lbCreate = new Label("> Unternehmen anlegen");
+
 	private Button btLogout = new Button("Logout");
 
 	private AbsolutePanel absolutePanelOwnCompany = new AbsolutePanel();
@@ -101,6 +99,7 @@ public class CompanySimulation implements EntryPoint {
 
 	private OwnCompany ownCom;
 	private List<Company> companies;
+
 	private RegExp expTradeName = RegExp
 			.compile("^([\u00C4\u00DC\u00D6A-Z])[0-9a-z\u00E4\u00FC\u00F6\u00C4\u00DC\u00DF\u00D6A-Z\\s]*");
 	private RegExp expInteger = RegExp.compile("^(\\d*)$");
@@ -108,7 +107,6 @@ public class CompanySimulation implements EntryPoint {
 
 	private CompanyServiceAsync service = GWT.create(CompanyService.class);
 
-	@Override
 	public void onModuleLoad() {
 
 		// AbsolutePanel : absolutePanelCreate
@@ -121,11 +119,13 @@ public class CompanySimulation implements EntryPoint {
 		// Label zurück zur Home : lbHome
 		absolutePanelCreate.add(lbHome, 30, 30);
 		lbHome.setStyleName("gwt-Home-Label");
+
 		// Label Unternehmen anlegen: lbCreate
 		absolutePanelCreate.add(lbCreate, 80, 30);
 		lbCreate.setStyleName("gwt-Label-Info");
 
-		// Buttons
+		// Button
+		// Logout: btLogout
 		absolutePanelCreate.add(btLogout, 914, 10);
 		btLogout.setSize("100px", "35px");
 
@@ -134,64 +134,8 @@ public class CompanySimulation implements EntryPoint {
 		absolutePanelCreate.add(tabPanelCreateCompanies, 90, 78);
 		tabPanelCreateCompanies.setSize("844px", "605px");
 
-		// Eventhandler
-		lbHome.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+		// TabPanels für die Unternehmen laden
 
-				if ((ownCom.getMarketShare()
-						+ companies.get(0).getMarketShare()
-						+ companies.get(1).getMarketShare() + companies.get(2)
-						.getMarketShare()) == 100) {
-
-					RootPanel.get().clear();
-					HomeSimulation home = new HomeSimulation();
-					home.onModuleLoad();
-
-				} else {
-					Window.alert("Der Marktanteil aller Unternehmen muss zusammen 100 betragen!");
-				}
-
-			}
-		}); // Ende lbHome
-
-		// Eventhandler ausloggen
-		btLogout.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				RootPanel.get().clear();
-				LogoutSimulation logout = new LogoutSimulation();
-				logout.onModuleLoad();
-			}
-		});
-
-		// Maschinen
-		addCellTableMachines();
-
-		Button btAddMachines = new Button("+");
-		absolutePanelOwnCompany.add(btAddMachines, 682, 277);
-		btAddMachines.setSize("30px", "30px");
-
-		Button btDeleteMachines = new Button("-");
-		absolutePanelOwnCompany.add(btDeleteMachines, 714, 277);
-		btDeleteMachines.setSize("30px", "30px");
-
-		btAddMachines.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				Machines newMachine = new Machines();
-				machinesOwnCompany.add(newMachine);
-			}
-		});
-		btDeleteMachines.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-
-				machinesOwnCompany.remove(machinesOwnCompany.size() - 1);
-			}
-		});
-
-		// AbsolutePanels für die Unternehmen anbringen
 		// Tab für das eigene Unternehmen
 		addTabPanelOwnCompany();
 		// Tab für das erste Unternehmen
@@ -200,80 +144,154 @@ public class CompanySimulation implements EntryPoint {
 		addTabPanelCompanyTwo();
 		// tab für das dritte Unternehmen
 		addTabPanelCompanyThree();
+		// Eventhandler
 
-		// Asynchroner Call: Falls Daten vorhanden sind, aus der Datenbank
-		// auslesen, ansonsten Felder im TabPanelUnternehmenAnlegen frei lassen
-		// service.getEigenesUnternehmen(new GetEigenesUnternehmenCallback());
+		// Auf die Home zurückkehren: lbHome
+		lbHome.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				// Überprüfen, ob Marktanteile insgesamt 100% ergeben
+				if ((ownCom.getMarketShare()
+						+ companies.get(0).getMarketShare()
+						+ companies.get(1).getMarketShare() + companies.get(2)
+						.getMarketShare()) == 100) {
 
+					// Homeoberfläche laden
+					RootPanel.get().clear();
+					HomeSimulation home = new HomeSimulation();
+					home.onModuleLoad();
+				} else {
+					// Betragen die Marktanteile gesamt nicht 100% wird eine
+					// Meldung ausgeworfen
+					Window.alert("Der Marktanteil aller Unternehmen muss zusammen 100 betragen!");
+				} // Ende if-else
+			}
+		}); // Ende lbHome
+
+		// Eventhandler ausloggen
+		btLogout.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				// Logoutoberfläche laden
+				RootPanel.get().clear();
+				LogoutSimulation logout = new LogoutSimulation();
+				logout.onModuleLoad();
+			}
+		}); // Ende btLogout
+
+		// Call
 		startCall();
 
 	} // Ende onModuleLoad
 
+	/**
+	 * addTabPanelOwnCompany lädt das Panel, auf dem Felder für das Eigene
+	 * Unternehmen angezeigt werden
+	 */
 	private void addTabPanelOwnCompany() {
-		absolutePanelOwnCompany.setSize("100%", "586px");
+		// Panel anbringen
 		tabPanelCreateCompanies.add(absolutePanelOwnCompany,
 				"Eigenes Unternehmen", false);
+		absolutePanelOwnCompany.setSize("100%", "586px");
 		absolutePanelOwnCompany.setStyleName("gwt-Panel");
 
-		// Elemente
+		// Elemente hinzufügen
 		// Firma
 		absolutePanelOwnCompany.add(lbTradeName, 41, 48);
+		absolutePanelOwnCompany.add(textBoxTradeName, 136, 36);
+
 		// Umsatz
 		absolutePanelOwnCompany.add(lbTopLineOwnCompany, 41, 105);
-		// Marktanteil
-		absolutePanelOwnCompany.add(lbMarketShareOwnCompany, 41, 159);
-		// Fixkosten
-		absolutePanelOwnCompany.add(lbFixedCosts, 41, 211);
-		// Produktpreis
-		absolutePanelOwnCompany.add(lbProductPriceOwnCompany, 432, 159);
-		// Absatzmenge
-		absolutePanelOwnCompany.add(lbVariableCosts, 432, 211);
-		// Anzahl Mitarbeiter
-		absolutePanelOwnCompany.add(lbNumberOfStaff, 432, 48);
-		// durchschnittliches Mitarbeitergehalt
-		absolutePanelOwnCompany.add(lbSalaryOfStaff, 432, 105);
-		absolutePanelOwnCompany.add(textBoxTradeName, 136, 36);
 		absolutePanelOwnCompany.add(textBoxTopLineOwnCompany, 136, 93);
 		textBoxTopLineOwnCompany.setSize("162px", "24px");
+
+		// Marktanteil
+		absolutePanelOwnCompany.add(lbMarketShareOwnCompany, 41, 159);
 		absolutePanelOwnCompany.add(textBoxMarketShareOwnCompany, 136, 147);
 		textBoxMarketShareOwnCompany.setSize("161px", "24px");
+
+		// Fixkosten
+		absolutePanelOwnCompany.add(lbFixedCosts, 41, 211);
 		absolutePanelOwnCompany.add(textBoxFixedCosts, 136, 199);
 		textBoxFixedCosts.setSize("161px", "24px");
+
+		// Anzahl Mitarbeiter
+		absolutePanelOwnCompany.add(lbNumberOfStaff, 432, 48);
 		absolutePanelOwnCompany.add(textBoxNumberOfStaff, 577, 36);
 		textBoxNumberOfStaff.setSize("161px", "24px");
+
+		// durchschnittliches Mitarbeitergehalt
+		absolutePanelOwnCompany.add(lbSalaryOfStaff, 432, 105);
 		absolutePanelOwnCompany.add(textBoxSalaryOfStaff, 577, 93);
 		textBoxSalaryOfStaff.setSize("161px", "24px");
+
+		// Produktpreis
+		absolutePanelOwnCompany.add(lbProductPriceOwnCompany, 432, 159);
 		absolutePanelOwnCompany.add(textBoxProductPriceOwnCompany, 577, 147);
 		textBoxProductPriceOwnCompany.setSize("161px", "24px");
+
+		// variable Kosten
+		absolutePanelOwnCompany.add(lbVariableCosts, 432, 211);
 		absolutePanelOwnCompany.add(textBoxVariableCosts, 577, 199);
 		textBoxVariableCosts.setSize("161px", "24px");
+
+		// Maschinentabelle laden
+		addCellTableMachines();
+
+		// Buttons
+
+		// Unternehmensdaten speichern
 		absolutePanelOwnCompany.add(btSaveOwnCompany, 607, 541);
 		btSaveOwnCompany.setSize("100px", "35px");
-		// Buttons
+
 		// Unternehmensdaten löschen
 		absolutePanelOwnCompany.add(btDeleteOwnCompany, 718, 541);
 		btDeleteOwnCompany.setSize("100px", "35px");
 
+		// Maschinenfeld hinzufügen
+		Button btAddMachines = new Button("+");
+		absolutePanelOwnCompany.add(btAddMachines, 682, 277);
+		btAddMachines.setSize("30px", "30px");
+
+		// Maschinenfeld löschen
+		Button btDeleteMachines = new Button("-");
+		absolutePanelOwnCompany.add(btDeleteMachines, 714, 277);
+		btDeleteMachines.setSize("30px", "30px");
+
 		// Eventhandler
-		// Unternehmen löschen
+
+		// Eventhandler Maschinenfeld hinzufügen
+		btAddMachines.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				Machines newMachine = new Machines();
+				machinesOwnCompany.add(newMachine);
+			}
+		}); // Ende btAddMachines
+
+		// Eventhandler Maschinenfeld löschen
+		btDeleteMachines.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				machinesOwnCompany.remove(machinesOwnCompany.size() - 1);
+			}
+		});// Ende btDeleteMachines
+
+		// Eventhandler Unternehmen löschen
 		btDeleteOwnCompany.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				// TODO: Meldung: Sind sie sich sicher
-				textBoxTradeName.setText("0");
+				textBoxTradeName.setText("Eigenes Unternehmen");
 				textBoxTopLineOwnCompany.setValue("0");
-				textBoxMarketShareOwnCompany.setValue("0");
-				textBoxProductPriceOwnCompany.setValue("0");
-				textBoxVariableCosts.setValue("0");
+				textBoxMarketShareOwnCompany.setValue("0.0");
+				textBoxProductPriceOwnCompany.setValue("0.0");
+				textBoxVariableCosts.setValue("0.0");
 				textBoxNumberOfStaff.setValue("0");
 				textBoxSalaryOfStaff.setValue("0");
 				// TODO Maschinen in Oberfläche löschen
 				// TODO EigenesUnternehmen aus DB löschen
 			}
 		}); // Ende btDeleteOwnCompany
-		// Unternehmen speichern
+
+		// Eventhandler Unternehmen speichern
 		btSaveOwnCompany.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-
+				// Überprüfung, ob Eingabe korrekt
 				if (expTradeName.test(textBoxTradeName.getText())
 						&& expInteger.test(textBoxTopLineOwnCompany.getText())
 						&& expDouble.test(textBoxMarketShareOwnCompany
@@ -283,9 +301,8 @@ public class CompanySimulation implements EntryPoint {
 						&& expInteger.test(textBoxSalaryOfStaff.getText())
 						&& expDouble.test(textBoxProductPriceOwnCompany
 								.getText())
-						&& expDouble.test(textBoxVariableCosts.getText())
-
-				) {
+						&& expDouble.test(textBoxVariableCosts.getText())) {
+					// Unternehmen mit geänderten Daten befüllen
 					ownCom.setTradeName(textBoxTradeName.getText());
 					ownCom.setTopLine(new Integer(textBoxTopLineOwnCompany
 							.getText()));
@@ -302,75 +319,46 @@ public class CompanySimulation implements EntryPoint {
 											.getText()));
 					ownCom.setVariableCosts(new Double(textBoxVariableCosts
 							.getText()));
-
-					// ownCom.getProduct().setSalesVolume(
-					// new Integer(textBoxVariableCosts.getText()));
-
+					// Call: Eigenes Unternehmen aktualisieren
 					service.addOwnCompany(ownCom, new AddOwnCompanyCallback());
-
 				} else {
+					// Ist Eingabe inkorrekt, wird Meldung ausgeworfen
 					Window.alert("Bitte Eingabe \u00FCberpr\u00FCfen");
-
-				}
-
+				} // Ende if-else
 			}
 		}); // Ende btSaveOwnCompany
 	} // Ende method addTabPanelOwnCompany
 
+	/**
+	 * addCellTableMachines befüllt die Maschinentabelle des eigenen
+	 * Unternehmens
+	 */
 	private void addCellTableMachines() {
-		// Maschinen
+		// Maschinentabelle anbringen
 		cellTableMachines = new CellTable<Machines>();
 		absolutePanelOwnCompany.add(cellTableMachines, 88, 277);
 		cellTableMachines.setSize("656px", "100px");
 		cellTableMachines.setStyleName("cellTableHeader");
 
+		// ServiceLifeColumn der Maschinentabelle befüllen
 		final EditTextCell serviceLifeCell = new EditTextCell();
 		Column<Machines, String> serviceLifeColumn = new Column<Machines, String>(
 				serviceLifeCell) {
-
-			@Override
 			public String getValue(Machines object) {
 				return new Integer(object.getServiceLife()).toString();
 			}
-
-		};
-		serviceLifeColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
-			@Override
-			public void update(int index, Machines object, String value) {
-
-				if (expInteger.test(value)) {
-					ownCom.getMachines().setServiceLife(new Integer(value));
-					cellTableMachines.redraw();
-				} else {
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
-				}
-
-			}
-		});// Ende serviceLifeColumn
-
+		}; // Ende serviceLifeCell
+		
+		// CapacityColumn der Maschinentabelle befüllen
 		final EditTextCell capacityCell = new EditTextCell();
 		Column<Machines, String> capacityColumn = new Column<Machines, String>(
 				capacityCell) {
-
-			@Override
 			public String getValue(Machines object) {
 				return new Integer(object.getCapacity()).toString();
 			}
-
-		};
-		capacityColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
-			@Override
-			public void update(int index, Machines object, String value) {
-
-				if (expInteger.test(value)) {
-					ownCom.getMachines().setCapacity(new Integer(value));
-					cellTableMachines.redraw();
-				} else {
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
-				}
-
-			}
-		}); // Ende capacityColumn
+		}; // Ende capacityColumn
+		
+		
 
 		final EditTextCell accountingValueCell = new EditTextCell();
 		Column<Machines, String> accountingValueColumn = new Column<Machines, String>(
@@ -427,7 +415,34 @@ public class CompanySimulation implements EntryPoint {
 		cellTableMachines.addColumn(capacityColumn, "Kapazit\u00e4t");
 		cellTableMachines.addColumn(accountingValueColumn, "Preis");
 		cellTableMachines.addColumn(staffColumn, "Notwendige Mitarbeiter");
+		
+		serviceLifeColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
+			public void update(int index, Machines object, String value) {
+				// Überprüfung, ob Inhalt stimmt
+				if (expInteger.test(value)) {
+					ownCom.getMachines().setServiceLife(new Integer(value));
+					cellTableMachines.redraw();
+				} else {
+					// Stimmt Inhalt nicht, wird Meldung ausgeworfen
+					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
+				} // Ende if-else
 
+			}
+		});// Ende serviceLifeColumn FieldUpdater
+
+		capacityColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
+			@Override
+			public void update(int index, Machines object, String value) {
+
+				if (expInteger.test(value)) {
+					ownCom.getMachines().setCapacity(new Integer(value));
+					cellTableMachines.redraw();
+				} else {
+					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
+				}
+
+			}
+		}); // Ende capacityColumn
 	}
 
 	private void addTabPanelCompanyOne() {

@@ -28,29 +28,30 @@ import com.google.gwt.event.dom.client.DragEnterEvent;
 
 public class LoginSimulation implements EntryPoint {
 
-	private final LoginServiceAsync LoginService = GWT
-			.create(LoginService.class);
-
-	// Panel
 	private AbsolutePanel panelLogin = new AbsolutePanel();
+
 	Image background = new Image("fallstudie/gwt/clean/images/Consulting.png");
-	// Widgets
 	Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
+
 	private TextBox textBoxUsername = new TextBox();
 	private PasswordTextBox textBoxPassword = new PasswordTextBox();
+
 	private Button btLogin = new Button("Login");
 	private Button btForgotPassword = new Button("Passwort vergessen?");
 
-	public static User userOnline;
 	private Label lbInfo = new Label();
+
 	String admin = new String("admin");
+	public static User userOnline;
+
+	private final LoginServiceAsync LoginService = GWT
+			.create(LoginService.class);
 
 	public void onModuleLoad() {
 
 		// AbsolutePanel: panelLogin
 		RootPanel.get().add(panelLogin, 0, 0);
 		panelLogin.setSize("1024px", "768px");
-		lbInfo.setSize("310px", "12px");
 
 		// Background: background
 		panelLogin.add(background, 0, 0);
@@ -70,53 +71,38 @@ public class LoginSimulation implements EntryPoint {
 		textBoxPassword.setText("Kennwort");
 		textBoxPassword.setSize("300px", "24px");
 
+		// Informationslabel: lbInfo
+		lbInfo.setSize("310px", "12px");
+		panelLogin.add(lbInfo, 208, 325);
+		lbInfo.setStyleName("gwt-Infolabel");
+
+		// Buttons
+
 		// Button einloggen: btLogin
 		panelLogin.add(btLogin, 208, 353);
 		btLogin.setSize("100px", "30px");
-
-		// Eventhandler
-
-		// Eventhandler Login
-		btLogin.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				userOnline = new User();
-				userOnline.setPassword(textBoxPassword.getText());
-				userOnline.setUsername(textBoxUsername.getText());
-				// Überprüfen, ob es sich bei dem einloggenden User um den admin
-				// handelt
-				if (userOnline.getUsername().equals(admin)) {
-					LoginService.checkAdmin(userOnline,
-							new CheckAdminCallback());
-				} else {
-					LoginService.checkLogin(userOnline,
-							new CheckLoginCallback());
-				}
-			}
-		}); // Ende btLogin Click-Handler
-		btLogin.addDragEnterHandler(new DragEnterHandler() {
-			public void onDragEnter(DragEnterEvent event) {
-				userOnline = new User();
-				userOnline.setPassword(textBoxPassword.getText());
-				userOnline.setUsername(textBoxUsername.getText());
-				// Überprüfen, ob es sich bei dem einloggenden User um den admin
-				// handelt
-				if (userOnline.getUsername().equals(admin)) {
-					LoginService.checkAdmin(userOnline,
-							new CheckAdminCallback());
-				} else {
-					LoginService.checkLogin(userOnline,
-							new CheckLoginCallback());
-				}
-			}
-		}); // Ende btLogin Enter-Handler
-
-		// Buttons
 
 		// Button vergessenes Passwort: btForgotPassword
 		panelLogin.add(btForgotPassword, 369, 353);
 		btForgotPassword.setSize("149px", "30px");
 
-		// Eventhandler vergessenes Passwort
+		// Eventhandler
+
+		// Eventhandler Login Click-Handler
+		btLogin.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				login();
+			}
+		}); // Ende btLogin Click-Handler
+
+		// Eventhandler Login Enter-Handler
+		btLogin.addDragEnterHandler(new DragEnterHandler() {
+			public void onDragEnter(DragEnterEvent event) {
+				login();
+			}
+		}); // Ende btLogin Enter-Handler
+
+		// Eventhandler vergessenes Passwort ClickHandler
 		btForgotPassword.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				userOnline = new User();
@@ -125,6 +111,8 @@ public class LoginSimulation implements EntryPoint {
 						new ForgotPasswordCallback());
 			}
 		}); // Ende btForgortPassword Click-Handler
+
+		// Eventhandler btForgotPassword Enter-Handler
 		btForgotPassword.addDragEnterHandler(new DragEnterHandler() {
 			public void onDragEnter(DragEnterEvent event) {
 				userOnline = new User();
@@ -134,17 +122,12 @@ public class LoginSimulation implements EntryPoint {
 			}
 		}); // Ende btForgottPassword Enter-Handler
 
-		// Informationsfeld: lfInfo
-		panelLogin.add(lbInfo, 208, 325);
-		lbInfo.setStyleName("gwt-Infolabel");
-
 		// Eventhandler Password TextBox: löscht den Textboxinhalt, damit der
 		// User Daten eingeben kann
 		textBoxPassword.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				textBoxPassword.setText("");
 			}
-
 		}); // Ende textBoxPassword
 
 		// Eventhandler Username TextBox: löscht den Textboxinhalt, damit der
@@ -154,8 +137,27 @@ public class LoginSimulation implements EntryPoint {
 				textBoxUsername.setText("");
 			}
 		}); // Ende textBoxUsername
-
 	} // Ende onModuleLoad
+
+	/**
+	 * login erzeugt einen User mit den eingegebenen Daten und schickt einen
+	 * Call an den Server zur Überprüfung der Daten
+	 */
+	private void login() {
+		userOnline = new User();
+		userOnline.setPassword(textBoxPassword.getText());
+		userOnline.setUsername(textBoxUsername.getText());
+
+		// Überprüfen, ob es sich bei dem einloggenden User um den admin
+		// handelt
+		if (userOnline.getUsername().equals(admin)) {
+			// Ist der User ein Admin wird die checkAdmin-Methode verwendet
+			LoginService.checkAdmin(userOnline, new CheckAdminCallback());
+		} else {
+			// Ist der User kein Admin wrd die checkLogin-Methode verwendet
+			LoginService.checkLogin(userOnline, new CheckLoginCallback());
+		} // Ende if-else
+	} // Ende method login
 
 	/**
 	 * 
@@ -165,19 +167,17 @@ public class LoginSimulation implements EntryPoint {
 	 */
 	public class CheckLoginCallback implements AsyncCallback<java.lang.Void> {
 
-		@Override
 		public void onFailure(Throwable caught) {
+			// Sind die Daten nicht bekannt, wird dem User eine Meldung
+			// ausgeworfen
 			lbInfo.setText("Username oder Passwort falsch/ unbekannt.");
-
 		} // Ende method onFailure
 
-		@Override
 		public void onSuccess(Void result) {
-
+			// Sind die Daten bekannt, wird die nächste Oberfläche geladen
 			RootPanel.get().clear();
 			HomeSimulation home = new HomeSimulation();
 			home.onModuleLoad();
-
 		} // Ende method onSuccess
 	} // Ende class CheckLoginCallback
 
@@ -190,17 +190,17 @@ public class LoginSimulation implements EntryPoint {
 	public class ForgotPasswordCallback implements
 			AsyncCallback<java.lang.Void> {
 
-		@Override
 		public void onFailure(Throwable caught) {
+			// Hat es nicht funktioniert, eine Meldung an den Admin zu schicken,
+			// wird dem User eine Meldung ausgeworfen
 			lbInfo.setText("Derzeit liegt leider ein Systemfehler vor. Versuchen Sie es sp\u00E4ter erneut.");
 
 		} // Ende method onFailure
 
-		@Override
 		public void onSuccess(Void result) {
-
+			// War das Admin informieren erfolgreich, wird dem User eine Meldung
+			// ausgeworfen
 			lbInfo.setText("Der Admin wurde informiert.");
-
 		} // Ende method onSuccess
 	} // Ende class ForgotPasswordCallback
 
@@ -212,20 +212,18 @@ public class LoginSimulation implements EntryPoint {
 	 */
 	public class CheckAdminCallback implements AsyncCallback<java.lang.Void> {
 
-		@Override
 		public void onFailure(Throwable caught) {
+			// Ist das Adminpasswort nicht bekannt, wird dem User eine Meldung
+			// ausgeworfen
 			lbInfo.setText("Adminpasswort falsch");
-
 		} // Ende method onFailure
 
-		@Override
 		public void onSuccess(Void result) {
-
+			// Ist das Adminpasswort bekannt, wird die nächste Oberfläche
+			// geladen
 			RootPanel.get().clear();
 			AdminSimulation admin = new AdminSimulation();
 			admin.onModuleLoad();
-
 		} // Ende method onSuccess
 	} // Ende class CheckAdminCallback
-
 } // Ende classLoginSimulation
