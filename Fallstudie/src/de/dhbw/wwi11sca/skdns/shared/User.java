@@ -24,52 +24,53 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(String username, String password, String mail) {
-		this.username = username;
-		this.setPassword(password);
-		this.mail = mail;
+	public User(final String pUsername, final String pPassword,
+			final String pMail) {
+		this.username = pUsername;
+		this.setPassword(pPassword);
+		this.mail = pMail;
 		this.forgottenPassword = false;
 	}
 
 	// Getter-Setter-Methoden
-	public String getUsername() {
+	public final String getUsername() {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public final void setUsername(final String pUsername) {
+		this.username = pUsername;
 	}
 
-	public String getMail() {
+	public final String getMail() {
 		return mail;
 	}
 
-	public void setMail(String mail) {
-		this.mail = mail;
+	public final void setMail(final String pMail) {
+		this.mail = pMail;
 	}
 
-	public boolean isForgottenPassword() {
+	public final boolean isForgottenPassword() {
 		return forgottenPassword;
 	}
 
-	public void setForgottenPassword(boolean forgottenPassword) {
-		this.forgottenPassword = forgottenPassword;
+	public final void setForgottenPassword(final boolean pForgottenPassword) {
+		this.forgottenPassword = pForgottenPassword;
 	}
 
-	public String getPassword() {
+	public final String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public final void setPassword(final String pPassword) {
+		this.password = pPassword;
 	}
 
-	public String getUserID() {
+	public final String getUserID() {
 		return userID;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public final void setUserID(final String pUserID) {
+		this.userID = pUserID;
 	}
 
 }

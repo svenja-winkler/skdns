@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.server;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * In der MarketSimulation werden alle Berechnungen für die Marktsimulation ausgeführt.
+ * In der MarketSimulation werden alle Berechnungen
+ *  für die Marktsimulation ausgeführt.
  *
  */
 import de.dhbw.wwi11sca.skdns.shared.Company;
@@ -14,35 +15,37 @@ import de.dhbw.wwi11sca.skdns.shared.SimulationVersion;
 
 public class MarketSimulation {
 
-	OwnCompany ownCompany;
-	Company company1;
-	Company company2;
-	Company company3;
+	private OwnCompany ownCompany;
+	private Company company1;
+	private Company company2;
+	private Company company3;
 
 	// Sonderfall 1
-	double freePersonal = 0;
-	int necessaryPersonal = 0;
+	private double freePersonal = 0;
+	private int necessaryPersonal = 0;
 
 	// Schritt 2
-	int random = 0;
-	int topLineMarket = 0;
-	int topLineMarketArithmetic = 0;
-	final static double increaseRandom[] = { 1.01, 1.01, 1.02, 1.03, 1.04,
-			1.02, 1.02, 1.01, 1.00, 0.99, 0.98, 1.01, 1.05, 1.02, 0.99, 1.03 };
+	private int random = 0;
+	private int topLineMarket = 0;
+	private int topLineMarketArithmetic = 0;
+	private static final double[] INCREASERANDOM = 
+		{ 1.01, 1.01, 1.02, 1.03, 1.04,	1.02, 1.02, 1.01, 1.00,
+		0.99, 0.98, 1.01, 1.05, 1.02, 0.99, 1.03 };
 
 	// Schritt 3
-	final static double marketingRandom[] = { 1.00, 1.00, 1.00, 1.00, 1.05,
-			1.05, 1.05, 1.05, 1.05, 1.05, 1.1, 1.1, 1.1, 1.15, 1.15, 1.2 };
+	private static final double[] marketingRandom = 
+		{ 1.00, 1.00, 1.00, 1.00, 1.05,	1.05, 1.05, 1.05, 1.05,
+		1.05, 1.1, 1.1, 1.1, 1.15, 1.15, 1.2 };
 
 	// Schritt 5
-	int amount = 0;
-	int amortization = 0;
+	private int amount = 0;
+	private int amortization = 0;
 
 	/**
 	 * simulate führt alle Schritte der Rechenlogik aus und ruft alle weiteren
 	 * notwendigen Methoden auf
 	 */
-	public SimulationVersion simulate(SimulationVersion version) {
+	public final SimulationVersion simulate(final SimulationVersion version) {
 
 		// Übernehmen der Unternehmn in der Simulationsversion
 		ownCompany = version.getOwnCompany();
@@ -77,7 +80,7 @@ public class MarketSimulation {
 		increaseRandom(1, 16, random);
 
 		// Berechnen des Gesamtumsatzes der zu berechneden Periode
-		topLineMarket = (int) Math.ceil(increaseRandom[random] * topLineMarket);
+		topLineMarket = (int) Math.ceil(INCREASERANDOM[random] * topLineMarket);
 
 		// Schritt 3
 
@@ -133,10 +136,10 @@ public class MarketSimulation {
 								.getSalesVolume()));
 
 		// Überprüfung, ob der Markt wächst oder sinkt
-		if (increaseRandom[random] > 1) {
+		if (INCREASERANDOM[random] > 1) {
 			// der Markt wächst == 1
 			version.setMarketIncrease(1);
-		} else if (increaseRandom[random] < 1) {
+		} else if (INCREASERANDOM[random] < 1) {
 			// der Markt sinkt == -1
 			version.setMarketIncrease(-1);
 		} else {
@@ -198,7 +201,7 @@ public class MarketSimulation {
 	 * specialCaseTwo ermittelt, ob genügend Personal für die Maschinen
 	 * vorhanden sind
 	 */
-	public void specialCaseOne(SimulationVersion version) {
+	public final void specialCaseOne(final SimulationVersion version) {
 		// ermitteln des freien Personals
 		freePersonal = (ownCompany.getNumberOfStaff() + version
 				.getMachineStaff())
@@ -229,7 +232,7 @@ public class MarketSimulation {
 	 * genügend Kapazität aufweisen, um die errechnete Absatzmenge zu
 	 * produzieren
 	 */
-	public void specialCaseTwo(SimulationVersion version, OwnCompany ownCompany) {
+	public final void specialCaseTwo(final SimulationVersion version, final OwnCompany ownCompany) {
 
 		// Absatzmenge des eigenen Unternehmens berechnen
 		int salesVolume = calculateSalesVolume(ownCompany.getTopLine(),
@@ -301,7 +304,7 @@ public class MarketSimulation {
 	 * calculateSalesVolume berechnet anhand von Preis und Umsatz des
 	 * Unternehmens
 	 */
-	private int calculateSalesVolume(int topLine, double price) {
+	private int calculateSalesVolume(final int topLine, final double price) {
 		double topLineCalc = topLine; // Umsatz
 
 		int salesVolume = (int) Math.ceil(topLineCalc / price);
@@ -313,8 +316,8 @@ public class MarketSimulation {
 	 * Konkurrenzunternehmen, falls nicht genügend Maschinenkapazität vorhanden
 	 * ist
 	 */
-	private Company calculateAdditionalVolume(double marketSharesCompanies,
-			Company company) {
+	private Company calculateAdditionalVolume(final double marketSharesCompanies,
+			final Company company) {
 		double distributionKey = company.getMarketShare()
 				/ marketSharesCompanies;
 		double salesVolume = (ownCompany.getProduct().getSalesVolume() - ownCompany
@@ -337,7 +340,7 @@ public class MarketSimulation {
 	 * calculateTopLineMarket berechnet den Gesamtumsatz des Marktes
 	 */
 	public static int calculateTopLineMarket(int topLineMarket,
-			int tLOwnCompany, int tLCompany1, int tLCompany2, int tLCompany3) {
+			final int tLOwnCompany, final int tLCompany1, final int tLCompany2, final int tLCompany3) {
 
 		topLineMarket = tLOwnCompany + tLCompany1 + tLCompany2 + tLCompany3;
 		return topLineMarket;
@@ -346,7 +349,7 @@ public class MarketSimulation {
 	/**
 	 * increaseRandom ermittelt anhand der Randomfunktion den Marktwachstum
 	 */
-	public static int increaseRandom(int low, int high, int random) {
+	public static int increaseRandom(final int low, final int high, int random) {
 		random = (int) Math.round(Math.random() * (high - low) + low);
 		return random;
 	} // Ende method increaseRandom
@@ -355,7 +358,7 @@ public class MarketSimulation {
 	 * calculateTopLineCompanies berechnet den Umsatz der Konkurrenzunternehmen
 	 * mittels Random für Marketing und Preisänderung
 	 */
-	public static int calculateTopLineCompanies(Company company) {
+	public static int calculateTopLineCompanies(final Company company) {
 		int topLine = company.getTopLine();
 
 		// Marketingumsatzanstieg berechnen (anhand Random)
@@ -379,8 +382,8 @@ public class MarketSimulation {
 	 * mit Berücksichtigung der getätigten Investitionen zu Marketing und
 	 * Preisänderung
 	 */
-	public static int calculateTopLineOwnCompany(int marketingInput,
-			int topLine, double priceOld, double priceNew) {
+	public static int calculateTopLineOwnCompany(final int marketingInput,
+			int topLine, final double priceOld, double priceNew) {
 
 		double marketingInputCalc = marketingInput;
 		double topLineCalc = topLine;
@@ -411,7 +414,7 @@ public class MarketSimulation {
 	 * calculateMarketShare ermittelt den Marktanteil für das angegebene
 	 * Unternehmen
 	 */
-	public static double calculateMarketShare(int topLine, int topLineCompany,
+	public static double calculateMarketShare(final int topLine, final int topLineCompany,
 			double marketShare) {
 		double topLineCompanyCalc = topLineCompany; // Gesamtumsatz des Marktes
 		double topLineCalc = topLine; // Umsatz des eigenen Unternehmens
@@ -426,8 +429,8 @@ public class MarketSimulation {
 	 * calculateSalesVolume ermittelt die Absatzmenge des angegebenen
 	 * Unternehmens
 	 */
-	public static int calculateSalesVolume(int topLineMarket,
-			double marketShare, double price, int salesVolume) {
+	public static int calculateSalesVolume(final int topLineMarket,
+			final double marketShare, final double price, int salesVolume) {
 
 		int realTopLine = (int) (topLineMarket * marketShare / 100); // realer
 																		// Umsatz
@@ -438,8 +441,8 @@ public class MarketSimulation {
 
 	/**
 	 */
-	private static int getAmortization(int amortization, int machineValue,
-			Machines machine) {
+	private static int getAmortization(int amortization, final int machineValue,
+			final Machines machine) {
 
 		amortization = (int) Math.ceil(machineValue / 10
 				+ machine.getAccountingValue() / machine.getServiceLife());

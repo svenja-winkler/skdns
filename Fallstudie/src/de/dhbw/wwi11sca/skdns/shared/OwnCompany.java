@@ -23,63 +23,66 @@ public class OwnCompany extends Company implements Serializable {
 	public OwnCompany() {
 	}
 
-	public OwnCompany(String userID, String companyID, int topLine,
-			double marketShare, Product product, String tradeName,
-			double fixedCosts, double variableCosts, Machines machines,
-			int salaryStaff, int numberOfStaff) {
-		setUserID(userID);
-		setCompanyID(companyID);
-		setTopLine(topLine);
-		setMarketShare(marketShare);
-		setProduct(product);
-		setTradeName(tradeName);
-		this.fixedCosts = fixedCosts;
-		this.variableCosts = variableCosts;
-		this.machines = machines;
-		this.salaryStaff = salaryStaff;
-		this.numberOfStaff = numberOfStaff;
+	public OwnCompany(final String pUserID, final String pCompanyID, 
+			final int pTopLine, final double pMarketShare, 
+			final Product pProduct, final String pTradeName,
+			final double pFixedCosts, final double pVariableCosts,
+			final Machines pMachines, final int pSalaryStaff,
+			final int pNumberOfStaff) {
+		
+		setUserID(pUserID);
+		setCompanyID(pCompanyID);
+		setTopLine(pTopLine);
+		setMarketShare(pMarketShare);
+		setProduct(pProduct);
+		setTradeName(pTradeName);
+		this.fixedCosts = pFixedCosts;
+		this.variableCosts = pVariableCosts;
+		this.machines = pMachines;
+		this.salaryStaff = pSalaryStaff;
+		this.numberOfStaff = pNumberOfStaff;
 
 	}
 
 	// Getter-Setter-Methoden
-	public double getFixedCosts() {
+	public final double getFixedCosts() {
 		return fixedCosts;
 	}
 
-	public void setFixedCosts(double fixedCosts) {
-		this.fixedCosts = fixedCosts;
+	public final void setFixedCosts(final double pFixedCosts) {
+		this.fixedCosts = pFixedCosts;
 	}
 
-	public double getVariableCosts() {
+	public final double getVariableCosts() {
 		return variableCosts;
 	}
 
-	public void setVariableCosts(double variableCosts) {
-		this.variableCosts = variableCosts;
+	public final void setVariableCosts(final double pVariableCosts) {
+		this.variableCosts = pVariableCosts;
 	}
 
-	public Machines getMachines() {
+	public final Machines getMachines() {
 		return machines;
 	}
 
-	public void setMachines(Machines machines) {
-		this.machines = machines;
+	public final void setMachines(final Machines pMachines) {
+		this.machines = pMachines;
 	}
 
-	public int getSalaryStaff() {
+	public final int getSalaryStaff() {
 		return salaryStaff;
 	}
 
-	public void setSalaryStaff(int salaryStaff) {
-		this.salaryStaff = salaryStaff;
+	public final void setSalaryStaff(final int pSalaryStaff) {
+		this.salaryStaff = pSalaryStaff;
 	}
 
-	public int getNumberOfStaff() {
+	public final int getNumberOfStaff() {
 		return numberOfStaff;
 	}
 
-	public void setNumberOfStaff(int numberOfStaff) {
-		this.numberOfStaff = numberOfStaff;
+	public final void setNumberOfStaff(final int pNumberOfStaff) {
+		this.numberOfStaff = pNumberOfStaff;
 	}
 
 }

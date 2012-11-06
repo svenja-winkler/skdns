@@ -23,53 +23,53 @@ public class Machines implements Serializable {
 	public Machines() {
 	}
 
-	public Machines(int capacity, int serviceLife, int staff,
-			double accountingValue) {
-		this.setCapacity(capacity);
-		this.setServiceLife(serviceLife);
-		this.setStaff(staff);
-		this.setAccountingValue(accountingValue);
+	public Machines(final int pCapacity, final int pServiceLife, 
+			final int pStaff, final double pAccountingValue) {
+		this.setCapacity(pCapacity);
+		this.setServiceLife(pServiceLife);
+		this.setStaff(pStaff);
+		this.setAccountingValue(pAccountingValue);
 	}
 
 	// Getter-Setter-Methoden
-	public int getCapacity() {
+	public final int getCapacity() {
 		return capacity;
 	}
 
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
+	public final void setCapacity(final int pCapacity) {
+		this.capacity = pCapacity;
 	}
 
-	public int getServiceLife() {
+	public final int getServiceLife() {
 		return serviceLife;
 	}
 
-	public void setServiceLife(int serviceLife) {
-		this.serviceLife = serviceLife;
+	public final void setServiceLife(final int pServiceLife) {
+		this.serviceLife = pServiceLife;
 	}
 
-	public double getAccountingValue() {
+	public final double getAccountingValue() {
 		return accountingValue;
 	}
 
-	public void setAccountingValue(double accountingValue) {
-		this.accountingValue = accountingValue;
+	public final void setAccountingValue(final double pAccountingValue) {
+		this.accountingValue = pAccountingValue;
 	}
 
-	public int getStaff() {
+	public final int getStaff() {
 		return staff;
 	}
 
-	public void setStaff(int staff) {
-		this.staff = staff;
+	public final void setStaff(final int pStaff) {
+		this.staff = pStaff;
 	}
 
-	public String getUserID() {
+	public final String getUserID() {
 		return userID;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public final void setUserID(final String pUserID) {
+		this.userID = pUserID;
 	}
 
 }

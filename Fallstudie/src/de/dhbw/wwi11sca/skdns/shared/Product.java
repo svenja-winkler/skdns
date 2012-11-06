@@ -21,34 +21,34 @@ public class Product implements Serializable {
 	public Product() {
 	}
 
-	public Product(int salesVolume, double price) {
-		this.setSalesVolume(salesVolume);
-		this.setPrice(price);
+	public Product(final int pSalesVolume, final double pPrice) {
+		this.setSalesVolume(pSalesVolume);
+		this.setPrice(pPrice);
 	}
 
 	// GEtter-Setter-Methoden
-	public int getSalesVolume() {
+	public final int getSalesVolume() {
 		return salesVolume;
 	}
 
-	public void setSalesVolume(int salesVolume) {
-		this.salesVolume = salesVolume;
+	public final void setSalesVolume(final int pSalesVolume) {
+		this.salesVolume = pSalesVolume;
 	}
 
-	public double getPrice() {
+	public final double getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
-		this.price = price;
+	public final void setPrice(final double pPrice) {
+		this.price = pPrice;
 	}
 
-	public String getUserID() {
+	public final String getUserID() {
 		return userID;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public final void setUserID(final String pUserID) {
+		this.userID = pUserID;
 	}
 
 }

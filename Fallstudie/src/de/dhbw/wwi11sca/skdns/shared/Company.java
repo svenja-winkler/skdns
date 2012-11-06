@@ -13,7 +13,6 @@ public class Company implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String userID = new String();
-
 	private String companyID = new String();
 	private int topLine;
 	private int amount;
@@ -25,93 +24,96 @@ public class Company implements Serializable {
 	public Company() {
 	}
 
-	public Company(int topLine, int amount, double marketShare) {
-		this.setTopLine(topLine);
-		this.setAmount(amount);
-		this.setMarketShare(marketShare);
+	public Company(final int pTopLine, final int pAmount,
+			final double pMarketShare) {
+		this.setTopLine(pTopLine);
+		this.setAmount(pAmount);
+		this.setMarketShare(pMarketShare);
 
 	}
 
-	public Company(int topLine, int amount, double marketShare, Product product) {
-		this.setTopLine(topLine);
-		this.setAmount(amount);
-		this.setMarketShare(marketShare);
-		this.setProduct(product);
+	public Company(final int pTopLine, final int pAmount,
+			final double pMarketShare, final Product pProduct) {
+		this.setTopLine(pTopLine);
+		this.setAmount(pAmount);
+		this.setMarketShare(pMarketShare);
+		this.setProduct(pProduct);
 	}
 
-	public Company(String userID, String companyID, String tradeName,
-			Product product) {
-		this.userID = userID;
-		this.companyID = companyID;
-		this.tradeName = tradeName;
-		this.product = product;
+	public Company(final String pUserID, final String pCompanyID, 
+			final String pTradeName, final Product pProduct) {
+		this.userID = pUserID;
+		this.companyID = pCompanyID;
+		this.tradeName = pTradeName;
+		this.product = pProduct;
 	}
 
-	public Company(String userID, String companyID, String tradeName,
-			int topLine, double marketShare, Product product) {
-		this.userID = userID;
-		this.companyID = companyID;
-		this.tradeName = tradeName;
-		this.topLine = topLine;
-		this.marketShare = marketShare;
-		this.product = product;
+	public Company(final String pUserID, final String pCompanyID, 
+			final String pTradeName, final int pTopLine, 
+			final double pMarketShare, final Product pProduct) {
+		this.userID = pUserID;
+		this.companyID = pCompanyID;
+		this.tradeName = pTradeName;
+		this.topLine = pTopLine;
+		this.marketShare = pMarketShare;
+		this.product = pProduct;
 	}
 
 	// Getter-Setter-Methoden
-	public String getCompanyID() {
+	public final String getCompanyID() {
 		return companyID;
 	}
 
-	public void setCompanyID(String companyID) {
-		this.companyID = companyID;
+	public final void setCompanyID(final String pCompanyID) {
+		this.companyID = pCompanyID;
 	}
 
-	public int getTopLine() {
+	public final int getTopLine() {
 		return topLine;
 	}
 
-	public void setTopLine(int topLine) {
-		this.topLine = topLine;
+	public final void setTopLine(final int pTopLine) {
+		this.topLine = pTopLine;
 	}
 
-	public int getAmount() {
+	public final int getAmount() {
 		return amount;
 	}
 
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public final void setAmount(final int pAmount) {
+		this.amount = pAmount;
 	}
 
-	public double getMarketShare() {
+	public final double getMarketShare() {
 		return marketShare;
 	}
 
-	public void setMarketShare(double marketShare) {
-		this.marketShare = marketShare;
+	public final void setMarketShare(final double pMarketShare) {
+		this.marketShare = pMarketShare;
 	}
 
-	public Product getProduct() {
+	public final Product getProduct() {
 		return product;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public final void setProduct(final Product pProduct) {
+		this.product = pProduct;
 	}
 
-	public String getUserID() {
+	public final String getUserID() {
 		return userID;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public final void setUserID(final String pUserID) {
+		this.userID = pUserID;
 	}
 
-	public String getTradeName() {
+	public final String getTradeName() {
 		return tradeName;
 	}
 
-	public void setTradeName(String tradeName) {
-		this.tradeName = tradeName;
+	public final void setTradeName(final String pTradeName) {
+		this.tradeName = pTradeName;
 	}
 
 }

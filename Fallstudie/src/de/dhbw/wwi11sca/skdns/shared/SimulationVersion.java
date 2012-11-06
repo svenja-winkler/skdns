@@ -38,140 +38,142 @@ public class SimulationVersion implements Serializable {
 
 	}
 
-	public SimulationVersion(int simulationYear, int simulationVersion) {
-		this.setSimulationYear(simulationYear);
-		this.setVersion(simulationVersion);
+	public SimulationVersion(final int pSimulationYear, 
+			final int pSimulationVersion) {
+		this.setSimulationYear(pSimulationYear);
+		this.setVersion(pSimulationVersion);
 
 	}
 
 	// Getter-Setter-Methoden
 
-	public int getPersonal() {
+	public final int getPersonal() {
 		return personal;
 	}
 
-	public void setPersonal(int personal) {
-		this.personal = personal;
+	public final void setPersonal(final int pPersonal) {
+		this.personal = pPersonal;
 	}
 
-	public int getMachineValue() {
+	public final int getMachineValue() {
 		return machineValue;
 	}
 
-	public void setMachineValue(int machineValue) {
-		this.machineValue = machineValue;
+	public final void setMachineValue(final int pMachineValue) {
+		this.machineValue = pMachineValue;
 	}
 
-	public int getMachineCapacity() {
+	public final int getMachineCapacity() {
 		return machineCapacity;
 	}
 
-	public void setMachineCapacity(int machineCapacity) {
-		this.machineCapacity = machineCapacity;
+	public final void setMachineCapacity(final int pMachineCapacity) {
+		this.machineCapacity = pMachineCapacity;
 	}
 
-	public int getMachineStaff() {
+	public final int getMachineStaff() {
 		return machineStaff;
 	}
 
-	public void setMachineStaff(int machineStaff) {
-		this.machineStaff = machineStaff;
+	public final void setMachineStaff(final int pMachineStaff) {
+		this.machineStaff = pMachineStaff;
 	}
 
-	public int getMarketing() {
+	public final int getMarketing() {
 		return marketing;
 	}
 
-	public void setMarketing(int marketing) {
-		this.marketing = marketing;
+	public final void setMarketing(final int pMarketing) {
+		this.marketing = pMarketing;
 	}
 
-	public int getSimulationYear() {
+	public final int getSimulationYear() {
 		return simulationYear;
 	}
 
-	public void setSimulationYear(int simulationYear) {
-		this.simulationYear = simulationYear;
+	public final void setSimulationYear(final int pSimulationYear) {
+		this.simulationYear = pSimulationYear;
 	}
 
-	public int getVersion() {
+	public final int getVersion() {
 		return version;
 	}
 
-	public void setVersion(int version) {
-		this.version = version;
+	public final void setVersion(final int pVersion) {
+		this.version = pVersion;
 	}
 
-	public Double getPrice() {
+	public final Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double double1) {
-		this.price = double1;
+	public final void setPrice(final Double pDouble1) {
+		this.price = pDouble1;
 	}
 
-	public int getMarketIncrease() {
+	public final int getMarketIncrease() {
 		return marketIncrease;
 	}
 
-	public void setMarketIncrease(int marketIncrease) {
-		this.marketIncrease = marketIncrease;
+	public final void setMarketIncrease(final int pMarketIncrease) {
+		this.marketIncrease = pMarketIncrease;
 	}
 
-	public OwnCompany getOwnCompany() {
+	public final OwnCompany getOwnCompany() {
 		return ownCompany;
 	}
 
-	public void setOwnCompany(OwnCompany ownCompany) {
-		this.ownCompany = ownCompany;
+	public final void setOwnCompany(final OwnCompany pOwnCompany) {
+		this.ownCompany = pOwnCompany;
 	}
 
-	public Company getCompany1() {
+	public final Company getCompany1() {
 		return company1;
 	}
 
-	public void setCompany1(Company company1) {
-		this.company1 = company1;
+	public final void setCompany1(final Company pCompany1) {
+		this.company1 = pCompany1;
 	}
 
-	public Company getCompany2() {
+	public final Company getCompany2() {
 		return company2;
 	}
 
-	public void setCompany2(Company company2) {
-		this.company2 = company2;
+	public final void setCompany2(final Company pCompany2) {
+		this.company2 = pCompany2;
 	}
 
-	public Company getCompany3() {
+	public final Company getCompany3() {
 		return company3;
 	}
 
-	public void setCompany3(Company company3) {
-		this.company3 = company3;
+	public final void setCompany3(final Company pCompany3) {
+		this.company3 = pCompany3;
 	}
 
-	public String getUserID() {
+	public final String getUserID() {
 		return userID;
 	}
 
-	public void setUserID(String userID) {
-		this.userID = userID;
+	public final void setUserID(final String pUserID) {
+		this.userID = pUserID;
 	}
 
-	public boolean isUnusedMachineCapacity() {
+	public final boolean isUnusedMachineCapacity() {
 		return unusedMachineCapacity;
 	}
 
-	public void setUnusedMachineCapacity(boolean unusedMachineCapacity) {
-		this.unusedMachineCapacity = unusedMachineCapacity;
+	public final void setUnusedMachineCapacity(
+			final boolean pUnusedMachineCapacity) {
+		this.unusedMachineCapacity = pUnusedMachineCapacity;
 	}
 
-	public int getNecessaryPersonal() {
+	public final int getNecessaryPersonal() {
 		return necessaryPersonal;
 	}
 
-	public void setNecessaryPersonal(int necessaryPersonal) {
-		this.necessaryPersonal = necessaryPersonal;
+	public final void setNecessaryPersonal(final int pNecessaryPersonal) {
+		this.necessaryPersonal = pNecessaryPersonal;
 	}
 
 }
