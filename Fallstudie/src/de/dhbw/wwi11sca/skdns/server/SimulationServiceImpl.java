@@ -11,20 +11,24 @@ package de.dhbw.wwi11sca.skdns.server;
 
 import java.util.List;
 import de.dhbw.wwi11sca.skdns.client.simulation.SimulationService;
-import de.dhbw.wwi11sca.skdns.server.MarketSimulation;
-import de.dhbw.wwi11sca.skdns.shared.*;
+import de.dhbw.wwi11sca.skdns.shared.Company;
+import de.dhbw.wwi11sca.skdns.shared.OwnCompany;
+import de.dhbw.wwi11sca.skdns.shared.SimulationVersion;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 @SuppressWarnings("serial")
 public class SimulationServiceImpl extends RemoteServiceServlet implements
 		SimulationService {
+	
+	//Constants
+	private static final int THREE = 3;
 
 	/**
 	 * getCompany holt alle Unternehmen aus der DB , deren UserID mit der UserID
 	 * des eingeloggten Users übereinstimmt
 	 */
-	public List<Company> getCompany() {
+	public final List<Company> getCompany() {
 		// ermittelt die Konkurrenzunternehmen , deren UserID mit der UserID des
 		// eingeloggten Users übereinstimmt
 		List<Company> dbCompany = DataManager.getDatastore()
@@ -48,7 +52,7 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements
 	 * getCompany(List<<Company> companies speichert die gelieferten
 	 * Unternehmen, und liefert sie zurück
 	 */
-	public List<Company> getCompany(List<Company> companies) {
+	public final List<Company> getCompany(final List<Company> companies) {
 		// löscht die Unternehmen, deren UserID mit der ID des eingeloggten
 		// Users übereinstimmen
 		DataManager.getDatastore().delete(
@@ -85,7 +89,8 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements
 	 * Berechnungen in der MarketSimulation auf, speichert die SimulationVersion
 	 * und liefert die Ergebnisse an die Oberfläche
 	 */
-	public SimulationVersion createSimulationCallback(SimulationVersion version) {
+	public final SimulationVersion createSimulationCallback(
+			final SimulationVersion version) {
 		// Unternehmen aus der DB holen
 		List<Company> dbCompany = getCompany();
 
@@ -94,7 +99,7 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements
 		version.setOwnCompany((OwnCompany) dbCompany.get(0));
 		version.setCompany1(dbCompany.get(1));
 		version.setCompany2(dbCompany.get(2));
-		version.setCompany3(dbCompany.get(3));
+		version.setCompany3(dbCompany.get(THREE));
 
 		// Ein neues Objekt erzeugen und aufrufen
 		MarketSimulation marktsim = new MarketSimulation();

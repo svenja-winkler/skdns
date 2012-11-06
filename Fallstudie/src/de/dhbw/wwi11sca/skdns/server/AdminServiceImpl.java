@@ -30,11 +30,22 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 	private static final long serialVersionUID = -1889396499053755175L;
 
 	private static Admin admin = new Admin();
-
+	private static final double PRODUCTPRICE = 12.34;
+	private static final int MACHINESCAPACITY = 100046;
+	private static final int MACHINESSERVICELIFE = 10;
+	private static final int MACHINESSTAFF = 10;
+	private static final double MACHINESACCOUNTINGVALUE = 1234.56;
+	private static final double OWNCOMMARKETSHARE = 50.05;
+	private static final double COMMARKETSHARE = 49.95;
+	private static final int TOPLINE = 1234567;
+	private static final double FIXEDCOSTS = 12345;
+	private static final double VARIABLECOSTS = 4.56;
+	private static final int SALARYSTAFF = 12345;
+	private static final int NUMBEROFSTAFF = 15;
 	/**
 	 * getUser holt alle User aus der DB
 	 */
-	public List<User> getUser() {
+	public final List<User> getUser() {
 		return DataManager.getDatastore().createQuery(User.class).asList();
 
 	} // Ende method getUser
@@ -42,26 +53,28 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * saveUser speichert einen neu erzeugten User in der DB
 	 */
-	public void saveUser(User newUser) {
+	public final void saveUser(final User newUser) {
 		newUser.setUserID(newUser.getUsername());
 
 		// eigenes Unternehmen des neuen Users erzeugen
 		// und mit vordefinierten Werten befüllen
 		Product ownProduct = new Product();
-		ownProduct.setPrice(12.34);
+		ownProduct.setPrice(PRODUCTPRICE);
 		ownProduct.setUserID(newUser.getUsername());
-		Machines ownMachine = new Machines(100046, 10, 10, 1234.56);
+		Machines ownMachine = new Machines(MACHINESCAPACITY,
+				MACHINESSERVICELIFE, MACHINESSTAFF, MACHINESACCOUNTINGVALUE);
 		OwnCompany ownCompany = new OwnCompany(newUser.getUsername(), "ownCom",
-				1234567, 50.05, ownProduct, "Eigenes Unternehmen", 12345, 4.56,
-				ownMachine, 12345, 15);
+				TOPLINE, OWNCOMMARKETSHARE, ownProduct, "Eigenes Unternehmen",
+				FIXEDCOSTS, VARIABLECOSTS, ownMachine, SALARYSTAFF,
+				NUMBEROFSTAFF);
 
 		// Konkurrenzunternehmen 1 erzeugen
 		// und mit vordefinierten Werten befüllen
 		Product productCom1 = new Product();
-		productCom1.setPrice(12.34);
+		productCom1.setPrice(PRODUCTPRICE);
 		productCom1.setUserID(newUser.getUsername());
 		Company company1 = new Company(newUser.getUsername(), "1",
-				"Konkurrent", 1234567, 49.95, productCom1);
+				"Konkurrent", TOPLINE, COMMARKETSHARE, productCom1);
 
 		// Konkurrenzunternehmen 2 erzeugen
 		Product productCom2 = new Product();
@@ -87,7 +100,7 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * deleteUser löscht einen angegebenen User
 	 */
-	public void deleteUser(String deleteUser) {
+	public final void deleteUser(final String deleteUser) {
 
 		// Löscht den User aus der DB
 		DataManager.getDatastore().delete(
@@ -119,7 +132,7 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * getStats ermittelt die Statistiken, die dem Admin angezeigt werden
 	 */
-	public Admin getStats() {
+	public final Admin getStats() {
 		// Ermittelt die Anzahl aller User in der DB
 		List<User> allUser = DataManager.getDatastore().createQuery(User.class)
 				.filter("username <>", "admin").asList();
@@ -131,7 +144,7 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 	/**
 	 * updateTable aktualisiert die Usertabelle auf der Oberfläche des Admins
 	 */
-	public void updateTable(User user) {
+	public final void updateTable(final User user) {
 		// liefert User aus der DB, deren ID mit der von user übereinstimmt
 		Query<User> updateQuery = DataManager.getDatastore()
 				.createQuery(User.class).field("userID")
@@ -153,7 +166,7 @@ public class AdminServiceImpl extends RemoteServiceServlet implements
 		return admin;
 	} // Ende method getAdmin
 
-	public void setAdmin(Admin admin) {
-		AdminServiceImpl.admin = admin;
+	public final void setAdmin(final Admin pAdmin) {
+		AdminServiceImpl.admin = pAdmin;
 	} // Ende method setAdmin
 } // Ende class AdminServiceImpl

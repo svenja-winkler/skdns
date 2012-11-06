@@ -23,7 +23,7 @@ public class HomeServiceImpl extends RemoteServiceServlet implements
 	 * getCompany ermittelt alle Unternehmen, die unter der UserID des
 	 * eingeloggten Users in der DB vorhanden sind
 	 */
-	public List<Company> getCompany() {
+	public final List<Company> getCompany() {
 		// Ermittelt die Konkurrenzunternehmen
 		List<Company> dbCompany = DataManager.getDatastore()
 				.createQuery(Company.class)

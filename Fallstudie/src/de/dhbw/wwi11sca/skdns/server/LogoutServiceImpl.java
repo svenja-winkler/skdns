@@ -19,13 +19,16 @@ import de.dhbw.wwi11sca.skdns.shared.SimulationVersion;
 public class LogoutServiceImpl extends RemoteServiceServlet implements
 		LogoutService {
 
+	//Constants
+	private static final int THREE = 10;
+	
 	private static final long serialVersionUID = -1627396366340846030L;
 
 	/**
 	 * deleteVersions entfernt alle SimulationVersionen des sich ausloggenden
 	 * Users, abgesehen der letzten drei
 	 */
-	public void deleteVersions() {
+	public final void deleteVersions() {
 		// überprüft, ob die UserID, die des Admins ist
 		// ist dies der Fall können keine Versionen gelöscht werden
 		if (LoginServiceImpl.getUserID() != null) {
@@ -37,7 +40,7 @@ public class LogoutServiceImpl extends RemoteServiceServlet implements
 
 			// überprüft, ob mehr als drei SimulationVersions in der DB
 			// vorhanden sind
-			if (versions.size() > 3) {
+			if (versions.size() > THREE) {
 				// löschen der SimulationVersions, abgesehen der letzten drei
 				DataManager.getDatastore().delete(
 						DataManager
@@ -46,10 +49,11 @@ public class LogoutServiceImpl extends RemoteServiceServlet implements
 								.filter("userID = ",
 										LoginServiceImpl.getUserID()));
 				versions.get(versions.size() - 1);
-				for (int i = versions.size(); i > versions.size() - 3; i--) {
+				for (int i = versions.size(); i > versions.size()
+						- THREE; i--) {
 					DataManager.getDatastore().save(versions.get(i));
 				} // Ende if-Statement(version.size() >3)
-			}// Ende if-Statement (LoginServiceImpl.getUserID() != null)
+			} // Ende if-Statement (LoginServiceImpl.getUserID() != null)
 		} // Ende method deleteVersions
 	} // Ende class LogoutServiceImpl
 } // Ende class LogoutServiceImpl

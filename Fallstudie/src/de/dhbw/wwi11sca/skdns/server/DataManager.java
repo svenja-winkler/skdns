@@ -7,7 +7,14 @@ import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
-public class DataManager {
+public final class DataManager {
+	
+	public static final int PORT = 27017;
+	
+	private DataManager() {
+		
+	}
+	
 	public static Datastore getDatastore() {
 		return new Morphia().createDatastore(getMongo(), "skdns");
 	}
@@ -15,7 +22,7 @@ public class DataManager {
 	private static Mongo getMongo() {
 		Mongo m = null;
 		try {
-			m = new Mongo("localhost", 27017);
+			m = new Mongo("localhost", PORT);
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (MongoException e) {

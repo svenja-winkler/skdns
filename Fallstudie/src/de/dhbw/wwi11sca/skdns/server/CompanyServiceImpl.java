@@ -27,7 +27,7 @@ public class CompanyServiceImpl extends RemoteServiceServlet implements
 	 * getCompany Ermittelt alle Konkurrenzunternehmen, deren UserID-Feld mit
 	 * der UserID des eingeloggten Users übereinstimmt
 	 */
-	public List<Company> getCompany() {
+	public final List<Company> getCompany() {
 
 		return DataManager.getDatastore().createQuery(Company.class)
 				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
@@ -37,7 +37,7 @@ public class CompanyServiceImpl extends RemoteServiceServlet implements
 	 * getOwnCompany Ermittelt das eigene Unternehmen, dessen UserID-Feld mit
 	 * der UserID des eingeloggten Users übereinstimmt
 	 */
-	public OwnCompany getOwnCompany() {
+	public final OwnCompany getOwnCompany() {
 		List<OwnCompany> dbOwnCompany = DataManager.getDatastore()
 				.createQuery(OwnCompany.class)
 				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
@@ -50,7 +50,7 @@ public class CompanyServiceImpl extends RemoteServiceServlet implements
 	 * das eigene Unternehmen, dessen UserID-Feld mit der UserID des
 	 * eingeloggten Users übereinstimmt
 	 */
-	public void addOwnCompany(OwnCompany ownCompany) {
+	public final void addOwnCompany(final OwnCompany ownCompany) {
 		// Ermittelt das zu aktualisierende eigene Unternehmen
 		Query<OwnCompany> updateQuery = DataManager.getDatastore()
 				.createQuery(OwnCompany.class).field("userID")
@@ -78,7 +78,7 @@ public class CompanyServiceImpl extends RemoteServiceServlet implements
 	 * eingeloggten Users und der CompanyID, des in der DB befindlichen
 	 * Unternehmens übereinstimmt
 	 */
-	public void addCompany(Company company) {
+	public final void addCompany(final Company company) {
 		// Ermittelt das zu aktualisierende Unternehmen
 		Query<Company> updateQuery = DataManager.getDatastore()
 				.createQuery(Company.class)
