@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.simulation;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * SimulationServiceAsync ist ein Interface für die Kommunikation der Simulation mit der SimulationServiceImpl im Server.
+ * SimulationServiceAsync ist ein Interface für die Kommunikation 
+ * der Simulation mit der SimulationServiceImpl im Server.
  *
  */
 import java.util.List;

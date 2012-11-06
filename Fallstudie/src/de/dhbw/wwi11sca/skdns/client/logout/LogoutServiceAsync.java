@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.logout;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * LogoutServiceAsync ist ein Interface für die Kommunikation der LogoutSimulation mit der LogoutServiceImpl im Server.
+ * LogoutServiceAsync ist ein Interface für die Kommunikation 
+ * der LogoutSimulation mit der LogoutServiceImpl im Server.
  *
  */
 

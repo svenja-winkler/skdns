@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 
 
-public class DelistedException extends Exception implements Serializable{
+public class DelistedException extends Exception implements Serializable {
 
 	/**
 	 * 
@@ -12,11 +12,11 @@ public class DelistedException extends Exception implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String symbol;
 	
-	public DelistedException(){}
-	public DelistedException(String symbol){
-		this.symbol = symbol;
+	public DelistedException() { }
+	public DelistedException(final String pSymbol) {
+		this.symbol = pSymbol;
 	}
-	public String getSymbol(){
+	public final String getSymbol() {
 		return this.symbol;
 	}
 }

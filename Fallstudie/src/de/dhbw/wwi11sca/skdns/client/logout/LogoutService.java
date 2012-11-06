@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.logout;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * LogoutService ist ein Interface für die Kommunikation der LogoutSimulation mit der LogoutServiceImpl im Server.
+ * LogoutService ist ein Interface für die Kommunikation 
+ * der LogoutSimulation mit der LogoutServiceImpl im Server.
  *
  */
 

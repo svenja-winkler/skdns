@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.admin;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * AdminService ist ein Interface für die Kommunikation der AdminSimulation mit der AdminnServiceImpl im Server.
+ * AdminService ist ein Interface für die Kommunikation der
+ *  AdminSimulation mit der AdminnServiceImpl im Server.
  *
  */
 import java.util.List;

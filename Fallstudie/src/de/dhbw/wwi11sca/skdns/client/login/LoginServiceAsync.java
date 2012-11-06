@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.login;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * LoginServiceAsync ist ein Interface für die Kommunikation der LoginSimulation mit der LoginServiceImpl im Server.
+ * LoginServiceAsync ist ein Interface für die Kommunikation 
+ * der LoginSimulation mit der LoginServiceImpl im Server.
  *
  */
 import de.dhbw.wwi11sca.skdns.shared.User;

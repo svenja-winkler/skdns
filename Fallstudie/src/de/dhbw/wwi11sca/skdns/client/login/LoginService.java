@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.login;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * LoginService ist ein Interface für die Kommunikation der LoginSimulation mit der LoginServiceImpl im Server.
+ * LoginService ist ein Interface für die Kommunikation 
+ * der LoginSimulation mit der LoginServiceImpl im Server.
  *
  */
 

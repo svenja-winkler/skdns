@@ -4,7 +4,8 @@ package de.dhbw.wwi11sca.skdns.client.home;
  * 
  * @author SKDNS Marktsimulationen
  * 
- * HomeServiceAsync ist ein Interface für die Kommunikation der HomeSimulation mit der HomeServiceImpl im Server.
+ * HomeServiceAsync ist ein Interface für die Kommunikation 
+ * der HomeSimulation mit der HomeServiceImpl im Server.
  *
  */
 import java.util.List;
