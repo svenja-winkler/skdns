@@ -1,22 +1,25 @@
 package de.dhbw.wwi11sca.skdns.shared;
 
+/**
+ * 
+ * @author SKDNS Marktsimulationen
+ * 
+ * Diese Objektklasse enthält alle wichtigen Daten eines Spieldurchlaufes.
+ * 
+ */
 import java.io.Serializable;
 
 public class SimulationVersion implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String userID = new String();
+	
 	private int personal;
 	private int machineValue;
 	private int machineCapacity;
 	private int machineStaff;
 	private int marketing;
 	private Double price;
-	
-	private int marketIncrease;
 
 	private int simulationYear;
 	private int version;
@@ -25,11 +28,12 @@ public class SimulationVersion implements Serializable {
 	private Company company1;
 	private Company company2;
 	private Company company3;
-	
+
+	private int marketIncrease;
 	private boolean unusedMachineCapacity = false;
 	private int necessaryPersonal;
 
-	// Konstruktor
+	// Konstruktoren
 	public SimulationVersion() {
 
 	}
@@ -40,7 +44,7 @@ public class SimulationVersion implements Serializable {
 
 	}
 
-	// Getter-Methoden
+	// Getter-Setter-Methoden
 
 	public int getPersonal() {
 		return personal;

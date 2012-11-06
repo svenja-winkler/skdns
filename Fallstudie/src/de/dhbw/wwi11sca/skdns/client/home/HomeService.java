@@ -19,10 +19,7 @@ import de.dhbw.wwi11sca.skdns.shared.OwnCompany;
 @RemoteServiceRelativePath("home")
 public interface HomeService extends RemoteService {
 
-	String loginServer(String name) throws IllegalArgumentException;
 
 	List<Company> getCompany();
-
-	
 
 }

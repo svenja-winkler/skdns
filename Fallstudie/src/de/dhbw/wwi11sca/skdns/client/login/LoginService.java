@@ -15,12 +15,11 @@ import de.dhbw.wwi11sca.skdns.client.DelistedException;
 
 @RemoteServiceRelativePath("login")
 public interface LoginService extends RemoteService {
-	String loginServer(String name) throws IllegalArgumentException;
 
 	void checkLogin(User user) throws DelistedException;
 
 	void forgotPassword(User user) throws DelistedException;
 
 	void checkAdmin(User userOnline) throws DelistedException;
-	
+
 }

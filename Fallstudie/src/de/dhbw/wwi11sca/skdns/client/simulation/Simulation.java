@@ -531,7 +531,6 @@ public class Simulation implements EntryPoint {
 		DataTable data = DataTable.create();
 		data.addColumn(ColumnType.STRING, "Unternehmen");
 		data.addColumn(ColumnType.NUMBER, "Umsatz");
-		data.addRows(4);
 		data.addRows(companies.size());
 		int rowIndex = 0;
 		// Datentabelle mit Daten befüllen
@@ -539,7 +538,6 @@ public class Simulation implements EntryPoint {
 		for (Company company : companies) {
 			data.setValue(rowIndex, 0, company.getTradeName());
 			data.setValue(rowIndex, 1, company.getTopLine());
-			rowIndex++;
 			rowIndex++;
 		}
 
@@ -604,6 +602,11 @@ public class Simulation implements EntryPoint {
 			companyListSimulation.add(result.getCompany2());
 			companyListSimulation.add(result.getCompany3());
 
+			for (Company company : companyListSimulation) {
+				if (company.getTopLine() == 0) {
+					companyListSimulation.remove(company);
+				}
+			}
 			// PieChart
 			showPieChart(companyListSimulation);
 

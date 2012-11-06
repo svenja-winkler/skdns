@@ -1,11 +1,19 @@
 package de.dhbw.wwi11sca.skdns.shared;
 
+/**
+ * 
+ * @author SKDNS Marktsimulationen
+ * 
+ * Diese Objektklasse enthält alle wichtigen Daten eines Unternehmens.
+ * 
+ */
 import java.io.Serializable;
 
 public class Company implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String userID = new String();
+
 	private String companyID = new String();
 	private int topLine;
 	private int amount;
@@ -13,7 +21,22 @@ public class Company implements Serializable {
 	private Product product;
 	private String tradeName;
 
+	// Konstruktoren
 	public Company() {
+	}
+
+	public Company(int topLine, int amount, double marketShare) {
+		this.setTopLine(topLine);
+		this.setAmount(amount);
+		this.setMarketShare(marketShare);
+
+	}
+
+	public Company(int topLine, int amount, double marketShare, Product product) {
+		this.setTopLine(topLine);
+		this.setAmount(amount);
+		this.setMarketShare(marketShare);
+		this.setProduct(product);
 	}
 
 	public Company(String userID, String companyID, String tradeName,
@@ -34,20 +57,7 @@ public class Company implements Serializable {
 		this.product = product;
 	}
 
-	public Company(int topLine, int amount, double marketShare, Product product) {
-		this.setTopLine(topLine);
-		this.setAmount(amount);
-		this.setMarketShare(marketShare);
-		this.setProduct(product);
-	}
-
-	public Company(int topLine, int amount, double marketShare) {
-		this.setTopLine(topLine);
-		this.setAmount(amount);
-		this.setMarketShare(marketShare);
-
-	}
-
+	// Getter-Setter-Methoden
 	public String getCompanyID() {
 		return companyID;
 	}

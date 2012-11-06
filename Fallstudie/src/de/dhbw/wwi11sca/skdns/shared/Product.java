@@ -1,14 +1,23 @@
 package de.dhbw.wwi11sca.skdns.shared;
 
+/**
+ * 
+ * @author SKDNS Marktsimulationen
+ * 
+ * Diese Objektklasse enthält alle wichtigen Daten eines Produktes.
+ * 
+ */
 import java.io.Serializable;
 
 public class Product implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String userID = new String();
+	
 	private int salesVolume;
 	private double price;
 
+	// Konstruktoren
 	public Product() {
 	}
 
@@ -17,6 +26,7 @@ public class Product implements Serializable {
 		this.setPrice(price);
 	}
 
+	// GEtter-Setter-Methoden
 	public int getSalesVolume() {
 		return salesVolume;
 	}

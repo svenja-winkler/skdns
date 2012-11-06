@@ -15,9 +15,4 @@ import de.dhbw.wwi11sca.skdns.shared.Company;
 public interface HomeServiceAsync {
 
 	void getCompany(AsyncCallback<List<Company>> callback);
-
-	void loginServer(String name, AsyncCallback<String> callback);
-
-	
-
 }

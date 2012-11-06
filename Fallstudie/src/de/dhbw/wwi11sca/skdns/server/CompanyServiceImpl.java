@@ -1,67 +1,65 @@
 package de.dhbw.wwi11sca.skdns.server;
 
-import java.net.UnknownHostException;
+/**
+ * 
+ * @author SKDNS Marktsimulationen
+ * 
+ * Die CompanyServiceImpl ist die Serverklasse für die CompanySimulation. 
+ * Sie greift auf die Datenbank zu.
+ *
+ */
+
 import java.util.List;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 
 import de.dhbw.wwi11sca.skdns.client.company.CompanyService;
 import de.dhbw.wwi11sca.skdns.shared.Company;
 import de.dhbw.wwi11sca.skdns.shared.OwnCompany;
-import de.dhbw.wwi11sca.skdns.shared.SimulationVersion;
-import de.dhbw.wwi11sca.skdns.shared.User;
 
 @SuppressWarnings("serial")
 public class CompanyServiceImpl extends RemoteServiceServlet implements
 		CompanyService {
 
+	/**
+	 * getCompany Ermittelt alle Konkurrenzunternehmen, deren UserID-Feld mit
+	 * der UserID des eingeloggten Users übereinstimmt
+	 */
 	public List<Company> getCompany() {
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		List<Company> dbCompanies = ds.createQuery(Company.class)
-				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
-		// sucht alle Unternehmen raus, die nicht die UserID aus
-		// LoginServiceImpl haben und löscht sie aus der Liste
 
-		return dbCompanies;
+		return DataManager.getDatastore().createQuery(Company.class)
+				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
 	} // Ende method getCompany
 
+	/**
+	 * getOwnCompany Ermittelt das eigene Unternehmen, dessen UserID-Feld mit
+	 * der UserID des eingeloggten Users übereinstimmt
+	 */
 	public OwnCompany getOwnCompany() {
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		List<OwnCompany> dbOwnCompany = ds.createQuery(OwnCompany.class)
+		List<OwnCompany> dbOwnCompany = DataManager.getDatastore()
+				.createQuery(OwnCompany.class)
 				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
-		// sucht alle Unternehmen raus, die nicht die UserID aus
-		// LoginServiceImpl haben und löscht sie aus der Liste
-
-		OwnCompany singleUN = dbOwnCompany.get(0);
-
-		return singleUN;
+		OwnCompany single = dbOwnCompany.get(0);
+		return single;
 	} // Ende method getOwnCompany
 
-	private static Mongo getMongo() {
-		Mongo m = null;
-		try {
-			m = new Mongo("localhost", 27017);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (MongoException e) {
-			e.printStackTrace();
-		}
-		return m;
-	} // Ende method getMongo
-
+	/**
+	 * addOwnCompany aktualisiert bei Änderungen von Daten auf der Oberfläche
+	 * das eigene Unternehmen, dessen UserID-Feld mit der UserID des
+	 * eingeloggten Users übereinstimmt
+	 */
 	public void addOwnCompany(OwnCompany ownCompany) {
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		Query<OwnCompany> updateQuery = ds.createQuery(OwnCompany.class)
-				.field("userID").equal(LoginServiceImpl.getUserID());
-		// ds.createQuery(EigenesUnternehmen.class);
+		// Ermittelt das zu aktualisierende eigene Unternehmen
+		Query<OwnCompany> updateQuery = DataManager.getDatastore()
+				.createQuery(OwnCompany.class).field("userID")
+				.equal(LoginServiceImpl.getUserID());
+
+		// aktualisiert das ermittelte Unternehmen
 		UpdateOperations<OwnCompany> ops;
-		ops = ds.createUpdateOperations(OwnCompany.class)
+		ops = DataManager.getDatastore()
+				.createUpdateOperations(OwnCompany.class)
 				.set("tradeName", ownCompany.getTradeName())
 				.set("topLine", ownCompany.getTopLine())
 				.set("marketShare", ownCompany.getMarketShare())
@@ -71,25 +69,30 @@ public class CompanyServiceImpl extends RemoteServiceServlet implements
 				.set("product", ownCompany.getProduct())
 				.set("machines", ownCompany.getMachines());
 
-		ds.update(updateQuery, ops);
-
+		DataManager.getDatastore().update(updateQuery, ops);
 	} // Ende method addOwnCompany
 
-	@Override
+	/**
+	 * addCompany aktualisiert bei Änderungen von Daten auf der Oberfläche ein
+	 * Konkurrenzunternehmen, dessen User-ID-Feld mit der UserID des
+	 * eingeloggten Users und der CompanyID, des in der DB befindlichen
+	 * Unternehmens übereinstimmt
+	 */
 	public void addCompany(Company company) {
-		// TODO Auto-generated method stub
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		Query<Company> updateQuery = ds.createQuery(Company.class)
+		// Ermittelt das zu aktualisierende Unternehmen
+		Query<Company> updateQuery = DataManager.getDatastore()
+				.createQuery(Company.class)
 				.filter("userID = ", LoginServiceImpl.getUserID())
 				.filter("companyID = ", company.getCompanyID());
-		// ds.createQuery(EigenesUnternehmen.class);
+		// aktualisiert das ermittelte Unternehmen
+
 		UpdateOperations<Company> ops;
-		ops = ds.createUpdateOperations(Company.class)
+		ops = DataManager.getDatastore().createUpdateOperations(Company.class)
 				.set("topLine", company.getTopLine())
 				.set("marketShare", company.getMarketShare())
 				.set("product", company.getProduct());
-		ds.update(updateQuery, ops);
 
-	}
+		DataManager.getDatastore().update(updateQuery, ops);
+	} // Ende method addCompany
 
 } // Ende class CompanyServiceImpl

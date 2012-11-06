@@ -1,111 +1,109 @@
 package de.dhbw.wwi11sca.skdns.server;
 
-import java.net.UnknownHostException;
+/**
+ * 
+ * @author SKDNS Marktsimulationen
+ * 
+ * Die SimulationServiceImpl ist die Serverklasse für die Simulation. 
+ * Sie greift auf die Datenbank zu.
+ *
+ */
+
 import java.util.List;
 import de.dhbw.wwi11sca.skdns.client.simulation.SimulationService;
 import de.dhbw.wwi11sca.skdns.server.MarketSimulation;
 import de.dhbw.wwi11sca.skdns.shared.*;
 
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 
-/**
- * The server side implementation of the RPC service.
- */
 @SuppressWarnings("serial")
 public class SimulationServiceImpl extends RemoteServiceServlet implements
 		SimulationService {
 
-	@Override
+	/**
+	 * getCompany holt alle Unternehmen aus der DB , deren UserID mit der UserID
+	 * des eingeloggten Users übereinstimmt
+	 */
 	public List<Company> getCompany() {
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-
-		List<Company> dbCompany = ds.createQuery(Company.class)
+		// ermittelt die Konkurrenzunternehmen , deren UserID mit der UserID des
+		// eingeloggten Users übereinstimmt
+		List<Company> dbCompany = DataManager.getDatastore()
+				.createQuery(Company.class)
 				.filter("userID =", LoginServiceImpl.getUserID()).asList();
-
-		List<OwnCompany> dbOwnCompany = ds.createQuery(OwnCompany.class)
+		// ermittelt das eigene Unternehmen, dessen UserID mit der UserID des
+		// eingeloggten Users übereinstimmt
+		List<OwnCompany> dbOwnCompany = DataManager.getDatastore()
+				.createQuery(OwnCompany.class)
 				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
 
-		// Eigenes Unternehmen aus der Datenbank laden und am Anfang der Liste
-		// in die Liste aufnehmen
 		OwnCompany single = dbOwnCompany.get(0);
 
+		// Das eigene Unternehmen wird an dem Anfang der Liste eingefügt
 		dbCompany.add(0, single);
 
 		return dbCompany;
 	} // Ende method getCompany
 
-	@Override
-	public SimulationVersion createSimulationCallback(SimulationVersion version) {
+	/**
+	 * getCompany(List<<Company> companies speichert die gelieferten
+	 * Unternehmen, und liefert sie zurück
+	 */
+	public List<Company> getCompany(List<Company> companies) {
+		// löscht die Unternehmen, deren UserID mit der ID des eingeloggten
+		// Users übereinstimmen
+		DataManager.getDatastore().delete(
+				DataManager.getDatastore().createQuery(Company.class)
+						.filter("userID = ", LoginServiceImpl.getUserID()));
+		DataManager.getDatastore().delete(
+				DataManager.getDatastore().createQuery(OwnCompany.class)
+						.filter("userID = ", LoginServiceImpl.getUserID()));
 
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
+		// speichert die gelieferten Unternehmen in der DB
+		for (Company company : companies) {
+			DataManager.getDatastore().save(company);
+		} // Ende for-Schleife
 
-		List<Company> dbCompany = ds.createQuery(Company.class)
+		// gibt die gelieferten Unternehmen zurück
+		List<Company> dbCompany = DataManager.getDatastore()
+				.createQuery(Company.class)
 				.filter("userID =", LoginServiceImpl.getUserID()).asList();
-		List<OwnCompany> dbOwnCompany = ds.createQuery(OwnCompany.class)
+
+		List<OwnCompany> dbOwnCompany = DataManager.getDatastore()
+				.createQuery(OwnCompany.class)
 				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
 
-		// TODO die nächsten vier zeilen funktionieren noch nicht
-		OwnCompany ownCompany = dbOwnCompany.get(0);
-		Company company1 = dbCompany.get(0);
-		Company company2 = dbCompany.get(1);
-		Company company3 = dbCompany.get(2);
+		OwnCompany single = dbOwnCompany.get(0);
 
+		// das eigene Unternehmen wird an dem Anfang der Liste eingefügt
+		dbCompany.add(0, single);
+
+		return dbCompany;
+	} // Ende method getCompany(List<Company> companies)
+
+	/**
+	 * createSimulationCallback erstellt eine SimulationVersion, ruft die
+	 * Berechnungen in der MarketSimulation auf, speichert die SimulationVersion
+	 * und liefert die Ergebnisse an die Oberfläche
+	 */
+	public SimulationVersion createSimulationCallback(SimulationVersion version) {
+		// Unternehmen aus der DB holen
+		List<Company> dbCompany = getCompany();
+
+		// Unternehmen in der SimulationsVersion speichern
 		version.setUserID(LoginServiceImpl.getUserID());
-		version.setOwnCompany(ownCompany);
-		version.setCompany1(company1);
-		version.setCompany2(company2);
-		version.setCompany3(company3);
+		version.setOwnCompany((OwnCompany) dbCompany.get(0));
+		version.setCompany1(dbCompany.get(1));
+		version.setCompany2(dbCompany.get(2));
+		version.setCompany3(dbCompany.get(3));
 
+		// Ein neues Objekt erzeugen und aufrufen
 		MarketSimulation marktsim = new MarketSimulation();
 		SimulationVersion simversion = new SimulationVersion();
 
 		simversion = marktsim.simulate(version);
-		ds.save(simversion);
+		DataManager.getDatastore().save(simversion);
 
 		return simversion;
 	} // Ende method createSimulationCallback
 
-	private static Mongo getMongo() {
-		Mongo m = null;
-		try {
-			m = new Mongo("localhost", 27017);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (MongoException e) {
-			e.printStackTrace();
-		}
-		return m;
-	} // Ende method getMongo
-
-	@Override
-	public List<Company> getCompany(List<Company> companies) {
-		
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		
-		ds.delete(ds.createQuery(Company.class).filter("userID = ", LoginServiceImpl.getUserID()));
-		ds.delete(ds.createQuery(OwnCompany.class).filter("userID = ", LoginServiceImpl.getUserID()));
-		
-		for (Company company : companies) {
-			ds.save(company);
-		}
-		
-		List<Company> dbCompany = ds.createQuery(Company.class)
-				.filter("userID =", LoginServiceImpl.getUserID()).asList();
-
-		List<OwnCompany> dbOwnCompany = ds.createQuery(OwnCompany.class)
-				.filter("userID = ", LoginServiceImpl.getUserID()).asList();
-
-		// Eigenes Unternehmen aus der Datenbank laden und am Anfang der Liste
-		// in die Liste aufnehmen
-		OwnCompany single = dbOwnCompany.get(0);
-
-		dbCompany.add(0, single);
-
-		return dbCompany;
-	}
-	
 } // Ende class SimulationServiceImpl

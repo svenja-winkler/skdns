@@ -1,16 +1,25 @@
 package de.dhbw.wwi11sca.skdns.shared;
 
+/**
+ * 
+ * @author SKDNS Marktsimulationen
+ * 
+ * Diese Objektklasse enthält alle wichtigen Daten des eigenen Unternehmens.
+ * 
+ */
 import java.io.Serializable;
 
 public class OwnCompany extends Company implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	private double fixedCosts;
 	private double variableCosts;
 	private Machines machines;
 	private int salaryStaff;
 	private int numberOfStaff;
 
+	// Konstruktoren
 	public OwnCompany() {
 	}
 
@@ -32,6 +41,7 @@ public class OwnCompany extends Company implements Serializable {
 
 	}
 
+	// Getter-Setter-Methoden
 	public double getFixedCosts() {
 		return fixedCosts;
 	}

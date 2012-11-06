@@ -8,124 +8,124 @@ package de.dhbw.wwi11sca.skdns.server;
  * Sie greift auf die Datenbank zu.
  *
  */
-import java.net.UnknownHostException;
+
 import java.util.List;
 import de.dhbw.wwi11sca.skdns.client.DelistedException;
 import de.dhbw.wwi11sca.skdns.client.login.LoginService;
 import de.dhbw.wwi11sca.skdns.shared.User;
-import com.google.code.morphia.Datastore;
-import com.google.code.morphia.Morphia;
+
 import com.google.code.morphia.query.Query;
 import com.google.code.morphia.query.UpdateOperations;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 
 public class LoginServiceImpl extends RemoteServiceServlet implements
 		LoginService {
 
+	private static final long serialVersionUID = -179774088492873807L;
+
 	private static String userID;
+
 	boolean control = false;
 	private String username;
 	private String password;
-	private static final long serialVersionUID = -179774088492873807L;
+
 	User userForgottenPassword;
 
-	@Override
+	String adminpassword = new String("12345");
+	String adminEMail = new String("admin@skdns.de");
+
+	/**
+	 * checkLogin kontrolliert die eingegebenen Userdaten
+	 */
 	public void checkLogin(User user) throws DelistedException {
 		username = (String) user.getUsername().trim();
 		password = (String) user.getPassword().trim();
 
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-
-		List<User> dbUser = ds.createQuery(User.class)
+		// Ermittelt, ob der Username in der DB vorhanden ist
+		List<User> dbUser = DataManager.getDatastore().createQuery(User.class)
 				.filter("username =", username).asList();
+
 		User first = dbUser.get(0);
 
-		
 		String dbUsername = (String) first.getUsername();
 		String dbPassword = (String) first.getPassword();
+
+		// Ermittelt, ob Username und Passwort mit den Daten der DB
+		// übereinstimmen
 		if ((username.equals(dbUsername)) && (password.equals(dbPassword))) {
 			AdminServiceImpl.getAdmin().setLoginCount(1);
 			setUserID(first.getUserID());
-			
+
 			// success
 		} else {
-			throw new DelistedException("Username oder Passwort falsch/ unbekannt.");
+			throw new DelistedException(
+					"Username oder Passwort falsch/ unbekannt.");
 		} // Ende if-else
 	} // Ende method checkLogin
 
-	@Override
-	public String loginServer(String name) throws IllegalArgumentException {
-		return null;
-	} // Ende method loginServer
-
-	private static Mongo getMongo() {
-		Mongo m = null;
-		try {
-			m = new Mongo("localhost", 27017);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (MongoException e) {
-			e.printStackTrace();
-		}
-		return m;
-	} // Ende method getMongo
-
-	@Override
+	/**
+	 * ForgotPassword meldet dem Admin, dass der User sein Password vergessen
+	 * hat, indem er forgottenPassword auf true setzt
+	 */
 	public void forgotPassword(User user) throws DelistedException {
 
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-
-		Query<User> updateQuery = ds.createQuery(User.class).filter(
-				"username =", user.getUsername());
+		Query<User> updateQuery = DataManager.getDatastore()
+				.createQuery(User.class)
+				.filter("username =", user.getUsername());
 
 		UpdateOperations<User> ops;
-		ops = ds.createUpdateOperations(User.class).set("forgottenPassword",
-				"true");
+		ops = DataManager.getDatastore().createUpdateOperations(User.class)
+				.set("forgottenPassword", "true");
 
-		ds.update(updateQuery, ops);
+		DataManager.getDatastore().update(updateQuery, ops);
 
 		// success
 
 	} // Ende method forgotPassword
 
-	@Override
+	/**
+	 * checkAdmin überprüft ob das Password des Admins mti dem Password der DB
+	 * übereinstimmt
+	 */
 	public void checkAdmin(User admin) throws DelistedException {
-		
-		//Überprüfe ob bereits ein Admin angelegt wurde
-		Datastore ds = new Morphia().createDatastore(getMongo(), "skdns");
-		try{
-			List<User> dbAdmin = ds.createQuery(User.class).filter("username = ", "admin").asList();
+
+		// überprüft, ob bereits ein Admin in der DB vorhanden ist, ist dies
+		// nicht der Fall wird ein Admin angelegt
+		try {
+			// Admin ist vorhanden
+			List<User> dbAdmin = DataManager.getDatastore()
+					.createQuery(User.class).filter("username = ", "admin")
+					.asList();
 			User singleAdmin = dbAdmin.get(0);
-			
-			if (admin.getPassword().equals(singleAdmin.getPassword())){
-				//success
+			// überprüft, ob das Passwort mit dem aus der DB übereinstimmt
+			if (admin.getPassword().equals(singleAdmin.getPassword())) {
+				// success
 			} else {
 				throw new DelistedException("Adminpasswort falsch.");
-			}
-			
-		}catch(IndexOutOfBoundsException e){
-			User newAdmin = new User("admin", "12345", "admin@skdns.de");
-			ds.save(newAdmin);
-			
-			List<User> dbAdmin = ds.createQuery(User.class).filter("username = ", "admin").asList();
+			} // Ende if-else
+
+		} catch (IndexOutOfBoundsException e) {
+			// Admin nicht vorhanden
+			// Erzeugen eines neuen Admins
+			User newAdmin = new User("admin", adminpassword, adminEMail);
+			DataManager.getDatastore().save(newAdmin);
+
+			// überprüft, ob das eingegebene Passwort mit dem neu erzeugten
+			// Passwort übereinstimmt
+			List<User> dbAdmin = DataManager.getDatastore()
+					.createQuery(User.class).filter("username = ", "admin")
+					.asList();
 			User singleAdmin = dbAdmin.get(0);
-			
-			if (admin.getPassword().equals(singleAdmin.getPassword())){
-				//success
+
+			if (admin.getPassword().equals(singleAdmin.getPassword())) {
+				// success
 			} else {
 				throw new DelistedException("Adminpasswort falsch.");
-			}
-			
-		}
-		
+			} // Ende if-else
+		} // Ende try-catch
 	} // Ende method checkAdmin
 
+	// Getter-Setter-Methoden für die UserID
 	public static String getUserID() {
 		return userID;
 	} // Ende method getUserID
@@ -133,6 +133,5 @@ public class LoginServiceImpl extends RemoteServiceServlet implements
 	public void setUserID(String userID) {
 		LoginServiceImpl.userID = userID;
 	} // Ende method setUserID
-
 
 } // Ende class LoginServiceImpl

@@ -11,16 +11,16 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String userID = new String();
+	
 	private String username = new String();
 	private String password = new String();
 	private String mail = new String();
+	
 	private boolean forgottenPassword = false;
 
+	// Konstruktoren
 	public User() {
 	}
 
@@ -31,6 +31,7 @@ public class User implements Serializable {
 		this.forgottenPassword = false;
 	}
 
+	// Getter-Setter-Methoden
 	public String getUsername() {
 		return username;
 	}

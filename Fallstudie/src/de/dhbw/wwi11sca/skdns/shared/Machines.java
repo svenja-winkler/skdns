@@ -1,16 +1,25 @@
 package de.dhbw.wwi11sca.skdns.shared;
 
+/**
+ * 
+ * @author SKDNS Marktsimulationen
+ * 
+ * Diese Objektklasse enthält alle wichtigen Daten einer Maschine.
+ * 
+ */
 import java.io.Serializable;
 
 public class Machines implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String userID = new String();
+
 	private int capacity;
 	private int serviceLife;
 	private int staff;
 	private double accountingValue;
 
+	// Konstruktoren
 	public Machines() {
 	}
 
@@ -22,6 +31,7 @@ public class Machines implements Serializable {
 		this.setAccountingValue(accountingValue);
 	}
 
+	// Getter-Setter-Methoden
 	public int getCapacity() {
 		return capacity;
 	}
