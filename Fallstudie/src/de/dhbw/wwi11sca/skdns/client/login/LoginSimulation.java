@@ -30,8 +30,9 @@ public class LoginSimulation implements EntryPoint {
 
 	private AbsolutePanel panelLogin = new AbsolutePanel();
 
-	Image background = new Image("fallstudie/gwt/clean/images/Consulting.png");
-	Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
+	private Image background = new 
+			Image("fallstudie/gwt/clean/images/Consulting.png");
+	private Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
 
 	private TextBox textBoxUsername = new TextBox();
 	private PasswordTextBox textBoxPassword = new PasswordTextBox();
@@ -41,13 +42,13 @@ public class LoginSimulation implements EntryPoint {
 
 	private Label lbInfo = new Label();
 
-	String admin = new String("admin");
+	private String admin = new String("admin");
 	public static User userOnline;
 
 	private final LoginServiceAsync LoginService = GWT
 			.create(LoginService.class);
 
-	public void onModuleLoad() {
+	public final void onModuleLoad() {
 
 		// AbsolutePanel: panelLogin
 		RootPanel.get().add(panelLogin, 0, 0);

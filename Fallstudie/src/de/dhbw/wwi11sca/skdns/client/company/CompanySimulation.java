@@ -103,7 +103,7 @@ public class CompanySimulation implements EntryPoint {
 	private RegExp expTradeName = RegExp
 			.compile("^([\u00C4\u00DC\u00D6A-Z])[0-9a-z\u00E4\u00FC\u00F6\u00C4\u00DC\u00DF\u00D6A-Z\\s]*");
 	private RegExp expInteger = RegExp.compile("^(\\d*)$");
-	private RegExp expDouble = RegExp.compile("^([1-9]\\d*|0)(\\.\\d)?$");
+	private RegExp expDouble = RegExp.compile("^([1-9]\\d*|0)(\\.(\\d*))?$");
 
 	private CompanyServiceAsync service = GWT.create(CompanyService.class);
 
