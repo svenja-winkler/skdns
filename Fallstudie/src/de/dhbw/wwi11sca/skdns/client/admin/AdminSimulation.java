@@ -476,6 +476,8 @@ public class AdminSimulation implements EntryPoint {
 			Window.alert("User wurde entfernt.");
 			// Call: User
 			service.getUser(new GetUserCallback());
+			// Statistiken
+            service.getStats(new GetStatsCallback());
 		} // Ende method onSuccess
 	} // Ende class DeleteUserCallback
 
