@@ -31,25 +31,30 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.view.client.ListDataProvider;
 
 public class HomeSimulation implements EntryPoint {
+	
+	//Constants
+	private static final int LOGOX = 333;
+	private static final int LOGOY = 96;
+	private static final int TABLECOMX = 110;
+	private static final int TABLECOMY = 268;
+	private static final int BTCOMCHANGEX = 267;
+	private static final int BTCOMCHANGEY = 533;
+	private static final int BTSIMULATIONX = 569;
+	private static final int BTSIMULATIONY = 533;
+	private static final int BTLOGOUTX = 914;
+	private static final int BTLOGOUTY = 10;
 
 	private AbsolutePanel panelHome = new AbsolutePanel();
-
 	private Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
-
 	private CellTable<Company> tableCompanies = new CellTable<Company>();
-
 	private Button btCompaniesChange = new Button("Unternehmen bearbeiten");
 	private Button btSimulation = new Button("Simulation starten");
 	private Button btLogout = new Button("Logout");
-
 	private List<Company> companyList;
-
-	int emptyCompanyCounter = 0;
-
+	private int emptyCompanyCounter = 0;
 	private HomeServiceAsync service = GWT.create(HomeService.class);
 
-	public void onModuleLoad() {
-
+	public final void onModuleLoad() {
 		// RootPanel: root
 		RootPanel root = RootPanel.get();
 		root.setSize("1024px", "768px");
@@ -59,26 +64,26 @@ public class HomeSimulation implements EntryPoint {
 		panelHome.setSize("1024px", "768px");
 
 		// Firmenlogo: logo
-		panelHome.add(logo, 333, 96);
+		panelHome.add(logo, LOGOX, LOGOY);
 		logo.setSize("359px", "93px");
 
 		// CellTable für Konkurrenzunternehmen
-		panelHome.add(tableCompanies, 110, 268);
+		panelHome.add(tableCompanies, TABLECOMX, TABLECOMY);
 		tableCompanies.setSize("805px", "200px");
 		tableCompanies.setStyleName("cellTableHeader");
 
 		// Buttons
 
 		// Button Unternehmen bearbeiten: btUNBearbeiten
-		panelHome.add(btCompaniesChange, 267, 533);
+		panelHome.add(btCompaniesChange, BTCOMCHANGEX, BTCOMCHANGEY);
 		btCompaniesChange.setSize("200px", "35px");
 
 		// Button Simulation starten: btSimulation
-		panelHome.add(btSimulation, 569, 533);
+		panelHome.add(btSimulation, BTSIMULATIONX, BTSIMULATIONY);
 		btSimulation.setSize("200px", "35px");
 
 		// Button Logout: btLogout
-		panelHome.add(btLogout, 914, 10);
+		panelHome.add(btLogout, BTLOGOUTX, BTLOGOUTY);
 		btLogout.setSize("100px", "35px");
 
 		// Eventhandler
@@ -105,7 +110,7 @@ public class HomeSimulation implements EntryPoint {
 
 		// Eventhandler ausloggen
 		btLogout.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Laden der Logoutoberfläche
 				RootPanel.get().clear();
 				LogoutSimulation logout = new LogoutSimulation();
@@ -114,11 +119,18 @@ public class HomeSimulation implements EntryPoint {
 		}); // btLogout
 
 		// Tabelle mit Unternehmensdaten befüllen
+		setTableCompanies();
+
+		// Call: Unternehmen laden
+		service.getCompany(new GetCompanyCallback());
+	} // Ende method onModuleLoad
+
+	private void setTableCompanies() {
 
 		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Firma
 		TextColumn<Company> tradeNameColumn = new TextColumn<Company>() {
 			@Override
-			public String getValue(Company company) {
+			public String getValue(final Company company) {
 				return new String(company.getTradeName());
 
 			}
@@ -128,7 +140,7 @@ public class HomeSimulation implements EntryPoint {
 		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
 		TextColumn<Company> topLineColumn = new TextColumn<Company>() {
 			@Override
-			public String getValue(Company company) {
+			public String getValue(final Company company) {
 				if (company.getTopLine() != 0) {
 					return new Integer(company.getTopLine()).toString();
 				} else {
@@ -141,7 +153,7 @@ public class HomeSimulation implements EntryPoint {
 		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Gewinn
 		TextColumn<Company> amountColumn = new TextColumn<Company>() {
 			@Override
-			public String getValue(Company company) {
+			public String getValue(final Company company) {
 				if (company.getAmount() != 0) {
 					return new Integer(company.getAmount()).toString();
 				} else {
@@ -201,11 +213,9 @@ public class HomeSimulation implements EntryPoint {
 		tableCompanies.addColumn(marketShareColumn, "Marktanteil");
 		tableCompanies.addColumn(productPriceColumn, "Produktpreis");
 		tableCompanies.addColumn(salesVolumeColumn, "Absatzmenge");
-
-		// Call: Unternehmen laden
-		service.getCompany(new GetCompanyCallback());
-	} // Ende method onModuleLoad
-
+	
+		
+	}
 	/**
 	 * 
 	 * Klasse, die für den Asynchronen Callback zuständig ist, welcher die Daten
@@ -217,10 +227,11 @@ public class HomeSimulation implements EntryPoint {
 		public void onFailure(final Throwable caught) {
 		} // Ende method onFailure
 
-		public final void onSuccess(List<Company> result) {
+		public final void onSuccess(final List<Company> result) {
 
 			// Unternehmenstabelle mit dem DataProvider verbinden
-			ListDataProvider<Company> dataProvider = new ListDataProvider<Company>();
+			ListDataProvider<Company> dataProvider = new 
+					ListDataProvider<Company>();
 			dataProvider.addDataDisplay(tableCompanies);
 
 			// Liste befüllen

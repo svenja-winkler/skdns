@@ -55,6 +55,8 @@ public class SimulationServiceImpl extends RemoteServiceServlet implements
 	public final List<Company> getCompany(final List<Company> companies) {
 		// löscht die Unternehmen, deren UserID mit der ID des eingeloggten
 		// Users übereinstimmen
+		
+		
 		DataManager.getDatastore().delete(
 				DataManager.getDatastore().createQuery(Company.class)
 						.filter("userID = ", LoginServiceImpl.getUserID()));

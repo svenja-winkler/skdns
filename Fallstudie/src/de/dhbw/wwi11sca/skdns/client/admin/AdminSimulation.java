@@ -36,39 +36,73 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 
 public class AdminSimulation implements EntryPoint {
+	
+	//Constants
+	private static final int PANELADMINX = -10;
+	private static final int LOGOX = 30;
+	private static final int LOGOY = 30;
+	private static final int BTLOGOUTX = 933;
+	private static final int BTLOGOUTY = 10;
+	private static final int BTCREATEUSERX = 243;
+	private static final int BTCREATEUSERY = 135;
+	private static final int BTDELETEX = 245;
+	private static final int BTDELETEY = 46;
+	private static final int USERSTATSX = 514;
+	private static final int USERSTATSY = 47;
+	private static final int LBEXUSERSX = 20;
+	private static final int LBEXUSERSY = 14;
+	private static final int LBEXUSERSCNTX = 285;
+	private static final int LBEXUSERSCNTY = 10;
+	private static final int LBLOGINSX = 10;
+	private static final int LBLOGINSY = 38;
+	private static final int LBLOGINCNTX = 285;
+	private static final int LBLOGINCNTY = 34;
+	private static final int PANCREATEUSERX = 547;
+	private static final int PANCREATEUSERY = 239;
+	private static final int LBCREATEUSERX = 10;
+	private static final int LBCREATEUSERY = 10;
+	private static final int TBOXUSERX = 10;
+	private static final int TBOXUSERY = 42;
+	private static final int TBOXPWDX = 10;
+	private static final int TBOXPWDY = 88;
+	private static final int TBOXMAILX = 10;
+	private static final int TBOXMAILY = 135;
+	private static final int PANDELETEUSERX = 545;
+	private static final int PANDELETEUSERY = 453;
+	private static final int LBDELETEUSERX = 10;
+	private static final int LBDELETEUSERY = 10;
+	private static final int TBOXUSERDELETEX = 10;
+	private static final int TBOXUSERDELETEY = 42;
+	private static final int CELLTBLSIZE = 30;
+	private static final int CELLTBLUSERX = 30;
+	private static final int CELLTBLUSERY = 181;
 
-	AbsolutePanel panelAdmin = new AbsolutePanel();
+	private AbsolutePanel panelAdmin = new AbsolutePanel();
+	private Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
+	private CellTable<User> cellTableUser = new CellTable<User>();
+	private Button btLogout = new Button("Logout");
+	private AbsolutePanel absolutePanelUserStats = new AbsolutePanel();
+	private Label lbExistingUsers = new Label("aktuell angelegte User:");
+	private Label lbLoginCounter = new Label("0");
+	private Label lbLogins = new Label("bisherige Anmeldungen (gesamt):");
+	private Label lbExistingUserCounter = new Label("0");
 
-	Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
+	private AbsolutePanel absolutePanelCreateUser = new AbsolutePanel();
+	private Label lbCreateNewUser = new Label("neuen User anlegen:");
+	private TextBox textBoxUsername = new TextBox();
+	private TextBox textBoxMail = new TextBox();
+	private TextBox textBoxPassword = new TextBox();
+	private Button btCreateUser = new Button("neuen User anlegen");
+	private User newUser;
 
-	CellTable<User> cellTableUser = new CellTable<User>();
+	private AbsolutePanel absolutePanelDeleteUser = new AbsolutePanel();
+	private TextBox textBoxUsernameDelete = new TextBox();
+	private Label lbDeleteUser = new Label("User l\u00F6schen:");
+	private Button btDelete = new Button("L\u00F6schen");
+	private String deleteUser;
+	private Boolean alreadyExistingUser = false;
 
-	Button btLogout = new Button("Logout");
-
-	AbsolutePanel absolutePanelUserStats = new AbsolutePanel();
-	Label lbExistingUsers = new Label("aktuell angelegte User:");
-	Label lbLoginCounter = new Label("0");
-	Label lbLogins = new Label("bisherige Anmeldungen (gesamt):");
-	Label lbExistingUserCounter = new Label("0");
-
-	AbsolutePanel absolutePanelCreateUser = new AbsolutePanel();
-	Label lbCreateNewUser = new Label("neuen User anlegen:");
-	TextBox textBoxUsername = new TextBox();
-	TextBox textBoxMail = new TextBox();
-	TextBox textBoxPassword = new TextBox();
-	Button btCreateUser = new Button("neuen User anlegen");
-	User newUser;
-
-	AbsolutePanel absolutePanelDeleteUser = new AbsolutePanel();
-	TextBox textBoxUsernameDelete = new TextBox();
-	Label lbDeleteUser = new Label("User l\u00F6schen:");
-	Button btDelete = new Button("L\u00F6schen");
-	String deleteUser;
-	Boolean alreadyExistingUser = false;
-
-	List<User> userList;
-	String changeInfo;
-
+	private List<User> userList;
 	private RegExp expName = RegExp
 			.compile("[a-zA-Z0-9\u00E4\u00FC\u00F6\u00C4\u00DC\u00DF\u00D6]+");
 	private RegExp expMail = RegExp
@@ -76,73 +110,76 @@ public class AdminSimulation implements EntryPoint {
 
 	private AdminServiceAsync service = GWT.create(AdminService.class);
 
-	public void onModuleLoad() {
+	public final void onModuleLoad() {
 		// RootPanel : root
 		RootPanel root = RootPanel.get();
 		root.setSize("1024px", "768px");
 
 		// AbsolutePanel : panelAdmin
-		root.add(panelAdmin, -10, 0);
+		root.add(panelAdmin, PANELADMINX, 0);
 		panelAdmin.setSize("1024px", "768px");
 
 		// Firmenlogo: logo
-		panelAdmin.add(logo, 30, 30);
+		panelAdmin.add(logo, LOGOX, LOGOY);
 		logo.setSize("339px", "100px");
 
 		// Buttons
 
 		// Button Logout: btLogout
-		panelAdmin.add(btLogout, 933, 10);
+		panelAdmin.add(btLogout, BTLOGOUTX, BTLOGOUTY);
 		btLogout.setSize("81px", "30px");
 
 		// Button User erzeugen: btCreateUser
-		absolutePanelCreateUser.add(btCreateUser, 243, 135);
+		absolutePanelCreateUser.add(btCreateUser, BTCREATEUSERX, BTCREATEUSERY);
 		btCreateUser.setSize("173px", "30px");
 
 		// Button User löschen: btDelete
-		absolutePanelDeleteUser.add(btDelete, 245, 46);
+		absolutePanelDeleteUser.add(btDelete, BTDELETEX, BTDELETEY);
 		btDelete.setSize("173px", "30px");
 
 		// Statistiken
-		panelAdmin.add(absolutePanelUserStats, 514, 47);
+		panelAdmin.add(absolutePanelUserStats, USERSTATSX, USERSTATSY);
 		absolutePanelUserStats.setStyleName("gwt-Panel-Invest");
 		absolutePanelUserStats.setSize("339px", "63px");
 		// Labels Summe der User
-		absolutePanelUserStats.add(lbExistingUsers, 20, 14);
-		absolutePanelUserStats.add(lbExistingUserCounter, 285, 10);
+		absolutePanelUserStats.add(lbExistingUsers, LBEXUSERSX, LBEXUSERSY);
+		absolutePanelUserStats.add(lbExistingUserCounter, LBEXUSERSCNTX,
+				LBEXUSERSCNTY);
 		lbExistingUserCounter.setSize("44px", "18px");
 		// Label Summe der Anmeldungen
-		absolutePanelUserStats.add(lbLogins, 10, 38);
-		absolutePanelUserStats.add(lbLoginCounter, 285, 34);
+		absolutePanelUserStats.add(lbLogins, LBLOGINSX, LBLOGINSY);
+		absolutePanelUserStats.add(lbLoginCounter, LBLOGINCNTX, LBLOGINCNTY);
 		lbLoginCounter.setSize("47px", "18px");
 
 		// Usertabelle
 		getUserTable();
 
 		// neuen User anlegen
-		panelAdmin.add(absolutePanelCreateUser, 547, 239);
+		panelAdmin.add(absolutePanelCreateUser, PANCREATEUSERX, PANCREATEUSERY);
 		absolutePanelCreateUser.setStyleName("gwt-Panel-Invest");
 		absolutePanelCreateUser.setSize("426px", "181px");
 
-		absolutePanelCreateUser.add(lbCreateNewUser, 10, 10);
+		absolutePanelCreateUser.add(lbCreateNewUser, LBCREATEUSERX,
+				LBCREATEUSERY);
 		lbCreateNewUser.setStyleName("gwt-Home-Label");
 
-		absolutePanelCreateUser.add(textBoxUsername, 10, 42);
+		absolutePanelCreateUser.add(textBoxUsername, TBOXUSERX, TBOXUSERY);
 		textBoxUsername.setSize("159px", "18px");
 		textBoxUsername.setText("Username");
-		absolutePanelCreateUser.add(textBoxPassword, 10, 88);
+		absolutePanelCreateUser.add(textBoxPassword, TBOXPWDX, TBOXPWDY);
 		textBoxPassword.setText("Kennwort");
-		absolutePanelCreateUser.add(textBoxMail, 10, 135);
+		absolutePanelCreateUser.add(textBoxMail, TBOXMAILX, TBOXMAILY);
 		textBoxMail.setText("E-Mail");
 
 		// User löschen
-		panelAdmin.add(absolutePanelDeleteUser, 545, 453);
+		panelAdmin.add(absolutePanelDeleteUser, PANDELETEUSERX, PANDELETEUSERY);
 		absolutePanelDeleteUser.setStyleName("gwt-Panel-Invest");
 		absolutePanelDeleteUser.setSize("428px", "98px");
 
-		absolutePanelDeleteUser.add(lbDeleteUser, 10, 10);
+		absolutePanelDeleteUser.add(lbDeleteUser, LBDELETEUSERX, LBDELETEUSERY);
 		lbDeleteUser.setStyleName("gwt-Home-Label");
-		absolutePanelDeleteUser.add(textBoxUsernameDelete, 10, 42);
+		absolutePanelDeleteUser.add(textBoxUsernameDelete, TBOXUSERDELETEX,
+				TBOXUSERDELETEY);
 		textBoxUsernameDelete.setText("Username");
 
 		// Calls
@@ -151,17 +188,25 @@ public class AdminSimulation implements EntryPoint {
 		// Statistiken angeben
 		service.getStats(new GetStatsCallback());
 
+		setButtons();
+	} // Ende onModuleLoad
+
+	/**
+	 * legt die Eventhandler für dieButtons fest
+	 */
+	public final void setButtons() {
 		// Eventhandler
 
 		// Eventhandler btDelete
 		btDelete.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// User löschen, dessen Name angezeigt wurde
 				deleteUser = textBoxUsernameDelete.getText().trim();
 
 				// Überprüfung, ob es sich um den Admin handelt
 				if ((deleteUser.toLowerCase()).equals("admin")) {
-					Window.alert("Sie k\u00f6nnen den Admin nicht l\u00f6schen!");
+					Window.alert("Sie k\u00f6nnen den Admin"
+							+ " nicht l\u00f6schen!");
 				} else {
 					service.deleteUser(deleteUser, new DeleteUserCallback());
 				} // Ende if-else
@@ -170,7 +215,7 @@ public class AdminSimulation implements EntryPoint {
 
 		// Eventhandler btCreateUser
 		btCreateUser.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Überprüfung, ob die Eingabe korrekt war
 				if (expName.test(textBoxUsername.getText())
 						&& expName.test(textBoxPassword.getText())
@@ -185,7 +230,7 @@ public class AdminSimulation implements EntryPoint {
 					} // Ende for-Schleife
 						// Existiert der User bereits wird eine Meldung
 						// ausgegeben
-					if (alreadyExistingUser == true) {
+					if (alreadyExistingUser) {
 						Window.alert("Dieser User existiert bereits.");
 						alreadyExistingUser = false;
 					} else {
@@ -208,7 +253,7 @@ public class AdminSimulation implements EntryPoint {
 
 		// Eventhandler ausloggen
 		btLogout.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Logoutoberfläche laden
 				RootPanel.get().clear();
 				LogoutSimulation logout = new LogoutSimulation();
@@ -220,7 +265,7 @@ public class AdminSimulation implements EntryPoint {
 		// "default"-Inhalt, damit der
 		// Admin Daten eingeben kann
 		textBoxUsername.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (textBoxUsername.getValue().equals("Username")) {
 					textBoxUsername.setText("");
 				} // Ende if-Statement
@@ -232,7 +277,7 @@ public class AdminSimulation implements EntryPoint {
 		// "default"-Inhalt, damit der
 		// Admin Daten eingeben kann
 		textBoxMail.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (textBoxMail.getValue().equals("E-Mail")) {
 					textBoxMail.setText("");
 				} // Ende if-Statement
@@ -243,7 +288,7 @@ public class AdminSimulation implements EntryPoint {
 		// "default"-Inhalt, damit der
 		// Admin Daten eingeben kann
 		textBoxPassword.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (textBoxPassword.getValue().equals("Kennwort")) {
 					textBoxPassword.setText("");
 				} // Ende if-Statement
@@ -254,43 +299,44 @@ public class AdminSimulation implements EntryPoint {
 		// "default"-Inhalt, damit
 		// der Admin Daten eingeben kann
 		textBoxUsernameDelete.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (textBoxUsernameDelete.getValue().equals("Username")) {
 					textBoxUsernameDelete.setText("");
 				} // Ende if-Statement
 			}
 		}); // Ende textBoxUsername
-	} // Ende onModuleLoad
+
+	}
 
 	/**
 	 * getUserTable lädt die angezeigte Usertabelle
 	 */
 	private void getUserTable() {
 		// die User werden in eine Tabelle geladen und angezeigt
-		cellTableUser.setPageSize(30);
+		cellTableUser.setPageSize(CELLTBLSIZE);
 		cellTableUser.setSize("489px", "407px");
-		panelAdmin.add(cellTableUser, 30, 181);
+		panelAdmin.add(cellTableUser, CELLTBLUSERX, CELLTBLUSERY);
 		cellTableUser.setStyleName("cellTableHeader");
 
 		// Usertabelle mit DB-Usern befüllen: Username
-		TextColumn<User> UsernameColumn = new TextColumn<User>() {
-			public String getValue(User user) {
+		TextColumn<User> usernameColumn = new TextColumn<User>() {
+			public String getValue(final User user) {
 				return new String(user.getUsername());
 			}
 		}; // Ende UsernameColumn
 
 		// Usertabelle mit DB-Usern befüllen: Kennwort
 		final TextInputCell passwordCell = new TextInputCell();
-		Column<User, String> PasswordColumn = new Column<User, String>(
+		Column<User, String> passwordColumn = new Column<User, String>(
 				passwordCell) {
-			public String getValue(User object) {
+			public String getValue(final User object) {
 				return object.getPassword();
 			}
 		}; // Ende PasswordColumn
 
 		// Usertabelle mit DB-Usern befüllen: E-Mail
-		TextColumn<User> EMailColumn = new TextColumn<User>() {
-			public String getValue(User user) {
+		TextColumn<User> eMailColumn = new TextColumn<User>() {
+			public String getValue(final User user) {
 				return new String(user.getMail());
 			}
 		}; // Ende EMailColumn
@@ -302,23 +348,24 @@ public class AdminSimulation implements EntryPoint {
 		SelectionCell forgottenPasswordCell = new SelectionCell(pwdCell);
 		Column<User, String> forgottenPasswordColumn = new Column<User, String>(
 				forgottenPasswordCell) {
-			public String getValue(User object) {
+			public String getValue(final User object) {
 				return new String(
 						new Boolean(object.isForgottenPassword()).toString());
 			}
 		}; // Ende forgottenPasswordColumn
 
 		// DB-Userdaten anzeigen lassen
-		cellTableUser.addColumn(UsernameColumn, "Username");
-		cellTableUser.addColumn(PasswordColumn, "Kennwort");
-		cellTableUser.addColumn(EMailColumn, "Email");
+		cellTableUser.addColumn(usernameColumn, "Username");
+		cellTableUser.addColumn(passwordColumn, "Kennwort");
+		cellTableUser.addColumn(eMailColumn, "Email");
 		cellTableUser.addColumn(forgottenPasswordColumn, "Passwort vergessen");
 
 		// Fieldupdater
 
 		// Fieldupdater PasswortColumn
-		PasswordColumn.setFieldUpdater(new FieldUpdater<User, String>() {
-			public void update(int index, User object, String value) {
+		passwordColumn.setFieldUpdater(new FieldUpdater<User, String>() {
+			public void update(final int index, final User object,
+					final String value) {
 				((User) object).setPassword((String) value);
 				object.setForgottenPassword(false);
 				// Call
@@ -332,7 +379,8 @@ public class AdminSimulation implements EntryPoint {
 		forgottenPasswordColumn
 				.setFieldUpdater(new FieldUpdater<User, String>() {
 					@Override
-					public void update(int index, User object, String value) {
+					public void update(final int index, final User object,
+							final String value) {
 						((User) object)
 								.setForgottenPassword(new Boolean(value));
 						// Call
@@ -352,13 +400,14 @@ public class AdminSimulation implements EntryPoint {
 	 */
 	public class UpdateTableCallback implements AsyncCallback<java.lang.Void> {
 
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende onFailure
 
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			// War die Passwortänderung erfolgreich, wird dem Admin eine Meldung
 			// ausgeworfen
-			Window.alert("\u00c4nderung erfolgreich. Informieren Sie den Kunden.");
+			Window.alert("\u00c4nderung erfolgreich. "
+					+ "Informieren Sie den Kunden.");
 		} // Ende method onSuccess
 	} // Ende class SaveUserCallback
 
@@ -371,10 +420,10 @@ public class AdminSimulation implements EntryPoint {
 	 */
 	public class GetUserCallback implements AsyncCallback<List<User>> {
 
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende onFailure
 
-		public final void onSuccess(List<User> result) {
+		public final void onSuccess(final List<User> result) {
 			// Unternehmenstabelle mit dem DataProvider verbinden
 			ListDataProvider<User> dataProvider = new ListDataProvider<User>();
 			dataProvider.addDataDisplay(cellTableUser);
@@ -395,10 +444,10 @@ public class AdminSimulation implements EntryPoint {
 	 */
 	public class SaveUserCallback implements AsyncCallback<java.lang.Void> {
 
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende onFailure
 
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			// Wurde der User erfolgreich gespeichert, wird dem User eine
 			// Meldung ausgeworfen
 			Window.alert("User wurde hinzugef\u00fcgt.");
@@ -418,10 +467,10 @@ public class AdminSimulation implements EntryPoint {
 	 */
 	public class DeleteUserCallback implements AsyncCallback<java.lang.Void> {
 
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende method onFailure
 
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			// Wurde der User erfolgreich gelöscht, wird dem Admin eine Meldung
 			// ausgeworfen
 			Window.alert("User wurde entfernt.");
@@ -439,10 +488,10 @@ public class AdminSimulation implements EntryPoint {
 	 */
 	public class GetStatsCallback implements AsyncCallback<Admin> {
 
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende method onFailure
 
-		public void onSuccess(Admin result) {
+		public final void onSuccess(final Admin result) {
 			// Setzt den Text der StatistikLabel
 			lbLoginCounter.setText(result.getLoginCount() + "");
 			lbExistingUserCounter.setText(result.getExistingUserCount() + "");

@@ -47,67 +47,71 @@ import com.google.gwt.user.client.ui.Image;
 
 public class Simulation implements EntryPoint {
 
-	AbsolutePanel absolutePanelSimulation = new AbsolutePanel();
-	AbsolutePanel absolutePanelInvestments = new AbsolutePanel();
+	private AbsolutePanel absolutePanelSimulation = new AbsolutePanel();
+	private AbsolutePanel absolutePanelInvestments = new AbsolutePanel();
 
-	Label lbHome = new Label("Home");
-	Label lbSimulation = new Label(">  Simulation");
+	private Label lbHome = new Label("Home");
+	private Label lbSimulation = new Label(">  Simulation");
 
-	Button btLogout = new Button("Logout");
-	Button btSimulation = new Button("Simulation starten");
-	Button btNextYear = new Button("Folgejahr");
+	private Button btLogout = new Button("Logout");
+	private Button btSimulation = new Button("Simulation starten");
+	private Button btNextYear = new Button("Folgejahr");
 
-	Label lbInvestments = new Label("Investitionen:");
-	Label lbMarketing = new Label("Marketing:");
-	Label lbPersonal = new Label("Personal:");
-	Label lbPrice = new Label("Produktpreis:");
-	Label lbMachine = new Label("Maschinen:");
-	Label lbMachineValue = new Label("Wert:");
-	Label lbUsedPersonal = new Label("n\u00f6tiges Personal:");
-	Label lbMachineCapacity = new Label("Kapazit\u00E4t:");
-	IntegerBox integerBoxMarketing = new IntegerBox();
-	IntegerBox integerBoxPersonal = new IntegerBox();
-	DoubleBox doubleBoxPrice = new DoubleBox();
-	IntegerBox integerBoxMachineValue = new IntegerBox();
-	IntegerBox integerBoxCapacity = new IntegerBox();
-	IntegerBox integerBoxMachineStaff = new IntegerBox();
+	private Label lbInvestments = new Label("Investitionen:");
+	private Label lbMarketing = new Label("Marketing:");
+	private Label lbPersonal = new Label("Personal:");
+	private Label lbPrice = new Label("Produktpreis:");
+	private Label lbMachine = new Label("Maschinen:");
+	private Label lbMachineValue = new Label("Wert:");
+	private Label lbUsedPersonal = new Label("n\u00f6tiges Personal:");
+	private Label lbMachineCapacity = new Label("Kapazit\u00E4t:");
+	private IntegerBox integerBoxMarketing = new IntegerBox();
+	private IntegerBox integerBoxPersonal = new IntegerBox();
+	private DoubleBox doubleBoxPrice = new DoubleBox();
+	private IntegerBox integerBoxMachineValue = new IntegerBox();
+	private IntegerBox integerBoxCapacity = new IntegerBox();
+	private IntegerBox integerBoxMachineStaff = new
+			IntegerBox();
 
-	ScrollPanel scrollPanelYears = new ScrollPanel();
-	TabLayoutPanel tabPanelYears = new TabLayoutPanel(1.5, Unit.EM);
-	AbsolutePanel[] absolutePanelYear = new AbsolutePanel[1000];
-	AbsolutePanel absolutePanelPieChart;
-	VerticalPanel verticalPanelColumns;
-	VerticalPanel verticalPanelInput;
-	AbsolutePanel absolutePanelMarketIncrease;
-	Image arrowImage;
-	Label lbResults;
-	Label lbInvestMarketing;
-	Label lbInvestPersonal;
-	Label lbInvestPrice;
-	Label lbInvestMachineValue;
-	Label lbInvestMachinesCapacity;
-	Label lbInvestMachinePersonal;
-	Label necessaryPersonalInfo;
-	Label unusedMachineCapacityInfo;
-	Label lbAmount;
+	private ScrollPanel scrollPanelYears = new ScrollPanel();
+	private TabLayoutPanel tabPanelYears = new TabLayoutPanel(1.5, Unit.EM);
+	private AbsolutePanel[] absolutePanelYear = new AbsolutePanel[1000];
+	private AbsolutePanel absolutePanelPieChart;
+	private VerticalPanel verticalPanelColumns;
+	private VerticalPanel verticalPanelInput;
+	private AbsolutePanel absolutePanelMarketIncrease;
+	private Image arrowImage;
+	private Label lbResults;
+	private Label lbInvestMarketing;
+	private Label lbInvestPersonal;
+	private Label lbInvestPrice;
+	private Label lbInvestMachineValue;
+	private Label lbInvestMachinesCapacity;
+	private Label lbInvestMachinePersonal;
+	private Label necessaryPersonalInfo;
+	private Label unusedMachineCapacityInfo;
+	private Label lbAmount;
 
-	CellTable<Company> tableCompanies = new CellTable<Company>();
-	List<Company> companyList;
-	List<Company> companyListSimulation;
+	private CellTable<Company> tableCompanies = new CellTable<Company>();
+	private List<Company> companyList;
+	private List<Company> companyListSimulation;
 
-	int stackYear = 0; // stack, der angibt, welches Feld im Array als letztes
-						// gefüllt wurde
-	int simulationYear = 1; // Gibt an, zu welchem Simulationsjahr die Version
-							// erzeugt wurde
-	int simulationVersion = 1; // Gibt an, welche Version des Simulationsjahres
-								// derzeit erstellt wird
-	int deleteCounter = 0; // Zähler der angibt, welche Arraypanels wieder
-							// gelöscht werden sollen
+	private int stackYear = 0;	// stack, der angibt, welches Feld im 
+								//Array als letztes gefüllt wurde
+	private int simulationYear = 1;	// Gibt an, zu welchem
+									// Simulationsjahr die Version
+									// erzeugt wurde
+	private int simulationVersion = 1;	// Gibt an, welche Version des 
+										// Simulationsjahres
+										// derzeit erstellt wird
+	private int deleteCounter = 0;	// Zähler der angibt, welche 
+									// Arraypanels wieder
+									// gelöscht werden sollen
 
 	private SimulationServiceAsync service = GWT
 			.create(SimulationService.class);
 
-	public void onModuleLoad() {
+	public final void onModuleLoad() {
 		// RootPanel : root
 		RootPanel root = RootPanel.get();
 		root.setSize("1024", "768");
@@ -161,7 +165,7 @@ public class Simulation implements EntryPoint {
 
 		// zur Home zurückkehren
 		lbHome.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Die Homeoberfläche wird geladen
 				RootPanel.get().clear();
 				HomeSimulation home = new HomeSimulation();
@@ -171,7 +175,7 @@ public class Simulation implements EntryPoint {
 
 		// Logout
 		btLogout.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// die Logoutoberfläche wird geladen
 				RootPanel.get().clear();
 				LogoutSimulation logout = new LogoutSimulation();
@@ -181,7 +185,7 @@ public class Simulation implements EntryPoint {
 
 		// Simulation starten
 		btSimulation.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Simulation anstoßen
 				getInput();
 
@@ -196,7 +200,7 @@ public class Simulation implements EntryPoint {
 
 		// Simulation Folgejahr starten
 		btNextYear.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Call: Unternehmenstabelle aktualisieren
 				service.getCompany(companyListSimulation,
 						new GetCompanyCallback());
@@ -248,21 +252,26 @@ public class Simulation implements EntryPoint {
 
 		// sind die Werte eingegeben worden, wird der Wert in der
 		// SimulationsVersion gespeichret
-		if (integerBoxMarketing.getValue() != null)
+		if (integerBoxMarketing.getValue() != null) {
 			version.setMarketing(integerBoxMarketing.getValue());
-		if (integerBoxMachineValue.getValue() != null)
+		}
+		if (integerBoxMachineValue.getValue() != null) {
 			version.setMachineValue(integerBoxMachineValue.getValue());
-		if (integerBoxCapacity.getValue() != null)
+		}
+		if (integerBoxCapacity.getValue() != null) {
 			version.setMachineCapacity(integerBoxCapacity.getValue());
-		if (integerBoxMachineStaff.getValue() != null)
+		}
+		if (integerBoxMachineStaff.getValue() != null) {
 			version.setMachineStaff(integerBoxMachineStaff.getValue());
-		if (integerBoxPersonal.getValue() != null)
+		}
+		if (integerBoxPersonal.getValue() != null) {
 			version.setPersonal(integerBoxPersonal.getValue());
+		}
 		if (doubleBoxPrice.getValue() != null) {
 			version.setPrice(doubleBoxPrice.getValue());
 		} else {
 			version.setPrice(0.0);
-		}// Ende if-else
+		} // Ende if-else
 
 		// Die befüllten Boxen werden geleert
 		deleteValueInvestments();
@@ -287,7 +296,7 @@ public class Simulation implements EntryPoint {
 	/**
 	 * summaryCompanies erstellt und befüllt die Unternehmenstabelle
 	 */
-	public void summaryCompanies() {
+	public final void summaryCompanies() {
 		// Tabelle erzeugen
 		tableCompanies = new CellTable<Company>();
 		absolutePanelSimulation.add(tableCompanies, 60, 79);
@@ -298,14 +307,14 @@ public class Simulation implements EntryPoint {
 
 		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
 		TextColumn<Company> tradeNameColumn = new TextColumn<Company>() {
-			public String getValue(Company company) {
+			public String getValue(final Company company) {
 				return new String(company.getTradeName());
 			}
 		}; // Ende tradeNameColumn
 
 		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Umsatz
 		TextColumn<Company> topLineColumn = new TextColumn<Company>() {
-			public String getValue(Company company) {
+			public String getValue(final Company company) {
 				if (company.getTopLine() != 0) {
 					return new Integer(company.getTopLine()).toString();
 				} else {
@@ -316,7 +325,7 @@ public class Simulation implements EntryPoint {
 
 		// Unternehmensdaten der Konkurrenzunternehmen befüllen: Gewinn
 		TextColumn<Company> amountColumn = new TextColumn<Company>() {
-			public String getValue(Company company) {
+			public String getValue(final Company company) {
 				if (company.getAmount() != 0) {
 					return new Integer(company.getAmount()).toString();
 				} else {
@@ -431,7 +440,7 @@ public class Simulation implements EntryPoint {
 	/**
 	 * showInput zeigt die Ergebnisse die in der Berechnung ermittelt wurden
 	 */
-	public void showInput(SimulationVersion result) {
+	public final void showInput(final SimulationVersion result) {
 		// Eingegebene Investitionen werden angezeigt
 		verticalPanelInput = new VerticalPanel();
 		lbResults = new Label("Ihre Eingabe: ");
@@ -465,7 +474,7 @@ public class Simulation implements EntryPoint {
 	/**
 	 * showPieChart lädt das Tortendiagramm
 	 */
-	public void showPieChart(final List<Company> companyListSimulation) {
+	public final void showPieChart(final List<Company> companyListSimulation) {
 		// Marktanteilstorte wird erstellt und angezeigt
 		absolutePanelPieChart = new AbsolutePanel();
 		absolutePanelYear[stackYear - 1].add(absolutePanelPieChart, 160, 10);
@@ -499,7 +508,7 @@ public class Simulation implements EntryPoint {
 	 * createPieTable erzeugt die Tabelle der Daten, die im Tortendiagramm
 	 * angezeigt werden sollen
 	 */
-	private DataTable createPieTable(List<Company> companies) {
+	private DataTable createPieTable(final List<Company> companies) {
 		// Datentabelle erzeugen
 		DataTable data = DataTable.create();
 		// Columns hinzufügen
@@ -522,7 +531,7 @@ public class Simulation implements EntryPoint {
 	 * showMarketIncrease bringt den Pfeil für den Marktwachstum auf dem
 	 * Ergebnispanel an
 	 */
-	private void showMarketIncrease(int marketIncrease) {
+	private void showMarketIncrease(final int marketIncrease) {
 		// neues Panel anbringen
 		absolutePanelMarketIncrease = new AbsolutePanel();
 		absolutePanelYear[stackYear - 1].add(absolutePanelMarketIncrease, 339,
@@ -537,7 +546,8 @@ public class Simulation implements EntryPoint {
 		if (marketIncrease == -1) {
 			arrowImage = new Image("fallstudie/gwt/clean/images/redArrow.png");
 		} else if (marketIncrease == 1) {
-			arrowImage = new Image("fallstudie/gwt/clean/images/greenArrow.png");
+			arrowImage = new Image(
+					"fallstudie/gwt/clean/images/greenArrow.png");
 		} else {
 			arrowImage = new Image(
 					"fallstudie/gwt/clean/images/orangeArrow.png");
@@ -551,7 +561,7 @@ public class Simulation implements EntryPoint {
 	/**
 	 * showColumnChart lädt das Balkendiagramm
 	 */
-	private void showColumnChart(final List<Company> companyListSimulation) {
+	private void showColumnChart(final List<Company> pCompanyListSimulation) {
 		// neues VerticalPanel anbringen
 		verticalPanelColumns = new VerticalPanel();
 		absolutePanelYear[stackYear - 1].add(verticalPanelColumns, 500, 10);
@@ -574,7 +584,7 @@ public class Simulation implements EntryPoint {
 
 				// Balkendiagramm erzeugen
 				ColumnChart columnChart = new ColumnChart(
-						createColumnTable(companyListSimulation), options);
+						createColumnTable(pCompanyListSimulation), options);
 
 				// Balkendiagramm anbringen
 				verticalPanelColumns.add(columnChart);
@@ -590,7 +600,7 @@ public class Simulation implements EntryPoint {
 	 * createColumnTable erzeugt die Tabelle der Daten, die im Balkendiagramm
 	 * angezeigt werden sollen
 	 */
-	private DataTable createColumnTable(List<Company> companies) {
+	private DataTable createColumnTable(final List<Company> companies) {
 		// Datentabelle erzeugen
 		DataTable data = DataTable.create();
 		// Columns hinzufügen
@@ -618,10 +628,11 @@ public class Simulation implements EntryPoint {
 		public void onFailure(final Throwable caught) {
 		} // Ende method onFailure
 
-		public final void onSuccess(List<Company> result) {
+		public final void onSuccess(final List<Company> result) {
 
 			// Unternehmenstabelle mit dem DataProvider verbinden
-			ListDataProvider<Company> dataProvider = new ListDataProvider<Company>();
+			ListDataProvider<Company> dataProvider = new 
+					ListDataProvider<Company>();
 			dataProvider.addDataDisplay(tableCompanies);
 
 			// Liste befüllen
@@ -642,10 +653,10 @@ public class Simulation implements EntryPoint {
 	public class CreateSimulationCallback implements
 			AsyncCallback<SimulationVersion> {
 
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende method onFailure
 
-		public void onSuccess(SimulationVersion result) {
+		public final void onSuccess(final SimulationVersion result) {
 			// neues Panel anbringen
 			tabPanelYears.add(absolutePanelYear[stackYear - 1], "Jahr "
 					+ simulationYear + " (" + (simulationVersion - 1) + ")",
@@ -689,10 +700,12 @@ public class Simulation implements EntryPoint {
 
 			// Überprüfen, ob das Label für Steigern des Betriebsergebnisses
 			// angebracht werden muss
-			if (result.isUnusedMachineCapacity() == true) {
+			if (result.isUnusedMachineCapacity()) {
 				// neue Info erzeugen
 				unusedMachineCapacityInfo = new Label(
-						"M\u00f6chten Sie noch eine Maschine kaufen? Sie k\u00f6nnten dadurch Ihr Betriebergebnis steigern!");
+						"M\u00f6chten Sie noch eine Maschine kaufen? " 
+						+ "Sie k\u00f6nnten dadurch Ihr" 
+						+ " Betriebergebnis steigern!");
 				// Onfo anbringen
 				absolutePanelYear[stackYear - 1].add(unusedMachineCapacityInfo,
 						105, 18);

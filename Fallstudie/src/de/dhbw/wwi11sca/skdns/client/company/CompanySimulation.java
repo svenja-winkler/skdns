@@ -36,9 +36,13 @@ import com.google.gwt.view.client.ListDataProvider;
 
 public class CompanySimulation implements EntryPoint {
 
+	// Constants
+
+	private static final double TABPANELSIZE = 1.5;
+
 	private AbsolutePanel absolutePanelCreate = new AbsolutePanel();
-	private TabLayoutPanel tabPanelCreateCompanies = new TabLayoutPanel(1.5,
-			Unit.EM);
+	private TabLayoutPanel tabPanelCreateCompanies = new TabLayoutPanel(
+			TABPANELSIZE, Unit.EM);
 
 	private Label lbHome = new Label("Home");
 	private Label lbCreate = new Label("> Unternehmen anlegen");
@@ -107,7 +111,7 @@ public class CompanySimulation implements EntryPoint {
 
 	private CompanyServiceAsync service = GWT.create(CompanyService.class);
 
-	public void onModuleLoad() {
+	public final void onModuleLoad() {
 
 		// AbsolutePanel : absolutePanelCreate
 		RootPanel rootPanel = RootPanel.get();
@@ -148,7 +152,7 @@ public class CompanySimulation implements EntryPoint {
 
 		// Auf die Home zurückkehren: lbHome
 		lbHome.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Überprüfen, ob Marktanteile insgesamt 100% ergeben
 				if ((ownCom.getMarketShare()
 						+ companies.get(0).getMarketShare()
@@ -162,14 +166,15 @@ public class CompanySimulation implements EntryPoint {
 				} else {
 					// Betragen die Marktanteile gesamt nicht 100% wird eine
 					// Meldung ausgeworfen
-					Window.alert("Der Marktanteil aller Unternehmen muss zusammen 100 betragen!");
+					Window.alert("Der Marktanteil aller Unternehmen "
+							+ "muss zusammen 100 betragen!");
 				} // Ende if-else
 			}
 		}); // Ende lbHome
 
 		// Eventhandler ausloggen
 		btLogout.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Logoutoberfläche laden
 				RootPanel.get().clear();
 				LogoutSimulation logout = new LogoutSimulation();
@@ -260,7 +265,7 @@ public class CompanySimulation implements EntryPoint {
 
 		// Eventhandler Maschinenfeld hinzufügen
 		btAddMachines.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				Machines newMachine = new Machines();
 				machinesOwnCompany.add(newMachine);
 			}
@@ -268,14 +273,14 @@ public class CompanySimulation implements EntryPoint {
 
 		// Eventhandler Maschinenfeld löschen
 		btDeleteMachines.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				machinesOwnCompany.remove(machinesOwnCompany.size() - 1);
 			}
-		});// Ende btDeleteMachines
+		}); // Ende btDeleteMachines
 
 		// Eventhandler Unternehmen löschen
 		btDeleteOwnCompany.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				textBoxTradeName.setText("Eigenes Unternehmen");
 				textBoxTopLineOwnCompany.setValue("0");
 				textBoxMarketShareOwnCompany.setValue("0.0");
@@ -290,7 +295,7 @@ public class CompanySimulation implements EntryPoint {
 
 		// Eventhandler Unternehmen speichern
 		btSaveOwnCompany.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Überprüfung, ob Eingabe korrekt
 				if (expTradeName.test(textBoxTradeName.getText())
 						&& expInteger.test(textBoxTopLineOwnCompany.getText())
@@ -344,28 +349,26 @@ public class CompanySimulation implements EntryPoint {
 		final EditTextCell serviceLifeCell = new EditTextCell();
 		Column<Machines, String> serviceLifeColumn = new Column<Machines, String>(
 				serviceLifeCell) {
-			public String getValue(Machines object) {
+			public String getValue(final Machines object) {
 				return new Integer(object.getServiceLife()).toString();
 			}
 		}; // Ende serviceLifeCell
-		
+
 		// CapacityColumn der Maschinentabelle befüllen
 		final EditTextCell capacityCell = new EditTextCell();
 		Column<Machines, String> capacityColumn = new Column<Machines, String>(
 				capacityCell) {
-			public String getValue(Machines object) {
+			public String getValue(final Machines object) {
 				return new Integer(object.getCapacity()).toString();
 			}
 		}; // Ende capacityColumn
-		
-		
 
 		final EditTextCell accountingValueCell = new EditTextCell();
-		Column<Machines, String> accountingValueColumn = new Column<Machines, String>(
-				accountingValueCell) {
+		Column<Machines, String> accountingValueColumn =
+				new Column<Machines, String>(accountingValueCell) {
 
 			@Override
-			public String getValue(Machines object) {
+			public String getValue(final Machines object) {
 				return new Double(object.getAccountingValue()).toString();
 			}
 
@@ -373,14 +376,16 @@ public class CompanySimulation implements EntryPoint {
 		accountingValueColumn
 				.setFieldUpdater(new FieldUpdater<Machines, String>() {
 					@Override
-					public void update(int index, Machines object, String value) {
+					public void update(final int index,
+							final Machines object, final String value) {
 
 						if (expDouble.test(value)) {
 							ownCom.getMachines().setAccountingValue(
 									new Double(value));
 							cellTableMachines.redraw();
 						} else {
-							Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
+							Window.alert("Die Eingabe ist ung\u00FCltig"
+									+ " und wird nicht gespeichert!");
 						}
 
 					}
@@ -391,20 +396,22 @@ public class CompanySimulation implements EntryPoint {
 				staffCell) {
 
 			@Override
-			public String getValue(Machines object) {
+			public String getValue(final Machines object) {
 				return new Integer(object.getStaff()).toString();
 			}
 
 		};
 		staffColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
 			@Override
-			public void update(int index, Machines object, String value) {
+			public void update(final int index, final Machines object,
+					final String value) {
 
 				if (expInteger.test(value)) {
 					ownCom.getMachines().setStaff(new Integer(value));
 					cellTableMachines.redraw();
 				} else {
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
+					Window.alert("Die Eingabe ist ung\u00FCltig " 
+						+ 	"und wird nicht gespeichert!");
 				}
 
 			}
@@ -415,30 +422,34 @@ public class CompanySimulation implements EntryPoint {
 		cellTableMachines.addColumn(capacityColumn, "Kapazit\u00e4t");
 		cellTableMachines.addColumn(accountingValueColumn, "Preis");
 		cellTableMachines.addColumn(staffColumn, "Notwendige Mitarbeiter");
-		
+
 		serviceLifeColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
-			public void update(int index, Machines object, String value) {
+			public void update(final int index, final Machines object,
+					final String value) {
 				// Überprüfung, ob Inhalt stimmt
 				if (expInteger.test(value)) {
 					ownCom.getMachines().setServiceLife(new Integer(value));
 					cellTableMachines.redraw();
 				} else {
 					// Stimmt Inhalt nicht, wird Meldung ausgeworfen
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
+					Window.alert("Die Eingabe ist ung\u00FCltig " 
+							+ "und wird nicht gespeichert!");
 				} // Ende if-else
 
 			}
-		});// Ende serviceLifeColumn FieldUpdater
+		}); // Ende serviceLifeColumn FieldUpdater
 
 		capacityColumn.setFieldUpdater(new FieldUpdater<Machines, String>() {
 			@Override
-			public void update(int index, Machines object, String value) {
+			public void update(final int index, final Machines object,
+					final String value) {
 
 				if (expInteger.test(value)) {
 					ownCom.getMachines().setCapacity(new Integer(value));
 					cellTableMachines.redraw();
 				} else {
-					Window.alert("Die Eingabe ist ung\u00FCltig und wird nicht gespeichert!");
+					Window.alert("Die Eingabe ist ung\u00FCltig " 
+							+ "und wird nicht gespeichert!");
 				}
 
 			}
@@ -475,7 +486,7 @@ public class CompanySimulation implements EntryPoint {
 		// Eventhandler
 		// Unternehmen löschen
 		btDeleteCompany1.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// TODO Daten Unternehmen 1 aus DB löschen
 				textBoxTopLineCompany1.setValue("0");
 				textBoxMarketShareCompany1.setValue("0");
@@ -484,7 +495,7 @@ public class CompanySimulation implements EntryPoint {
 		}); // Ende btDeleteCompany1
 		// Unternehmen speichern
 		btSaveCompany1.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 
 				if (expInteger.test(textBoxTopLineCompany1.getText())
 						&& expDouble.test(textBoxMarketShareCompany1.getText())
@@ -542,7 +553,7 @@ public class CompanySimulation implements EntryPoint {
 		// Eventhandler
 		// Unternehmen löschen
 		btDeleteCompany2.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// TODO Daten Unternehmen 2 aus DB löschen
 				textBoxTopLineCompany2.setValue("0");
 				textBoxMarketShareCompany2.setValue("0");
@@ -551,7 +562,7 @@ public class CompanySimulation implements EntryPoint {
 		}); // Ende btDeleteCompany2
 		// Unternehmen speichern
 		btSaveCompany2.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (expInteger.test(textBoxTopLineCompany2.getText())
 						&& expDouble.test(textBoxMarketShareCompany2.getText())
 						&& expDouble.test(textBoxProductPriceCompany2.getText())
@@ -604,7 +615,7 @@ public class CompanySimulation implements EntryPoint {
 		// Eventhandler
 		// Unternehmen löschen
 		btDeleteCompany3.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// TODO Daten Unternehmen 3 aus DB löschen
 				textBoxTopLineCompany3.setValue("0");
 				textBoxMarketShareCompany3.setValue("0");
@@ -613,10 +624,11 @@ public class CompanySimulation implements EntryPoint {
 		}); // Ende btDeleteCompany3
 		// Unternehmen speichern
 		btSaveCompany3.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				if (expInteger.test(textBoxTopLineCompany3.getText())
 						&& expDouble.test(textBoxMarketShareCompany3.getText())
-						&& expDouble.test(textBoxProductPriceCompany3.getText())) {
+						&& expDouble.test(textBoxProductPriceCompany3.
+								getText())) {
 					companies.get(2).setTopLine(
 							new Integer(textBoxTopLineCompany3.getText()));
 					companies.get(2).setMarketShare(
@@ -647,14 +659,15 @@ public class CompanySimulation implements EntryPoint {
 	 * angelegtes eigenes Unternehmen speichert
 	 * 
 	 */
-	public class AddOwnCompanyCallback implements AsyncCallback<java.lang.Void> {
+	public class AddOwnCompanyCallback implements 
+		AsyncCallback<java.lang.Void> {
 
 		@Override
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende onFailure
 
 		@Override
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			Window.alert("Das eigene Unternehmen wurde aktualisiert");
 		} // Ende method onSuccess
 	} // Ende class AddOwnCompanyCallback
@@ -668,11 +681,11 @@ public class CompanySimulation implements EntryPoint {
 	public class AddCompanyCallback implements AsyncCallback<java.lang.Void> {
 
 		@Override
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende onFailure
 
 		@Override
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			Window.alert("Das Unternehmen wurde aktualisiert");
 		} // Ende method onSuccess
 	} // Ende class AddCompanyCallback
@@ -686,16 +699,17 @@ public class CompanySimulation implements EntryPoint {
 	public class GetOwnCompanyCallback implements AsyncCallback<OwnCompany> {
 
 		@Override
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende onFailure
 
 		@Override
-		public void onSuccess(OwnCompany result) {
+		public final void onSuccess(final OwnCompany result) {
 
 			ownCom = new OwnCompany();
 			ownCom = result;
 
-			ListDataProvider<Machines> dataOwnProvider = new ListDataProvider<Machines>();
+			ListDataProvider<Machines> dataOwnProvider = new 
+					ListDataProvider<Machines>();
 			// Connect the table to the data provider.
 			dataOwnProvider.addDataDisplay(cellTableMachines);
 			// Add the data to the data provider, which automatically pushes it
@@ -737,11 +751,11 @@ public class CompanySimulation implements EntryPoint {
 	public class GetCompanyCallback implements AsyncCallback<List<Company>> {
 
 		@Override
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende onFailure
 
 		@Override
-		public void onSuccess(List<Company> result) {
+		public final void onSuccess(final List<Company> result) {
 			// Anzeige der Unternehmen mit Daten aus Mongodb füllen
 			companies = result;
 			textBoxTopLineCompany1.setText(new Integer(result.get(0)

@@ -43,11 +43,25 @@ public class LoginSimulation implements EntryPoint {
 	private Label lbInfo = new Label();
 
 	private String admin = new String("admin");
-	public static User userOnline;
+	private static User userOnline;
 
-	private final LoginServiceAsync LoginService = GWT
+	private final LoginServiceAsync loginService = GWT
 			.create(LoginService.class);
 
+	//Constants
+	private static final int LOGOX = 545;
+	private static final int LOGOY = 34;
+	private static final int TEXTBOXUSERNAMEX = 208;
+	private static final int TEXTBOXUSERNAMEY = 229;
+	private static final int TEXTBOXPASSWORDX = 208;
+	private static final int TEXTBOXPASSWORDY = 283;
+	private static final int LBINFOX =  208;
+	private static final int LBINFOY = 325;
+	private static final int BTLOGINX = 208;
+	private static final int BTLOGINY = 353;
+	private static final int BTFORGOTPWDX = 369;
+	private static final int BTFORGOTPWDY = 353;
+	
 	public final void onModuleLoad() {
 
 		// AbsolutePanel: panelLogin
@@ -59,66 +73,66 @@ public class LoginSimulation implements EntryPoint {
 		background.setSize("1024px", "768px");
 
 		// Firmenlogo: logo
-		panelLogin.add(logo, 545, 34);
+		panelLogin.add(logo, LOGOX, LOGOY);
 		logo.setSize("360px", "110px");
 
 		// TextBox für den Usernamen: textBoxUsername
-		panelLogin.add(textBoxUsername, 208, 229);
+		panelLogin.add(textBoxUsername, TEXTBOXUSERNAMEX, TEXTBOXUSERNAMEY);
 		textBoxUsername.setSize("300px", "24px");
 		textBoxUsername.setText("Username");
 
 		// TextBox für das Kennwort: textBoxPassword
-		panelLogin.add(textBoxPassword, 208, 283);
+		panelLogin.add(textBoxPassword, TEXTBOXPASSWORDX, TEXTBOXPASSWORDY);
 		textBoxPassword.setText("Kennwort");
 		textBoxPassword.setSize("300px", "24px");
 
 		// Informationslabel: lbInfo
 		lbInfo.setSize("310px", "12px");
-		panelLogin.add(lbInfo, 208, 325);
+		panelLogin.add(lbInfo, LBINFOX, LBINFOY);
 		lbInfo.setStyleName("gwt-Infolabel");
 
 		// Buttons
 
 		// Button einloggen: btLogin
-		panelLogin.add(btLogin, 208, 353);
+		panelLogin.add(btLogin, BTLOGINX, BTLOGINY);
 		btLogin.setSize("100px", "30px");
 
 		// Button vergessenes Passwort: btForgotPassword
-		panelLogin.add(btForgotPassword, 369, 353);
+		panelLogin.add(btForgotPassword, BTFORGOTPWDX, BTFORGOTPWDY);
 		btForgotPassword.setSize("149px", "30px");
 
 		// Eventhandler
 
 		// Eventhandler Login Click-Handler
 		btLogin.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				login();
 			}
 		}); // Ende btLogin Click-Handler
 
 		// Eventhandler Login Enter-Handler
 		btLogin.addDragEnterHandler(new DragEnterHandler() {
-			public void onDragEnter(DragEnterEvent event) {
+			public void onDragEnter(final DragEnterEvent event) {
 				login();
 			}
 		}); // Ende btLogin Enter-Handler
 
 		// Eventhandler vergessenes Passwort ClickHandler
 		btForgotPassword.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				userOnline = new User();
 				userOnline.setUsername(textBoxUsername.getText());
-				LoginService.forgotPassword(userOnline,
+				loginService.forgotPassword(userOnline,
 						new ForgotPasswordCallback());
 			}
 		}); // Ende btForgortPassword Click-Handler
 
 		// Eventhandler btForgotPassword Enter-Handler
 		btForgotPassword.addDragEnterHandler(new DragEnterHandler() {
-			public void onDragEnter(DragEnterEvent event) {
+			public void onDragEnter(final DragEnterEvent event) {
 				userOnline = new User();
 				userOnline.setUsername(textBoxUsername.getText());
-				LoginService.forgotPassword(userOnline,
+				loginService.forgotPassword(userOnline,
 						new ForgotPasswordCallback());
 			}
 		}); // Ende btForgottPassword Enter-Handler
@@ -126,7 +140,7 @@ public class LoginSimulation implements EntryPoint {
 		// Eventhandler Password TextBox: löscht den Textboxinhalt, damit der
 		// User Daten eingeben kann
 		textBoxPassword.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				textBoxPassword.setText("");
 			}
 		}); // Ende textBoxPassword
@@ -134,7 +148,7 @@ public class LoginSimulation implements EntryPoint {
 		// Eventhandler Username TextBox: löscht den Textboxinhalt, damit der
 		// User Daten eingeben kann
 		textBoxUsername.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				textBoxUsername.setText("");
 			}
 		}); // Ende textBoxUsername
@@ -153,10 +167,10 @@ public class LoginSimulation implements EntryPoint {
 		// handelt
 		if (userOnline.getUsername().equals(admin)) {
 			// Ist der User ein Admin wird die checkAdmin-Methode verwendet
-			LoginService.checkAdmin(userOnline, new CheckAdminCallback());
+			loginService.checkAdmin(userOnline, new CheckAdminCallback());
 		} else {
 			// Ist der User kein Admin wrd die checkLogin-Methode verwendet
-			LoginService.checkLogin(userOnline, new CheckLoginCallback());
+			loginService.checkLogin(userOnline, new CheckLoginCallback());
 		} // Ende if-else
 	} // Ende method login
 
@@ -168,13 +182,13 @@ public class LoginSimulation implements EntryPoint {
 	 */
 	public class CheckLoginCallback implements AsyncCallback<java.lang.Void> {
 
-		public void onFailure(Throwable caught) {
+		public final void onFailure(final Throwable caught) {
 			// Sind die Daten nicht bekannt, wird dem User eine Meldung
 			// ausgeworfen
 			lbInfo.setText("Username oder Passwort falsch/ unbekannt.");
 		} // Ende method onFailure
 
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			// Sind die Daten bekannt, wird die nächste Oberfläche geladen
 			RootPanel.get().clear();
 			HomeSimulation home = new HomeSimulation();
@@ -191,14 +205,15 @@ public class LoginSimulation implements EntryPoint {
 	public class ForgotPasswordCallback implements
 			AsyncCallback<java.lang.Void> {
 
-		public void onFailure(Throwable caught) {
+		public final void onFailure(final Throwable caught) {
 			// Hat es nicht funktioniert, eine Meldung an den Admin zu schicken,
 			// wird dem User eine Meldung ausgeworfen
-			lbInfo.setText("Derzeit liegt leider ein Systemfehler vor. Versuchen Sie es sp\u00E4ter erneut.");
+			lbInfo.setText("Derzeit liegt leider ein Systemfehler vor." 
+			+	" Versuchen Sie es sp\u00E4ter erneut.");
 
 		} // Ende method onFailure
 
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			// War das Admin informieren erfolgreich, wird dem User eine Meldung
 			// ausgeworfen
 			lbInfo.setText("Der Admin wurde informiert.");
@@ -213,18 +228,18 @@ public class LoginSimulation implements EntryPoint {
 	 */
 	public class CheckAdminCallback implements AsyncCallback<java.lang.Void> {
 
-		public void onFailure(Throwable caught) {
+		public final void onFailure(final Throwable caught) {
 			// Ist das Adminpasswort nicht bekannt, wird dem User eine Meldung
 			// ausgeworfen
 			lbInfo.setText("Adminpasswort falsch");
 		} // Ende method onFailure
 
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			// Ist das Adminpasswort bekannt, wird die nächste Oberfläche
 			// geladen
 			RootPanel.get().clear();
-			AdminSimulation admin = new AdminSimulation();
-			admin.onModuleLoad();
+			AdminSimulation adminSimulation = new AdminSimulation();
+			adminSimulation.onModuleLoad();
 		} // Ende method onSuccess
 	} // Ende class CheckAdminCallback
 } // Ende classLoginSimulation

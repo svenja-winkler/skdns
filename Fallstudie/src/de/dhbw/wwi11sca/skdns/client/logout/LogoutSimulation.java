@@ -20,28 +20,34 @@ import de.dhbw.wwi11sca.skdns.client.login.LoginSimulation;
 import com.google.gwt.user.client.ui.Image;
 
 public class LogoutSimulation implements EntryPoint {
+	
+	//Constants
+	private static final int LOGOX = 50;
+	private static final int LOGOY = 50;
+	private static final int BTRELOGINX = 350;
+	private static final int BTRELOGINY = 189;
+	private static final int BTLOGOUTX = 50;
+	private static final int BTLOGOUTY = 192;
 
-	Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
-
+	private Image logo = new Image("fallstudie/gwt/clean/images/Logo.JPG");
 	private Label lbLogout = new Label("Sie wurden erfolgreich ausgeloggt.");
 	private Button btRelogin = new Button("erneuter Login?");
-
 	private final LogoutServiceAsync service = GWT.create(LogoutService.class);
 
-	public void onModuleLoad() {
+	public final void onModuleLoad() {
 
 		RootPanel rootPanel = RootPanel.get();
 
 		// Firmenlogo: logo
-		rootPanel.add(logo, 50, 50);
+		rootPanel.add(logo, LOGOX, LOGOY);
 		logo.setSize("405px", "108px");
 
 		// Button erneuter Login?: btRelogin
-		rootPanel.add(btRelogin, 350, 189);
+		rootPanel.add(btRelogin, BTRELOGINX, BTRELOGINY);
 
 		// Eventhandler btRelogin
 		btRelogin.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
+			public void onClick(final ClickEvent event) {
 				// Die Loginfläche wird geladen
 				RootPanel.get().clear();
 				LoginSimulation login = new LoginSimulation();
@@ -63,14 +69,14 @@ public class LogoutSimulation implements EntryPoint {
 	public class DeleteSimulationCallback implements
 			AsyncCallback<java.lang.Void> {
 
-		public void onFailure(Throwable caught) {
+		public void onFailure(final Throwable caught) {
 		} // Ende method onFailure
 
-		public void onSuccess(Void result) {
+		public final void onSuccess(final Void result) {
 			// War das Löschen der Simulationsversionen erfolgreich, wird dem
 			// ausgeloggten User ausgegeben, dass er sich erfolgreich ausgeloggt
 			// hat
-			RootPanel.get().add(lbLogout, 50, 192);
+			RootPanel.get().add(lbLogout, BTLOGOUTX, BTLOGOUTY);
 		} // Ende method onSuccess
 	} // Ende class DeleteSimulationCallback
 } // Ende classLogoutSimulation
