@@ -285,11 +285,30 @@ public class CompanySimulation implements EntryPoint {
 				textBoxTopLineOwnCompany.setValue("0");
 				textBoxMarketShareOwnCompany.setValue("0.0");
 				textBoxProductPriceOwnCompany.setValue("0.0");
+				textBoxFixedCosts.setValue("0.0");
 				textBoxVariableCosts.setValue("0.0");
 				textBoxNumberOfStaff.setValue("0");
 				textBoxSalaryOfStaff.setValue("0");
-				// TODO Maschinen in Oberfläche löschen
-				// TODO EigenesUnternehmen aus DB löschen
+				machinesOwnCompany.remove(ownCom.getMachines());
+				
+				ownCom.setTradeName("Eigenes Unternehmen");
+				ownCom.setTopLine(0);
+				ownCom.setMarketShare(0.0);
+				ownCom.setFixedCosts(0.0);
+				ownCom.setNumberOfStaff(0);
+				ownCom.setSalaryStaff(0);
+				ownCom.getProduct().setPrice(0.0);
+				ownCom.getProduct().setSalesVolume(0);
+				ownCom.setVariableCosts(0.0);
+				ownCom.getMachines().setAccountingValue(0.0);
+				ownCom.getMachines().setCapacity(0);
+				ownCom.getMachines().setServiceLife(0);
+				ownCom.getMachines().setStaff(0);
+				ownCom.setAmount(0);
+			
+				// Call: Eigenes Unternehmen aktualisieren
+				service.addOwnCompany(ownCom, new AddOwnCompanyCallback());
+			
 			}
 		}); // Ende btDeleteOwnCompany
 
@@ -313,7 +332,8 @@ public class CompanySimulation implements EntryPoint {
 							.getText()));
 					ownCom.setMarketShare(new Double(
 							textBoxMarketShareOwnCompany.getText()));
-					ownCom.setFixedCosts(new Double(textBoxFixedCosts.getText()));
+					ownCom.setFixedCosts(new Double(textBoxFixedCosts.
+							getText()));
 					ownCom.setNumberOfStaff(new Integer(textBoxNumberOfStaff
 							.getText()));
 					ownCom.setSalaryStaff(new Integer(textBoxSalaryOfStaff
@@ -487,10 +507,16 @@ public class CompanySimulation implements EntryPoint {
 		// Unternehmen löschen
 		btDeleteCompany1.addClickHandler(new ClickHandler() {
 			public void onClick(final ClickEvent event) {
-				// TODO Daten Unternehmen 1 aus DB löschen
+				//Unternehmen 1 aus DB löschen
 				textBoxTopLineCompany1.setValue("0");
 				textBoxMarketShareCompany1.setValue("0");
 				textBoxProductPriceCompany1.setValue("0");
+				companies.get(0).setTopLine(0);
+				companies.get(0).setMarketShare(0.0);
+				companies.get(0).getProduct().setSalesVolume(0);
+				companies.get(0).getProduct().setPrice(0.0);
+				service.addCompany(companies.get(0),
+						new AddCompanyCallback());	
 			}
 		}); // Ende btDeleteCompany1
 		// Unternehmen speichern
@@ -554,10 +580,16 @@ public class CompanySimulation implements EntryPoint {
 		// Unternehmen löschen
 		btDeleteCompany2.addClickHandler(new ClickHandler() {
 			public void onClick(final ClickEvent event) {
-				// TODO Daten Unternehmen 2 aus DB löschen
+				// Daten Unternehmen 2 aus DB löschen
 				textBoxTopLineCompany2.setValue("0");
 				textBoxMarketShareCompany2.setValue("0");
 				textBoxProductPriceCompany2.setValue("0");
+				companies.get(1).setTopLine(0);
+				companies.get(1).setMarketShare(0.0);
+				companies.get(1).getProduct().setSalesVolume(0);
+				companies.get(1).getProduct().setPrice(0.0);
+				service.addCompany(companies.get(1),
+						new AddCompanyCallback());	
 			}
 		}); // Ende btDeleteCompany2
 		// Unternehmen speichern
@@ -616,10 +648,16 @@ public class CompanySimulation implements EntryPoint {
 		// Unternehmen löschen
 		btDeleteCompany3.addClickHandler(new ClickHandler() {
 			public void onClick(final ClickEvent event) {
-				// TODO Daten Unternehmen 3 aus DB löschen
+				// Daten Unternehmen 3 aus DB löschen
 				textBoxTopLineCompany3.setValue("0");
 				textBoxMarketShareCompany3.setValue("0");
 				textBoxProductPriceCompany3.setValue("0");
+				companies.get(2).setTopLine(0);
+				companies.get(2).setMarketShare(0.0);
+				companies.get(2).getProduct().setSalesVolume(0);
+				companies.get(2).getProduct().setPrice(0.0);
+				service.addCompany(companies.get(2),
+						new AddCompanyCallback());	
 			}
 		}); // Ende btDeleteCompany3
 		// Unternehmen speichern
